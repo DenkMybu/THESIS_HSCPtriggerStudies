@@ -42,7 +42,7 @@ TrigEff::~TrigEff(){
 
 
 //*************************************************************
-//Dans Load : Selection va être le nom de la variable qu'on veut étudier. Dans Fill on va mettre la valeur
+//LOAD THE USER'S CONFIG
 
 
 void TrigEff::LoadNoMap(const vector<string> &triggerNames, const vector<string> &SelectedTriggerNames,int ErrorType, string NameVar,string FileName){ 

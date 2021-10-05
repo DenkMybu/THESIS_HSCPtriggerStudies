@@ -145,7 +145,7 @@ public :
    TBranch        *b_gen_phi;   //!
    TBranch        *b_gen_mass;   //!
    //--------------------------------------
-   // Methods
+   // 		   METHODS
    //--------------------------------------
 
    AnaEff(TTree *tree=0);
@@ -156,11 +156,43 @@ public :
    virtual void     Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
+   virtual int      Preselection();
+   virtual int      Selection(int indexcandidate);
    
 private :
 
   //*************************************** TH1D compiled by main class *****************************************************
   TH1D* DISTRIB_NB_RHADRONS;
+
+  TH1D* DISTRIB_IAS;
+
+  TH1D* DISTRIB_IASCHN;
+  TH1D* DISTRIB_IASCHCH;
+  TH1D* DISTRIB_IASDCH;
+
+  TH1D* DISTRIB_IH:
+
+  TH1D* DISTRIB_IHCHN;
+  TH1D* DISTRIB_IHCHCH;
+  TH1D* DISTRIB_IHDCH;
+
+  TH1D* DISTRIB_ETA_DCH;
+  TH1D* DISTRIB_MET_CHN;
+  TH1D* DISTRIB_MET_CHCH;
+  TH1D* DISTRIB_P1MP2CHCH;
+  TH1D* DISTRIB_P1MP2CHN;
+
+  //*************************************************************************************************************************
+
+
+  //*************************************** TH2D compiled by main class *****************************************************
+  TH2D* DISTRIB_P1_P2_CHN;
+  TH2D* DISTRIB_P1_P2_CHCH;
+
+  TH2D* DISTRIB_PT1_PT2;
+  TH2D* DISTRIB_MET_pt_CHCH;
+  TH2D* DISTRIB_MET_pt_CHN;
+
 
 
   //*************************************************************************************************************************
@@ -174,6 +206,33 @@ private :
 AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 {
 	DISTRIB_NB_RHADRONS=0;
+
+	DISTRIB_IAS=0;
+
+	DISTRIB_IASCHN=0;
+	DISTRIB_IASCHCH=0;
+	DISTRIB_IASDCH=0;
+
+	DISTRIB_IH=0:
+
+	DISTRIB_IHCHN=0;
+	DISTRIB_IHCHCH=0;
+	DISTRIB_IHDCH=0;
+
+	DISTRIB_ETA_DCH=0;
+	DISTRIB_MET_CHN=0;
+	DISTRIB_MET_CHCH=0;
+	DISTRIB_P1MP2CHCH=0;
+	DISTRIB_P1MP2CHN=0;
+
+
+	DISTRIB_P1_P2_CHN=0;
+	DISTRIB_P1_P2_CHCH=0;
+
+	DISTRIB_PT1_PT2=0;
+	DISTRIB_MET_pt_CHCH=0;
+	DISTRIB_MET_pt_CHN=0;
+
 	triggerName = 0;
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -207,6 +266,65 @@ AnaEff::~AnaEff() //deconstruct
    
    if(!DISTRIB_NB_RHADRONS){
    	delete DISTRIB_NB_RHADRONS;
+   }
+
+   if(!DISTRIB_IAS){
+   	delete DISTRIB_IAS;
+   }
+   if(!DISTRIB_IASCHN){
+   	delete DISTRIB_IASCHN;
+   }
+   if(!DISTRIB_IASCHCH){
+   	delete DISTRIB_IASCHCH;
+   }
+   if(!DISTRIB_IASDCH){
+   	delete DISTRIB_IASDCH;
+   }
+
+  if(!DISTRIB_IH){
+   	delete DISTRIB_IH;
+   }
+   if(!DISTRIB_IHCHN){
+   	delete DISTRIB_IHCHN;
+   }
+   if(!DISTRIB_IHCHCH){
+   	delete DISTRIB_IHCHCH;
+   }
+   if(!DISTRIB_IHDCH){
+   	delete DISTRIB_IHDCH;
+   }
+  if(!DISTRIB_ETA_DCH){
+   	delete DISTRIB_ETA_DCH;
+   }
+  if(!DISTRIB_MET_CHN){
+   	delete DISTRIB_MET_CHN;
+   }
+  if(!DISTRIB_MET_CHCH){
+   	delete DISTRIB_MET_CHCH;
+   }
+  if(!DISTRIB_P1MP2CHCH){
+   	delete DISTRIB_P1MP2CHCH;
+   }
+  if(!DISTRIB_P1MP2CHN){
+   	delete DISTRIB_P1MP2CHN;
+   }	
+
+
+
+   if(!DISTRIB_P1_P2_CHN){
+   	delete DISTRIB_P1_P2_CHN;
+   }
+   if(!DISTRIB_P1_P2_CHCH){
+   	delete DISTRIB_P1_P2_CHCH;
+   }
+   if(!DISTRIB_PT1_PT2){
+   	delete DISTRIB_PT1_PT2;
+   }
+   if(!DISTRIB_MET_pt_CHCH){
+   	delete DISTRIB_MET_pt_CHCH;
+   }
+   if(!DISTRIB_MET_pt_CHN){
+   	delete DISTRIB_MET_pt_CHN;
    }
 
    //delete[] passTrigger;

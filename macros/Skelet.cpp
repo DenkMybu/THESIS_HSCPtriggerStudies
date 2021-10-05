@@ -35,17 +35,135 @@ void AnaEff::Loop()
 	cout << "Number of triggers for this file  : " << ntrigger << endl;
 	cout << " Number of events for this file : " << nentries << endl;
 
+	string NameList = "CompleteList",PrescaledList = "PrescaledList",ListAll = "ListOfAllTriggersEff", SubNum = "all",ExtRoot = ".root",ExtTxt = ".txt",Date="05_10_2021", Or = "LogicalOr";
+
+	string TransferTxt="AllInfos",TransferEff = "Eff",TransferZ = "EntriesFromZ",TransferW = "EntriesFromW",ErrorEffTransfer = "Error",TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak",DataType = "Stop2400";
 	
+	string NameCompleteListTest = "ListeInteretTriggers";
+
+
+	string StudyDistribZ = TransferDistribZ + DataType + Date;
+
+
+
+	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
+
+
+
+
+
+
+
+
+
+
 	DISTRIB_NB_RHADRONS = new TH1D ("DISTRIB_NB_RHADRONS" , " ( nb r hadrons (all scenarios) )", 6,0,4);
 	DISTRIB_NB_RHADRONS->GetXaxis()->SetTitle("# R-hadrons");
 	DISTRIB_NB_RHADRONS->GetYaxis()->SetTitle("# events");
 
+	DISTRIB_IAS = new TH1D("DISTRIB_IAS", "( IAS )",80,0,1.2);
+	DISTRIB_IAS->GetXaxis()->SetTitle("Ias");
+	DISTRIB_IAS->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_IASCHN = new TH1D("DISTRIB_IASCHN", "( IAS ) CHN",80,0,1.2);
+	DISTRIB_IASCHN->GetXaxis()->SetTitle("Ias");
+	DISTRIB_IASCHN->GetYaxis()->SetTitle("# HSCP");
+	
+	DISTRIB_IASCHCH = new TH1D("DISTRIB_IASCHCH", "( IAS )CHCH",80,0,1.2);
+	DISTRIB_IASCHCH->GetXaxis()->SetTitle("Ias");
+	DISTRIB_IASCHCH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_IASDCH = new TH1D("DISTRIB_IASDCH", "( IAS )DCH",80,0,1.2);
+	DISTRIB_IASDCH->GetXaxis()->SetTitle("Ias");
+	DISTRIB_IASDCH->GetYaxis()->SetTitle("# HSCP");
 
 
+	DISTRIB_IH = new TH1D ("DISTRIB_IH", " IH ", 100, 0 , 15);
+	DISTRIB_IH->GetXaxis()->SetTitle("Ih");
+	DISTRIB_IH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_IHCHN = new TH1D ("DISTRIB_IHCHN", " IH CHN ", 100, 0 , 15);
+	DISTRIB_IHCHN->GetXaxis()->SetTitle("Ih");
+	DISTRIB_IHCHN->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_IHCHCH = new TH1D ("DISTRIB_IHCHCH", " IH CHCH", 100, 0 , 30);
+	DISTRIB_IHCHCH->GetXaxis()->SetTitle("Ih");
+	DISTRIB_IHCHCH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_IHDCH = new TH1D ("DISTRIB_IHDCH", " IH DCH", 100, 0 , 30);
+	DISTRIB_IHDCH->GetXaxis()->SetTitle("Ih");
+	DISTRIB_IHDCH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_P1_P2_CHN = new TH2D("DISTRIB_P1_P2_CHN", "P1_P2CHN", 600 , 0 , 4000 , 600, 0 , 4000 );
+	DISTRIB_P1_P2_CHN->GetXaxis()->SetTitle("P candidate 1");
+	DISTRIB_P1_P2_CHN->GetYaxis()->SetTitle("P candidate 2");
+
+	DISTRIB_P1_P2_CHCH = new TH2D("DISTRIB_P1_P2_CHCH", "P1_P2CHCH", 600 , 0 , 4000 , 600, 0 , 4000 );
+	DISTRIB_P1_P2_CHCH->GetXaxis()->SetTitle("P candidate 1");
+	DISTRIB_P1_P2_CHCH->GetYaxis()->SetTitle("P candidate 2");
+
+//****
+	DISTRIB_ETA_DCH = new TH1D("DISTRIB_ETA_DCH", "( ETA dch )", 100, -3, 3);
+	DISTRIB_ETA_DCH->GetXaxis()->SetTitle(" #eta ");
+	DISTRIB_ETA_DCH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_MET_CHN = new TH1D ("DISTRIB_MET_CHN", " ( MET CHN) " , 100,0,4000);
+	DISTRIB_MET_CHN->GetXaxis()->SetTitle("MET (GeV)");
+	DISTRIB_MET_CHN->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_MET_CHCH = new TH1D ("DISTRIB_MET_CHCH", " ( MET CHCH) " , 100,0,4000);
+	DISTRIB_MET_CHCH->GetXaxis()->SetTitle("MET (GeV)");
+	DISTRIB_MET_CHCH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_P1MP2CHCH = new TH1D ("DISTRIB_P1MP2CHCH", "P1MP2CHCH", 100, -5, 5);
+	DISTRIB_P1MP2CHCH->GetXaxis()->SetTitle("2*(p1 - p2) / (p1 + p2)");
+	DISTRIB_P1MP2CHCH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_P1MP2CHN = new TH1D ("DISTRIB_P1MP2CHN", "P1MP2CHN", 100, -5, 5);
+	DISTRIB_P1MP2CHN->GetXaxis()->SetTitle("2*(p1 - p2) / (p1 + p2)");
+	DISTRIB_P1MP2CHN->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_MET_pt_CHN = new TH2D("DISTRIB_MET_pt_CHN", "Met vs pt chn", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_MET_pt_CHN->GetYaxis()->SetTitle("Reco MET [GeV]");
+	DISTRIB_MET_pt_CHN->GetXaxis()->SetTitle("Pt [GeV]");
+
+	DISTRIB_MET_pt_CHCH = new TH2D("DISTRIB_MET_pt_CHCH", "Met vs pt chch", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_MET_pt_CHCH->GetYaxis()->SetTitle("Reco MET [GeV]");
+	DISTRIB_MET_pt_CHCH->GetXaxis()->SetTitle("Pt [GeV]");
+
+	DISTRIB_PT1_PT2 = new TH2D("DISTRIB_PT1_PT2", "PT1_PT2 ", 300 , 0 , 2000 , 300, 0 , 2000 );
+	DISTRIB_PT1_PT2->GetXaxis()->SetTitle("PT candidate 1");
+	DISTRIB_PT1_PT2->GetYaxis()->SetTitle("PT candidate 2");
+
+
+	int indexcandidate;
 	
 	
 	DISTRIB_NB_RHADRONS->Sumw2();
 
+	DISTRIB_IAS->Sumw2();
+
+	DISTRIB_IASCHN->Sumw2();
+	DISTRIB_IASCHCH->Sumw2();
+	DISTRIB_IASDCH->Sumw2();
+
+	DISTRIB_IH->Sumw2();
+
+	DISTRIB_IHCHN->Sumw2();
+	DISTRIB_IHCHCH->Sumw2();
+	DISTRIB_IHDCH->Sumw2();
+	
+	DISTRIB_P1_P2_CHN->Sumw2();
+	DISTRIB_P1_P2_CHCH->Sumw2();
+
+	DISTRIB_ETA_DCH->Sumw2();
+	DISTRIB_MET_CHN->Sumw2();
+	DISTRIB_MET_CHCH->Sumw2();
+	DISTRIB_MET_pt_CHN->Sumw2();
+	DISTRIB_MET_pt_CHCH->Sumw2();
+	DISTRIB_P1MP2CHCH->Sumw2();
+	DISTRIB_P1MP2CHN->Sumw2();
+	DISTRIB_PT1_PT2->Sumw2();
 	//trigEff_presel.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);
 	
 	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
@@ -58,17 +176,111 @@ void AnaEff::Loop()
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 	
-		
+		indexcandidate=Preselection();
+
+
 	}
 
 
+	distrib = new TFile(distribvarZ.c_str(),"RECREATE");
+	
+	distrib->cd();
+
 	DISTRIB_NB_RHADRONS->Write();
 
-	cout << "After loop nentries" << endl;
+	DISTRIB_IAS->Write();
+
+	DISTRIB_IASCHN->Write();
+	DISTRIB_IASCHCH->Write();
+	DISTRIB_IASDCH->Write();
+
+	DISTRIB_IH->Write();
+
+	DISTRIB_IHCHN->Write();
+	DISTRIB_IHCHCH->Write();
+	DISTRIB_IHDCH->Write();
+
+	DISTRIB_P1_P2_CHN->Write();
+	DISTRIB_P1_P2_CHCH->Write();
 	
+	DISTRIB_ETA_DCH->Write();
+	DISTRIB_MET_CHN->Write();
+	DISTRIB_MET_CHCH->Write();
+	DISTRIB_MET_pt_CHN->Write();
+	DISTRIB_MET_pt_CHCH->Write();
+	DISTRIB_P1MP2CHCH->Write();
+	DISTRIB_P1MP2CHN->Write();
+	DISTRIB_PT1_PT2->Write();
+
+	distrib->Close();
 	cout << "Program terminated without any logic call out of bound" << endl;
 
 }
+
+int AnaEff::Preselection(){
+	int index=64,count2=0;
+	vector<int> positions;
+	vector< pair<float, int > > Muonpt,HSCPpt,HSCPponm;
+	
+	bool yon=true;
+	for(int ihs=0; ihs<nhscp;ihs++){
+		yon=true;
+		if( track_eta[hscp_track_idx[ihs]] >= 2.1 || track_eta[hscp_track_idx[ihs]] <= -2.1 ){
+			yon=false;
+		}
+		if( track_npixhits[hscp_track_idx[ihs]] <= 1 ){ //?
+			yon=false;
+		}
+		if( track_nhits[hscp_track_idx[ihs]] <= 4 ){ //7
+			yon=false;
+		}
+		if( track_validfraction[hscp_track_idx[ihs]] <= 0.8 ){
+			yon=false;
+		}
+		if( ndedxhits <= 5 ){
+			yon=false;
+		}
+		if( track_pt[hscp_track_idx[ihs]] <= 55 ){ //55
+			yon=false;
+		}
+		if( track_dxy[hscp_track_idx[ihs]] >=0.5 ){
+			yon=false;
+		}
+		if( track_dz[hscp_track_idx[ihs]] >=0.5 ){
+			yon=false;
+		}
+		if( track_pterr[hscp_track_idx[ihs]]/track_pt[hscp_track_idx[ihs]] >= 1 ){ 
+			yon=false;
+		}
+		if( track_qual[hscp_track_idx[ihs]] < 2 ){//?
+			yon=false;
+		}
+		/*if(track_ias_ampl[hscp_track_idx[ihs]] < 0.8){ 
+			yon = false;
+		}*/
+		
+		if(yon){
+			positions.push_back(ihs); 
+			HSCPpt.push_back(make_pair(track_pt[hscp_track_idx[ihs]],ihs));
+			Muonpt.push_back(make_pair(muon_pt[ihs],ihs));
+		}
+		
+	}
+
+	if(positions.size() != 0){
+		int siz=Muonpt.size(),sizH = HSCPpt.size();
+
+		sort(Muonpt.begin(),Muonpt.end());
+		sort(HSCPpt.begin(),HSCPpt.end());
+		return HSCPpt[sizH-1].second;
+		//return Muonpt[siz-1].second;
+	}
+	else{
+		return 64;
+	}
+
+}
+
 
 void AnaEff::AssoGenId(int indexcandidate){
 
