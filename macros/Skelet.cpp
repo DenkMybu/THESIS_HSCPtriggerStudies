@@ -49,14 +49,6 @@ void AnaEff::Loop()
 	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
 
 
-
-
-
-
-
-
-
-
 	DISTRIB_NB_RHADRONS = new TH1D ("DISTRIB_NB_RHADRONS" , " ( nb r hadrons (all scenarios) )", 6,0,4);
 	DISTRIB_NB_RHADRONS->GetXaxis()->SetTitle("# R-hadrons");
 	DISTRIB_NB_RHADRONS->GetYaxis()->SetTitle("# events");
@@ -136,7 +128,7 @@ void AnaEff::Loop()
 	DISTRIB_PT1_PT2->GetYaxis()->SetTitle("PT candidate 2");
 
 
-	int indexcandidate;
+	int indexcandidate, indexcandidatenosel, indexcandidatesel;
 	
 	
 	DISTRIB_NB_RHADRONS->Sumw2();
@@ -177,7 +169,13 @@ void AnaEff::Loop()
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 	
 		indexcandidate=Preselection();
+		if(indexcandidate!=64){
+			indexcandidatesel = Selection(indexcandidate);
+			if(indexcandidatesel != 64){
+				AssoGenId(indexcandidatesel);
 
+			}
+		}
 
 	}
 
