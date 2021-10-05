@@ -168,14 +168,14 @@ void AnaEff::Loop()
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 	
-		indexcandidate=Preselection();
+		/*indexcandidate=Preselection();
 		if(indexcandidate!=64){
 			indexcandidatesel = Selection(indexcandidate);
 			if(indexcandidatesel != 64){
 				AssoGenId(indexcandidatesel);
 
 			}
-		}
+		}*/
 
 	}
 
