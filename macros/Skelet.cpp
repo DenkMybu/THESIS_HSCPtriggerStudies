@@ -281,6 +281,21 @@ int AnaEff::Preselection(){
 
 }
 
+
+int AnaEff::Selection(int indexcandidate){
+	bool yoy = false;
+	
+	if(track_ias_ampl[hscp_track_idx[indexcandidate]] > 0.2){ 
+			yoy = true;
+			return indexcandidate;
+		}
+
+	else{
+		return 64;
+	}
+	
+}
+
 double AnaEff::deltaR2(float track_eta,float track_phi, float muon_eta, float muon_phi){
 	float dp = std::abs(track_phi - muon_phi);
 	if (dp > M_PI){
