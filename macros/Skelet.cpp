@@ -358,7 +358,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		}
 	}
 	DISTRIB_NB_RHADRONS->Fill(candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size());
-	cout << " Number of HSCP (charged + neutral + double charged) " << candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size() << endl;
+	//cout << " Number of HSCP (charged + neutral + double charged) " << candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size() << endl;
 	bool alo = false,alo2=false;
 
 
