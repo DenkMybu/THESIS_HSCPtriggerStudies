@@ -29,7 +29,7 @@ void AnaEff::Loop()
 	
 	Long64_t nentries = fChain->GetEntriesFast();
 	Long64_t nbytes = 0, nb = 0, nbi = 0;
-	Long64_t initializing = LoadTree(0); 
+	Long64_t initializing = LoadTree(0);
 	if (initializing < 0) cout << "Aborted"<< endl;
 	nbi = fChain->GetEntry(initializing);   nbytes += nbi;
 	cout << "Number of triggers for this file  : " << ntrigger << endl;
