@@ -158,9 +158,17 @@ public :
    virtual void     Show(Long64_t entry = -1);
    virtual int      Preselection();
    virtual int      Selection(int indexcandidate);
+   virtual double   deltaR2(float track_eta,float track_phi, float muon_eta, float muon_phi);
+   virtual double   deltaR(double delta);
    virtual void	    AssoGenId(int indexcandidate);
+
    
 private :
+
+  TFile* distrib;
+  Int_t nbchch=0,nbchn=0,nbnn=0,nbtot=0,nbn=0,nbch=0, nbtch=0;
+  Double_t Psurm1=0;
+  Double_t Psurm2=0;
 
   //*************************************** TH1D compiled by main class *****************************************************
   TH1D* DISTRIB_NB_RHADRONS;
@@ -206,6 +214,8 @@ private :
 
 AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 {
+	distrib=0;
+
 	DISTRIB_NB_RHADRONS=0;
 
 	DISTRIB_IAS=0;
@@ -265,6 +275,10 @@ AnaEff::~AnaEff() //deconstruct
    if (!fChain) return;
    delete fChain->GetCurrentFile();
    
+   if(!distrib){
+   	delete distrib;
+   }
+
    if(!DISTRIB_NB_RHADRONS){
    	delete DISTRIB_NB_RHADRONS;
    }

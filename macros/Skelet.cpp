@@ -281,6 +281,19 @@ int AnaEff::Preselection(){
 
 }
 
+double AnaEff::deltaR2(float track_eta,float track_phi, float muon_eta, float muon_phi){
+	float dp = std::abs(track_phi - muon_phi);
+	if (dp > M_PI){
+		dp -= 2.0 * M_PI;
+	}
+	return (track_eta - muon_eta)*(track_eta - muon_eta) + dp * dp;
+
+}
+
+double AnaEff::deltaR(double delta) {
+	return std::sqrt(delta);
+}
+
 
 void AnaEff::AssoGenId(int indexcandidate){
 
