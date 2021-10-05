@@ -158,6 +158,7 @@ public :
    virtual void     Show(Long64_t entry = -1);
    virtual int      Preselection();
    virtual int      Selection(int indexcandidate);
+   virtual void	    AssoGenId(int indexcandidate);
    
 private :
 
@@ -213,7 +214,7 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_IASCHCH=0;
 	DISTRIB_IASDCH=0;
 
-	DISTRIB_IH=0:
+	DISTRIB_IH=0;
 
 	DISTRIB_IHCHN=0;
 	DISTRIB_IHCHCH=0;
