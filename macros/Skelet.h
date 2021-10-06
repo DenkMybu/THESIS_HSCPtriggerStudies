@@ -248,19 +248,19 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 	if (tree == 0) {
-		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-2000_TuneCP5_13TeV-pythia8/MC17_Gluino2000/210316_095038/0000/nt_mc_aod_1.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
+		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2400.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
 
 		if (!f || !f->IsOpen()) {
-			f = new TFile("/opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-2000_TuneCP5_13TeV-pythia8/MC17_Gluino2000/210316_095038/0000/nt_mc_aod_1.root");
+			f = new TFile("/opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2400.root");
 		}
 		
 	
-		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-2000_TuneCP5_13TeV-pythia8/MC17_Gluino2000/210316_095038/0000/nt_mc_aod_1.root:/stage"); 
+		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2400.root:/stage"); 
 		dir->GetObject("ttree",tree);
 		
+// /opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2400.root
+// /opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-2000_TuneCP5_13TeV-pythia8/MC17_Gluino2000/210316_095038/0000/nt_mc_aod_1.root
 
-// /opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_new.root
-// /home/raph/CMS/HSCPtriggerStudies/data/MergedMET/Cuts3/all_new.root
   	 }
   
    //passTrigger = new bool[ntrigger];
