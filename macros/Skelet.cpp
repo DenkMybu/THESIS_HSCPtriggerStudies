@@ -322,7 +322,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 	//cout << " NEW EVENT ------"<<endl;
 	for(int i=0; i < ngenpart ; i++){
 		
-		cout << "gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+		cout << "Nb of part_gen" << ngenpart << " , gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
 
 
 		if(gen_moth_pdg[i] == 1000021){
