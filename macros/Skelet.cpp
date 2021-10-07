@@ -22,8 +22,9 @@ const double uncertaintyMu = 0.0000000024;
 const double massW = 80.379;
 const double uncertaintyW = 0.012;
 
-const float TheorMass = 1800;
+const float TheorMass = 2400;
 
+ 
 void AnaEff::Loop()
 {
 	
@@ -32,18 +33,14 @@ void AnaEff::Loop()
 	Long64_t initializing = LoadTree(0);
 	if (initializing < 0) cout << "Aborted"<< endl;
 	nbi = fChain->GetEntry(initializing);   nbytes += nbi;
-	cout << "Number of triggers for this file  : " << ntrigger << endl;
-	cout << " Number of events for this file : " << nentries << endl;
+	cout << "Number of triggers for this file  : " << ntrigger << " , number of events : " << nentries << endl;
 
-	string NameList = "CompleteList",PrescaledList = "PrescaledList",ListAll = "ListOfAllTriggersEff", SubNum = "all",ExtRoot = ".root",ExtTxt = ".txt",Date="05_10_2021", Or = "LogicalOr";
-
-	string TransferTxt="AllInfos",TransferEff = "Eff",TransferZ = "EntriesFromZ",TransferW = "EntriesFromW",ErrorEffTransfer = "Error",TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak",DataType = "Stop2400";
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + TheorMass;
 	
 	string NameCompleteListTest = "ListeInteretTriggers";
 
 
 	string StudyDistribZ = TransferDistribZ + DataType + Date;
-
 
 
 	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
@@ -161,7 +158,7 @@ void AnaEff::Loop()
 	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
 	
 
-	cout << "Before loop nentries" << endl;
+	cout << "Working on " << DataType << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { //All entries
 		Long64_t ientry = LoadTree(jentry);
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
@@ -281,13 +278,9 @@ int AnaEff::Preselection(){
 
 
 int AnaEff::Selection(int indexcandidate){
-	bool yoy = false;
-	
 	if(track_ias_ampl[hscp_track_idx[indexcandidate]] > 0.2){ 
-			yoy = true;
-			return indexcandidate;
-		}
-
+		return indexcandidate;
+	}
 	else{
 		return 64;
 	}
@@ -363,10 +356,12 @@ void AnaEff::AssoGenId(int indexcandidate){
 
 
 	nbtot+=1;
-	//cout << "nb neutral : " << candidatesneutral.size() << " , nb charged : " << candidatesrh.size() << " ,nb tot = " << candidatesneutral.size() + candidatesrh.size() <<endl;
+	
 	if(candidatesdoublech.size() >= 1 ){
 		nbtch+=1;
-		double deltatranfrdch = deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesdoublech[candidatesdoublech.size()-1]], gen_phi[candidatesdoublech[candidatesdoublech.size()-1]]);
+		double eta_track = track_eta[hscp_track_idx[indexcandidate]],phi_track = track_phi[hscp_track_idx[indexcandidate]],eta_gen = gen_eta[candidatesdoublech[candidatesdoublech.size()-1]], phi_gen = gen_phi[candidatesdoublech[candidatesdoublech.size()-1]];
+		
+		double deltatranfrdch = deltaR2(eta_track, phi_track, eta_gen, phi_gen);
 		double finaldeltadch = deltaR(deltatranfrdch);	
 
 		if(finaldeltadch < 0.3 ){
@@ -423,7 +418,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 				DISTRIB_IHCHN->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 				DISTRIB_IASCHN->Fill(track_ias_ampl[hscp_track_idx[indexcandidate]]);
 				DISTRIB_P1_P2_CHN->Fill(p1,p2);
-				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);
+				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);// PT of charged candidate
 			}
 			else{
 				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesneutral.size()-1]]);
@@ -442,7 +437,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		}*/
 
 
-		DISTRIB_PT1_PT2->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesrh[candidatesneutral.size()-1]]);
+		DISTRIB_PT1_PT2->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 		
 		
 
