@@ -46,6 +46,8 @@ void AnaEff::Loop()
 
 
 	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
+
+
 	//************************************** DECLARATION OF THXD *******************************************************
 	//******************************************************************************************************************
 
@@ -86,6 +88,20 @@ void AnaEff::Loop()
 	DISTRIB_IHDCH->GetXaxis()->SetTitle("Ih");
 	DISTRIB_IHDCH->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_METNOSEL = new TH1D("DISTRIB_METNOSEL", "( MET )", 100,0,4000);
+	DISTRIB_METNOSEL->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METNOSEL->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_METPRESEL = new TH1D("DISTRIB_METPRESEL", "( MET )", 100,0,4000);
+	DISTRIB_METPRESEL->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METPRESEL->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_METSEL = new TH1D("DISTRIB_METSEL", "( MET )", 100,0,4000);
+	DISTRIB_METSEL->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METSEL->GetYaxis()->SetTitle("# HSCP");
+
+
+
 	DISTRIB_ETA_DCH = new TH1D("DISTRIB_ETA_DCH", "( ETA dch )", 100, -3, 3);
 	DISTRIB_ETA_DCH->GetXaxis()->SetTitle(" #Eta ");
 	DISTRIB_ETA_DCH->GetYaxis()->SetTitle("# HSCP");
@@ -111,36 +127,38 @@ void AnaEff::Loop()
 	DISTRIB_P1MP2CHN->GetYaxis()->SetTitle("# HSCP");
 
 	DISTRIB_MET_pt_CHN = new TH2D("DISTRIB_MET_pt_CHN", "Met vs pt chn", 600, 0, 4000, 600, 0, 4000);
-	DISTRIB_MET_pt_CHN->GetYaxis()->SetTitle("Reco MET [GeV]");
-	DISTRIB_MET_pt_CHN->GetXaxis()->SetTitle("Pt [GeV]");
+	DISTRIB_MET_pt_CHN->GetXaxis()->SetTitle("Reco MET [GeV]");
+	DISTRIB_MET_pt_CHN->GetYaxis()->SetTitle("Pt [GeV]");
 
 	DISTRIB_MET_pt_CHCH = new TH2D("DISTRIB_MET_pt_CHCH", "Met vs pt chch", 600, 0, 4000, 600, 0, 4000);
-	DISTRIB_MET_pt_CHCH->GetYaxis()->SetTitle("Reco MET [GeV]");
-	DISTRIB_MET_pt_CHCH->GetXaxis()->SetTitle("Pt [GeV]");
+	DISTRIB_MET_pt_CHCH->GetXaxis()->SetTitle("Reco MET [GeV]");
+	DISTRIB_MET_pt_CHCH->GetYaxis()->SetTitle("Pt [GeV]");
 
 	DISTRIB_PT1_PT2 = new TH2D("DISTRIB_PT1_PT2", "PT1_PT2 ", 300 , 0 , 2000 , 300, 0 , 2000 );
 	DISTRIB_PT1_PT2->GetXaxis()->SetTitle("PT candidate 1");
 	DISTRIB_PT1_PT2->GetYaxis()->SetTitle("PT candidate 2");
 
 	DISTRIB_PT1_PT2_CHCH = new TH2D("DISTRIB_PT1_PT2_CHCH", "PT1_PT2_CHCH", 300 , 0 , 2000 , 300, 0 , 2000 );
-	DISTRIB_PT1_PT2_CHCH->GetXaxis()->SetTitle("PT candidate 1");
-	DISTRIB_PT1_PT2_CHCH->GetYaxis()->SetTitle("PT candidate 2");
+	DISTRIB_PT1_PT2_CHCH->GetXaxis()->SetTitle("PT charged candidate 1");
+	DISTRIB_PT1_PT2_CHCH->GetYaxis()->SetTitle("PT charged candidate 2");
 
 	DISTRIB_PT1_PT2_CHN = new TH2D("DISTRIB_PT1_PT2_CHN", "PT1_PT2_CHN", 300 , 0 , 2000 , 300, 0 , 2000 );
-	DISTRIB_PT1_PT2_CHN->GetXaxis()->SetTitle("PT candidate 1");
-	DISTRIB_PT1_PT2_CHN->GetYaxis()->SetTitle("PT candidate 2");
+	DISTRIB_PT1_PT2_CHN->GetXaxis()->SetTitle("PT charged candidate");
+	DISTRIB_PT1_PT2_CHN->GetYaxis()->SetTitle("PT neutral candidate");
 
 	DISTRIB_PT1_PT2_NN = new TH2D("DISTRIB_PT1_PT2_NN", "PT1_PT2_NN", 300 , 0 , 2000 , 300, 0 , 2000 );
-	DISTRIB_PT1_PT2_NN->GetXaxis()->SetTitle("PT candidate 1");
-	DISTRIB_PT1_PT2_NN->GetYaxis()->SetTitle("PT candidate 2");
+	DISTRIB_PT1_PT2_NN->GetXaxis()->SetTitle("PT neutral candidate 1");
+	DISTRIB_PT1_PT2_NN->GetYaxis()->SetTitle("PT neutral candidate 2");
 
 	DISTRIB_P1_P2_CHN = new TH2D("DISTRIB_P1_P2_CHN", "P1_P2CHN", 600 , 0 , 4000 , 600, 0 , 4000 );
-	DISTRIB_P1_P2_CHN->GetXaxis()->SetTitle("P candidate 1");
-	DISTRIB_P1_P2_CHN->GetYaxis()->SetTitle("P candidate 2");
+	DISTRIB_P1_P2_CHN->GetXaxis()->SetTitle("P charged candidate");
+	DISTRIB_P1_P2_CHN->GetYaxis()->SetTitle("P neutral candidate");
 
 	DISTRIB_P1_P2_CHCH = new TH2D("DISTRIB_P1_P2_CHCH", "P1_P2CHCH", 600 , 0 , 4000 , 600, 0 , 4000 );
-	DISTRIB_P1_P2_CHCH->GetXaxis()->SetTitle("P candidate 1");
-	DISTRIB_P1_P2_CHCH->GetYaxis()->SetTitle("P candidate 2");
+	DISTRIB_P1_P2_CHCH->GetXaxis()->SetTitle("P charged candidate 1");
+	DISTRIB_P1_P2_CHCH->GetYaxis()->SetTitle("P charged candidate 2");
+
+
 	//******************************************************************************************************************
 	//******************************************************************************************************************
 
@@ -158,6 +176,10 @@ void AnaEff::Loop()
 	DISTRIB_IHCHCH->Sumw2();
 	DISTRIB_IHDCH->Sumw2();
 	
+	ISTRIB_METNOSEL->Sumw2();
+	DISTRIB_METPRESEL->Sumw2();
+	DISTRIB_METSEL->Sumw2();
+
 	DISTRIB_P1_P2_CHN->Sumw2();
 	DISTRIB_P1_P2_CHCH->Sumw2();
 
@@ -188,14 +210,16 @@ void AnaEff::Loop()
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 		counter+=1;
+		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 		indexcandidate=Preselection();
 		if(indexcandidate!=64){
+			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
 			if(indexcandidatesel != 64){
+				DISTRIB_METSEL->Fill(pfmet_pt[0]);
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
-				DISTRIB_IAS->Fill(track_ih_ampl[hscp_track_idx[indexcandidatesel]]);
 				AssoGenId(indexcandidatesel);
 
 			}
@@ -214,7 +238,8 @@ void AnaEff::Loop()
 	cout << " Neutral-X : " << nbnn << " / " << nbtot << " = "  <<  nbnn*1.0/nbtot << endl;
 	cout << "Double charged R-hadrons :  " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << endl;
 
-
+	//*********************************TXT OUTPUT***********************************
+	//******************************************************************************
 	
 	InfosData << "# events : " << nentries << " , # passing preselection : " << passedpresel << "# selection IAS > 0.2" << passedevent << ", should equal nbtot = " << nbtot << " ¦¦ nb missmatched : " << nbmissmatch << endl;
 	InfosData << "*******************************SCENARIOS*******************************" << "\n\n" << endl;
@@ -223,6 +248,11 @@ void AnaEff::Loop()
 	InfosData << " # Neutral-Neutral : " << nbnn << " / " << nbtot << " = " << nbnn*1.0/nbtot << endl;
 	InfosData << " # Neutral-X : " << nbnx << " / " << nbtot << " = " << nbnx*1.0/nbtot << endl;
 	InfosData << " # Double charged - X " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << endl;
+
+	//******************************************************************************
+	//******************************************************************************
+
+
 	InfosData.close();
 
 	distrib = new TFile(distribvarZ.c_str(),"RECREATE");
@@ -244,6 +274,10 @@ void AnaEff::Loop()
 	DISTRIB_IHCHN->Write();
 	DISTRIB_IHCHCH->Write();
 	DISTRIB_IHDCH->Write();
+
+	DISTRIB_METNOSEL->Write();
+	DISTRIB_METPRESEL->Write();
+	DISTRIB_METSEL->Write();
 
 	DISTRIB_P1_P2_CHN->Write();
 	DISTRIB_P1_P2_CHCH->Write();
@@ -268,6 +302,8 @@ void AnaEff::Loop()
 
 }
 //*********************************PRESELECTION*********************************
+//******************************************************************************
+
 int AnaEff::Preselection(){
 	int index=64,count2=0;
 	vector<int> positions;
@@ -331,6 +367,12 @@ int AnaEff::Preselection(){
 
 }
 //******************************************************************************
+//******************************************************************************
+
+
+//***********************************SELECTION***********************************
+//*******************************************************************************
+
 
 int AnaEff::Selection(int indexcandidate){
 	if(track_ias_ampl[hscp_track_idx[indexcandidate]] > 0.2){ 
@@ -341,6 +383,9 @@ int AnaEff::Selection(int indexcandidate){
 	}
 	
 }
+//*******************************************************************************
+//*******************************************************************************
+
 
 void AnaEff::AssoGenId(int indexcandidate){
 
@@ -415,6 +460,9 @@ void AnaEff::AssoGenId(int indexcandidate){
 			DISTRIB_ETA_DCH->Fill(track_eta[hscp_track_idx[indexcandidate]]);
 		}
 	}
+	//*******************************NEUTRAL + NEUTRAL*******************************
+	//*******************************************************************************
+
 
 	if(candidatesrh.size() == 0 && candidatesneutral.size() == 2){
 		DISTRIB_MET_NN->Fill(pfmet_pt[0]);
@@ -422,9 +470,16 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_PT1_PT2_NN->Fill(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-2]]);
 	}
 
+	//*******************************NEUTRAL + XXXXXXX*******************************
+	//*******************************************************************************
+
 	if( candidatesrh.size() == 0 && candidatesneutral.size() == 1 ){
 		nbnx+=1;
 	}
+
+
+	//*******************************CHARGED + NEUTRAL*******************************
+	//*******************************************************************************
 
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
@@ -457,6 +512,9 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 	}
 
+
+	//*******************************CHARGED + CHARGED*******************************
+	//*******************************************************************************
 
 	else if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
 		//*********** P of charged candidate 1 ***************
