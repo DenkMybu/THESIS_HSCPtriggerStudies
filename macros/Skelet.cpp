@@ -250,7 +250,7 @@ void AnaEff::Loop()
 	cout << "Program terminated without any logic call out of bound" << endl;
 
 }
-
+//*********************************PRESELECTION*********************************
 int AnaEff::Preselection(){
 	int index=64,count2=0;
 	vector<int> positions;
@@ -307,14 +307,13 @@ int AnaEff::Preselection(){
 		sort(Muonpt.begin(),Muonpt.end());
 		sort(HSCPpt.begin(),HSCPpt.end());
 		return HSCPpt[sizH-1].second;
-		//return Muonpt[siz-1].second;
 	}
 	else{
 		return 64;
 	}
 
 }
-
+//******************************************************************************
 
 int AnaEff::Selection(int indexcandidate){
 	if(track_ias_ampl[hscp_track_idx[indexcandidate]] > 0.2){ 
@@ -328,16 +327,10 @@ int AnaEff::Selection(int indexcandidate){
 
 void AnaEff::AssoGenId(int indexcandidate){
 
-	vector<int> indexpdgch{1009213, 1009323, 1092214, 1091114, 1093114, 1093224, 1093314, 1093334, 1000612, 1000632, 1000652, 1006211, 1006213, 1006313, 1006321, 1006323 };
-	vector<int> indexpdgn{1000622, 1093324, 1092114, 1000993, 1009113, 1009223, 1009313, 1009333, 1093214, 1000642, 1006113, 1006311, 1006313};
-	vector<int> indexpdgch2{1006223, 1092224};
-
+	vector<int> indexpdgch{1009213, 1009323, 1092214, 1091114, 1093114, 1093224, 1093314, 1093334, 1000612, 1000632, 1000652, 1006211, 1006213, 1006313, 1006321, 1006323 }, indexpdgn{1000622, 1093324, 1092114, 1000993, 1009113, 1009223, 1009313, 1009333, 1093214, 1000642, 1006113, 1006311, 1006313}, indexpdgch2{1006223, 1092224};
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
 	int nbmothgen=0;
-	int nbnn=0;
-	double p1=0,p2=0,eta1=0,eta2=0,pt1=0,pt2=0;
-	float poverm1,poverm2;
-	//cout << " NEW EVENT ------"<<endl;
+
 	for(int i=0; i < ngenpart ; i++){
 		
 		//cout << "Nb of part_gen" << ngenpart << " , gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
@@ -401,7 +394,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		}
 	}
 
-	if(candidatesrh.size() == 0 && candidatesneutral.size() >= 2){
+	if(candidatesrh.size() == 0 && candidatesneutral.size() == 2){
 		DISTRIB_MET_NN->Fill(pfmet_pt[0]);
 		nbnn+=1;
 		DISTRIB_PT1_PT2_NN->Fill(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-2]]);
@@ -411,7 +404,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		nbnx+=1;
 	}
 
-	if( candidatesrh.size() >= 1 && candidatesneutral.size() >= 1 ){
+	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
 		//cout << " charged + neutral " << endl;
 		double p1 = gen_pt[candidatesrh[candidatesrh.size()-1]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
@@ -437,29 +430,13 @@ void AnaEff::AssoGenId(int indexcandidate){
 			}
 			else{
 				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesneutral.size()-1]]);
-			
 			}
-
 		}
-		/*else if ( finaldelta1chn < 0.3 && finaldelta2chn > 0.3){
-			
-		}
-		else if( finaldelta1chn > 0.3 && finaldelta2chn < 0.3){
-			
-		}
-		else if( finaldelta1chn > 0.3 && finaldelta2chn > 0.3){
-			
-		}*/
-
-
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
-		
-		
-
 	}
 
 
-	else if(candidatesrh.size() >= 2 && candidatesneutral.size() == 0){
+	else if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
 		//*********** P of charged candidate 1 ***************
 		double p1chch = (gen_pt[candidatesrh[candidatesrh.size()-1]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]));
 		//*********** P of charged candidate 2 ***************
@@ -497,18 +474,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 			else{
 				DISTRIB_MET_pt_CHCH->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-2]]);
 			}
-
 		}
-		/*else if ( finaldelta1 < 0.3 && finaldelta2 > 0.3){
-			Psurm1 = poverm1;
-		}
-		else if( finaldelta1 > 0.3 && finaldelta2 < 0.3){
-			Psurm1 = poverm2;
-		}
-		else if( finaldelta1 > 0.3 && finaldelta2 > 0.3){
-			Psurm1 = 0;
-		}*/
-
 	}
 	
 	if(alo==false && alo2 == false){
