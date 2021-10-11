@@ -39,6 +39,8 @@ void AnaEff::Loop()
 	
 	string NameCompleteListTest = "ListeInteretTriggers";
 
+	string StudyTxt = TransferTxt + DataType + Date;
+	string NameOfTxt = StudyTxt + SubNum + ExtTxt;
 
 	string StudyDistribZ = TransferDistribZ + DataType + Date;
 
@@ -177,7 +179,7 @@ void AnaEff::Loop()
 	
 	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
 	
-	int counter=0,passedevent=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
+	int counter=0,passedevent=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
 
 	cout << "Working on " << DataType << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { //All entries
@@ -188,6 +190,7 @@ void AnaEff::Loop()
 		counter+=1;
 		indexcandidate=Preselection();
 		if(indexcandidate!=64){
+			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
 			if(indexcandidatesel != 64){
 				passedevent+=1;
@@ -200,13 +203,27 @@ void AnaEff::Loop()
 
 	}
 
-	cout << "--------------------- Gluinos ---------------- "  << endl;
+	ofstream InfosData;
+	InfosData.open (NameOfTxt);
+
+	
+	cout << "--------------------- RHADRONS ---------------- "  << endl;
 	cout << " There was " << nbtot << " events, " << nbchn << " charged + neutral and" << nbchch << " charged + charged" << endl;
 	cout << " Charged-Charged : " << nbchch << " / " << nbtot << " = " << nbchch*1.0/nbtot <<  endl;
 	cout << " Neutral-Charged : " << nbchn << " / " << nbtot << " = "  <<  nbchn*1.0/nbtot << endl;
 	cout << " Neutral-X : " << nbnn << " / " << nbtot << " = "  <<  nbnn*1.0/nbtot << endl;
 	cout << "Double charged R-hadrons :  " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << endl;
 
+
+	
+	InfosData << "# events : " << nentries << " , # passing preselection : " << passedpresel << "# selection IAS > 0.2" << passedevent << ", should equal nbtot = " << nbtot << endl;
+	InfosData << "*******************************SCENARIOS*******************************" << "\n\n" << endl;
+	InfosData << " # Charged-Charged : " << nbchch << " / " << nbtot << " = " << nbchch*1.0/nbtot << endl;
+	InfosData << " # Charged-Neutral : " << nbchn << " / " << nbtot << " = " << nbchn*1.0/nbtot << endl;
+	InfosData << " # Neutral-Neutral : " << nbnn << " / " << nbtot << " = " << nbnn*1.0/nbtot << endl;
+	InfosData << " # Neutral-X : " << nbnx << " / " << nbtot << " = " << nbnx*1.0/nbtot << endl;
+	InfosData << " # Double charged - X " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << endl;
+	InfosData.close();
 
 	distrib = new TFile(distribvarZ.c_str(),"RECREATE");
 	
@@ -376,6 +393,13 @@ void AnaEff::AssoGenId(int indexcandidate){
 					cout << "double charge gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
 				}
 			}
+		}
+
+		if (candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size() != 2 ){
+			cout << " There weren't two different rhadrons (mis-matching may be the cause) " << endl;
+			break;
+
+
 		}
 	}
 	DISTRIB_NB_RHADRONS->Fill(candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size());
