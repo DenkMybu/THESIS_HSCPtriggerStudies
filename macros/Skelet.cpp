@@ -100,6 +100,11 @@ void AnaEff::Loop()
 	DISTRIB_MET_CHN->GetXaxis()->SetTitle("MET (GeV)");
 	DISTRIB_MET_CHN->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_MET_NN = new TH1D ("DISTRIB_MET_NN", " ( MET NN) " , 100,0,4000);
+	DISTRIB_MET_NN->GetXaxis()->SetTitle("MET (GeV)");
+	DISTRIB_MET_NN->GetYaxis()->SetTitle("# HSCP");
+
+
 	DISTRIB_MET_CHCH = new TH1D ("DISTRIB_MET_CHCH", " ( MET CHCH) " , 100,0,4000);
 	DISTRIB_MET_CHCH->GetXaxis()->SetTitle("MET (GeV)");
 	DISTRIB_MET_CHCH->GetYaxis()->SetTitle("# HSCP");
@@ -123,6 +128,19 @@ void AnaEff::Loop()
 	DISTRIB_PT1_PT2 = new TH2D("DISTRIB_PT1_PT2", "PT1_PT2 ", 300 , 0 , 2000 , 300, 0 , 2000 );
 	DISTRIB_PT1_PT2->GetXaxis()->SetTitle("PT candidate 1");
 	DISTRIB_PT1_PT2->GetYaxis()->SetTitle("PT candidate 2");
+
+	DISTRIB_PT1_PT2_CHCH = new TH2D("DISTRIB_PT1_PT2_CHCH", "PT1_PT2_CHCH", 300 , 0 , 2000 , 300, 0 , 2000 );
+	DISTRIB_PT1_PT2_CHCH->GetXaxis()->SetTitle("PT candidate 1");
+	DISTRIB_PT1_PT2_CHCH->GetYaxis()->SetTitle("PT candidate 2");
+
+	DISTRIB_PT1_PT2_CHN = new TH2D("DISTRIB_PT1_PT2_CHN", "PT1_PT2_CHN", 300 , 0 , 2000 , 300, 0 , 2000 );
+	DISTRIB_PT1_PT2_CHN->GetXaxis()->SetTitle("PT candidate 1");
+	DISTRIB_PT1_PT2_CHN->GetYaxis()->SetTitle("PT candidate 2");
+
+	DISTRIB_PT1_PT2_NN = new TH2D("DISTRIB_PT1_PT2_NN", "PT1_PT2_NN", 300 , 0 , 2000 , 300, 0 , 2000 );
+	DISTRIB_PT1_PT2_NN->GetXaxis()->SetTitle("PT candidate 1");
+	DISTRIB_PT1_PT2_NN->GetYaxis()->SetTitle("PT candidate 2");
+
 	//******************************************************************************************************************
 	//******************************************************************************************************************
 
@@ -144,13 +162,19 @@ void AnaEff::Loop()
 	DISTRIB_P1_P2_CHCH->Sumw2();
 
 	DISTRIB_ETA_DCH->Sumw2();
+
 	DISTRIB_MET_CHN->Sumw2();
+	DISTRIB_MET_NN->Sumw2();
 	DISTRIB_MET_CHCH->Sumw2();
 	DISTRIB_MET_pt_CHN->Sumw2();
 	DISTRIB_MET_pt_CHCH->Sumw2();
 	DISTRIB_P1MP2CHCH->Sumw2();
 	DISTRIB_P1MP2CHN->Sumw2();
+
 	DISTRIB_PT1_PT2->Sumw2();
+	DISTRIB_PT1_PT2_CHCH->Sumw2();
+	DISTRIB_PT1_PT2_CHN->Sumw2();
+	DISTRIB_PT1_PT2_NN->Sumw2();
 	//trigEff_presel.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);
 	
 	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
@@ -212,11 +236,15 @@ void AnaEff::Loop()
 	DISTRIB_ETA_DCH->Write();
 	DISTRIB_MET_CHN->Write();
 	DISTRIB_MET_CHCH->Write();
+	DISTRIB_MET_NN->Write();
 	DISTRIB_MET_pt_CHN->Write();
 	DISTRIB_MET_pt_CHCH->Write();
 	DISTRIB_P1MP2CHCH->Write();
 	DISTRIB_P1MP2CHN->Write();
 	DISTRIB_PT1_PT2->Write();
+	DISTRIB_PT1_PT2_CHCH->Write();
+	DISTRIB_PT1_PT2_CHN->Write();
+	DISTRIB_PT1_PT2_NN->Write();
 	//******************************************************************************
 	//******************************************************************************
 
@@ -300,20 +328,6 @@ int AnaEff::Selection(int indexcandidate){
 	
 }
 
-double AnaEff::deltaR2(float track_eta,float track_phi, float muon_eta, float muon_phi){
-	float dp = std::abs(track_phi - muon_phi);
-	if (dp > M_PI){
-		dp -= 2.0 * M_PI;
-	}
-	return (track_eta - muon_eta)*(track_eta - muon_eta) + dp * dp;
-
-}
-
-double AnaEff::deltaR(double delta) {
-	return std::sqrt(delta);
-}
-
-
 void AnaEff::AssoGenId(int indexcandidate){
 
 	vector<int> indexpdgch{1009213, 1009323, 1092214, 1091114, 1093114, 1093224, 1093314, 1093334, 1000612, 1000632, 1000652, 1006211, 1006213, 1006313, 1006321, 1006323 };
@@ -334,7 +348,8 @@ void AnaEff::AssoGenId(int indexcandidate){
 		if(gen_moth_pdg[i] == 1000021){
 			nbmothgen+=1;
 		}
-
+		//******************************** CHARGED RHADRONS********************************
+		//*********************************************************************************
 		for(int k = 0; k < indexpdgch.size() ; k++){
 			if(abs(gen_pdg[i]) == indexpdgch[k]){
 				if(gen_status[i] == 1){
@@ -343,7 +358,13 @@ void AnaEff::AssoGenId(int indexcandidate){
 				}
 			}
 		}
-		
+		//*********************************************************************************
+		//*********************************************************************************
+
+
+
+		//******************************** NEUTRAL RHADRONS********************************
+		//*********************************************************************************
 		for(int j=0; j < indexpdgn.size(); j++){
 			if(abs(gen_pdg[i]) == indexpdgn[j]){
 				if(gen_status[i] == 1){
@@ -352,11 +373,14 @@ void AnaEff::AssoGenId(int indexcandidate){
 				}
 			}
 		}
+		//*********************************************************************************
+		//*********************************************************************************
 		
-		
+
 		for(int j=0; j < indexpdgch2.size(); j++){
 			if(abs(gen_pdg[i]) == indexpdgch2[j]){
 				if(gen_status[i] == 1){
+					nbdch+=1;
 					candidatesdoublech.push_back(i);
 					cout << "double charge gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
 				}
@@ -364,49 +388,29 @@ void AnaEff::AssoGenId(int indexcandidate){
 		}
 	}
 	DISTRIB_NB_RHADRONS->Fill(candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size());
-	//cout << " Number of HSCP (charged + neutral + double charged) " << candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size() << endl;
 	bool alo = false,alo2=false;
-
-
 	nbtot+=1;
-	
 	if(candidatesdoublech.size() >= 1 ){
 		nbtch+=1;
 		double eta_track = track_eta[hscp_track_idx[indexcandidate]],phi_track = track_phi[hscp_track_idx[indexcandidate]],eta_gen = gen_eta[candidatesdoublech[candidatesdoublech.size()-1]], phi_gen = gen_phi[candidatesdoublech[candidatesdoublech.size()-1]];
-		
 		double deltatranfrdch = deltaR2(eta_track, phi_track, eta_gen, phi_gen);
 		double finaldeltadch = deltaR(deltatranfrdch);	
 
 		if(finaldeltadch < 0.3 ){
-	
 			DISTRIB_IHDCH->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_IASDCH->Fill(track_ias_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_ETA_DCH->Fill(track_eta[hscp_track_idx[indexcandidate]]);
 		}
-
-		
-
-
-		if(candidatesrh.size() >= 1){
-			//cout << " There is " << candidatesdoublech.size() << " double charged and " << candidatesrh.size() <<" single charged " << endl;
-		}
-		else if(candidatesneutral.size() >= 1){
-			//cout << " There is 1 double charged and 1 neutral" << endl;
-
-		}
-
-		else{
-
-			//cout << " There is 1 double charged and nothing else" << endl;
-		}
-
 	}
 
-
-
-	if( candidatesrh.size() == 0 && candidatesneutral.size() >= 1 ){
+	if(candidatesrh.size() == 0 && candidatesneutral.size() >= 2){
+		DISTRIB_MET_NN->Fill(pfmet_pt[0]);
 		nbnn+=1;
+		DISTRIB_PT1_PT2_NN->Fill(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-2]]);
+	}
 
+	if( candidatesrh.size() == 0 && candidatesneutral.size() == 1 ){
+		nbnx+=1;
 	}
 
 	if( candidatesrh.size() >= 1 && candidatesneutral.size() >= 1 ){
@@ -450,7 +454,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		}*/
 
 
-		DISTRIB_PT1_PT2->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
+		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 		
 		
 
@@ -467,7 +471,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_MET_CHCH->Fill(pfmet_pt[0]);
 
 		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
-		DISTRIB_PT1_PT2->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesrh[candidatesrh.size()-2]]);
+		DISTRIB_PT1_PT2_CHCH->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesrh[candidatesrh.size()-2]]);
 		DISTRIB_P1_P2_CHCH->Fill(p1chch,p2chch);
 		
 		nbchch+=1;
@@ -515,6 +519,19 @@ void AnaEff::AssoGenId(int indexcandidate){
 	candidatesrh.clear();
 	candidatesneutral.clear();
 	candidatesdoublech.clear();
+}
+
+double AnaEff::deltaR2(float track_eta,float track_phi, float muon_eta, float muon_phi){
+	float dp = std::abs(track_phi - muon_phi);
+	if (dp > M_PI){
+		dp -= 2.0 * M_PI;
+	}
+	return (track_eta - muon_eta)*(track_eta - muon_eta) + dp * dp;
+
+}
+
+double AnaEff::deltaR(double delta) {
+	return std::sqrt(delta);
 }
 
 

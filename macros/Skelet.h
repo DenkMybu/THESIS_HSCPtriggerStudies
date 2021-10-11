@@ -166,7 +166,7 @@ public :
 private :
 
   TFile* distrib;
-  Int_t nbchch=0,nbchn=0,nbnn=0,nbtot=0,nbn=0,nbch=0, nbtch=0;
+  Int_t nbchch=0,nbchn=0,nbnn=0,nbdch=0,nbtot=0,nbn=0,nbch=0, nbtch=0, nbnx=0;
   Double_t Psurm1=0;
   Double_t Psurm2=0;
 
@@ -188,8 +188,11 @@ private :
   TH1D* DISTRIB_ETA_DCH;
   TH1D* DISTRIB_MET_CHN;
   TH1D* DISTRIB_MET_CHCH;
+  TH1D* DISTRIB_MET_NN;
+
   TH1D* DISTRIB_P1MP2CHCH;
   TH1D* DISTRIB_P1MP2CHN;
+
 
   //*************************************************************************************************************************
 
@@ -199,6 +202,10 @@ private :
   TH2D* DISTRIB_P1_P2_CHCH;
 
   TH2D* DISTRIB_PT1_PT2;
+  TH2D* DISTRIB_PT1_PT2_CHCH;
+  TH2D* DISTRIB_PT1_PT2_CHN;
+  TH2D* DISTRIB_PT1_PT2_NN;
+	
   TH2D* DISTRIB_MET_pt_CHCH;
   TH2D* DISTRIB_MET_pt_CHN;
 
@@ -231,8 +238,11 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_IHDCH=0;
 
 	DISTRIB_ETA_DCH=0;
+
 	DISTRIB_MET_CHN=0;
 	DISTRIB_MET_CHCH=0;
+	DISTRIB_MET_NN=0;
+
 	DISTRIB_P1MP2CHCH=0;
 	DISTRIB_P1MP2CHN=0;
 
@@ -241,6 +251,10 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_P1_P2_CHCH=0;
 
 	DISTRIB_PT1_PT2=0;
+	DISTRIB_PT1_PT2_CHCH=0;
+	DISTRIB_PT1_PT2_CHN=0;
+	DISTRIB_PT1_PT2_NN=0;
+
 	DISTRIB_MET_pt_CHCH=0;
 	DISTRIB_MET_pt_CHN=0;
 
@@ -272,75 +286,87 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 
 AnaEff::~AnaEff() //deconstruct
 {
-   if (!fChain) return;
-   delete fChain->GetCurrentFile();
+  if (!fChain) return;
+  delete fChain->GetCurrentFile();
    
-   if(!distrib){
+  if(!distrib){
    	delete distrib;
-   }
+  }
 
-   if(!DISTRIB_NB_RHADRONS){
+  if(!DISTRIB_NB_RHADRONS){
    	delete DISTRIB_NB_RHADRONS;
-   }
+  }
 
-   if(!DISTRIB_IAS){
+  if(!DISTRIB_IAS){
    	delete DISTRIB_IAS;
-   }
-   if(!DISTRIB_IASCHN){
+  }
+  if(!DISTRIB_IASCHN){
    	delete DISTRIB_IASCHN;
-   }
-   if(!DISTRIB_IASCHCH){
+  }
+  if(!DISTRIB_IASCHCH){
    	delete DISTRIB_IASCHCH;
-   }
-   if(!DISTRIB_IASDCH){
+  }
+  if(!DISTRIB_IASDCH){
    	delete DISTRIB_IASDCH;
-   }
+  }
 
   if(!DISTRIB_IH){
    	delete DISTRIB_IH;
-   }
-   if(!DISTRIB_IHCHN){
+  }
+  if(!DISTRIB_IHCHN){
    	delete DISTRIB_IHCHN;
-   }
-   if(!DISTRIB_IHCHCH){
+  }
+  if(!DISTRIB_IHCHCH){
    	delete DISTRIB_IHCHCH;
-   }
-   if(!DISTRIB_IHDCH){
-   	delete DISTRIB_IHDCH;
-   }
+  }
+  if(!DISTRIB_IHDCH){
+  	delete DISTRIB_IHDCH;
+  }
   if(!DISTRIB_ETA_DCH){
-   	delete DISTRIB_ETA_DCH;
-   }
+  	delete DISTRIB_ETA_DCH;
+  }
   if(!DISTRIB_MET_CHN){
-   	delete DISTRIB_MET_CHN;
-   }
+  	delete DISTRIB_MET_CHN;
+  }
+  if(!DISTRIB_MET_NN){
+  	delete DISTRIB_MET_NN;
+  }
   if(!DISTRIB_MET_CHCH){
-   	delete DISTRIB_MET_CHCH;
-   }
+  	delete DISTRIB_MET_CHCH;
+  }
   if(!DISTRIB_P1MP2CHCH){
-   	delete DISTRIB_P1MP2CHCH;
-   }
+  	delete DISTRIB_P1MP2CHCH;
+  }
   if(!DISTRIB_P1MP2CHN){
-   	delete DISTRIB_P1MP2CHN;
-   }	
+  	delete DISTRIB_P1MP2CHN;
+  }	
 
 
 
-   if(!DISTRIB_P1_P2_CHN){
+  if(!DISTRIB_P1_P2_CHN){
    	delete DISTRIB_P1_P2_CHN;
-   }
-   if(!DISTRIB_P1_P2_CHCH){
+  }
+  if(!DISTRIB_P1_P2_CHCH){
    	delete DISTRIB_P1_P2_CHCH;
-   }
-   if(!DISTRIB_PT1_PT2){
+  }
+  if(!DISTRIB_PT1_PT2){
    	delete DISTRIB_PT1_PT2;
-   }
-   if(!DISTRIB_MET_pt_CHCH){
+  }
+  if(!DISTRIB_PT1_PT2_CHCH){
+   	delete DISTRIB_PT1_PT2_CHCH;
+  }
+  if(!DISTRIB_PT1_PT2_CHN){
+   	delete DISTRIB_PT1_PT2_CHN;
+  }
+  if(!DISTRIB_PT1_PT2_NN){
+   	delete DISTRIB_PT1_PT2_NN;
+  }
+  if(!DISTRIB_MET_pt_CHCH){
    	delete DISTRIB_MET_pt_CHCH;
-   }
-   if(!DISTRIB_MET_pt_CHN){
+  }
+  if(!DISTRIB_MET_pt_CHN){
    	delete DISTRIB_MET_pt_CHN;
-   }
+  }
 
    //delete[] passTrigger;
 }
