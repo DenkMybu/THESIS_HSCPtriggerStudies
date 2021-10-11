@@ -44,7 +44,8 @@ void AnaEff::Loop()
 
 
 	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
-
+	//************************************** DECLARATION OF THXD *******************************************************
+	//******************************************************************************************************************
 
 	DISTRIB_NB_RHADRONS = new TH1D ("DISTRIB_NB_RHADRONS" , " ( nb r hadrons (all scenarios) )", 6,0,4);
 	DISTRIB_NB_RHADRONS->GetXaxis()->SetTitle("# R-hadrons");
@@ -91,7 +92,6 @@ void AnaEff::Loop()
 	DISTRIB_P1_P2_CHCH->GetXaxis()->SetTitle("P candidate 1");
 	DISTRIB_P1_P2_CHCH->GetYaxis()->SetTitle("P candidate 2");
 
-//****
 	DISTRIB_ETA_DCH = new TH1D("DISTRIB_ETA_DCH", "( ETA dch )", 100, -3, 3);
 	DISTRIB_ETA_DCH->GetXaxis()->SetTitle(" #eta ");
 	DISTRIB_ETA_DCH->GetYaxis()->SetTitle("# HSCP");
@@ -123,11 +123,9 @@ void AnaEff::Loop()
 	DISTRIB_PT1_PT2 = new TH2D("DISTRIB_PT1_PT2", "PT1_PT2 ", 300 , 0 , 2000 , 300, 0 , 2000 );
 	DISTRIB_PT1_PT2->GetXaxis()->SetTitle("PT candidate 1");
 	DISTRIB_PT1_PT2->GetYaxis()->SetTitle("PT candidate 2");
+	//******************************************************************************************************************
+	//******************************************************************************************************************
 
-
-	int indexcandidate, indexcandidatenosel, indexcandidatesel;
-	
-	
 	DISTRIB_NB_RHADRONS->Sumw2();
 
 	DISTRIB_IAS->Sumw2();
@@ -157,6 +155,7 @@ void AnaEff::Loop()
 	
 	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
 	
+	int counter=0,passedevent=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
 
 	cout << "Working on " << DataType << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { //All entries
@@ -164,11 +163,14 @@ void AnaEff::Loop()
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
-	
+		counter+=1;
 		indexcandidate=Preselection();
 		if(indexcandidate!=64){
 			indexcandidatesel = Selection(indexcandidate);
 			if(indexcandidatesel != 64){
+				passedevent+=1;
+				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
+				DISTRIB_IAS->Fill(track_ih_ampl[hscp_track_idx[indexcandidatesel]]);
 				AssoGenId(indexcandidatesel);
 
 			}
@@ -176,11 +178,20 @@ void AnaEff::Loop()
 
 	}
 
+	cout << "--------------------- Gluinos ---------------- "  << endl;
+	cout << " There was " << nbtot << " events, " << nbchn << " charged + neutral and" << nbchch << " charged + charged" << endl;
+	cout << " Charged-Charged : " << nbchch << " / " << nbtot << " = " << nbchch*1.0/nbtot <<  endl;
+	cout << " Neutral-Charged : " << nbchn << " / " << nbtot << " = "  <<  nbchn*1.0/nbtot << endl;
+	cout << " Neutral-X : " << nbnn << " / " << nbtot << " = "  <<  nbnn*1.0/nbtot << endl;
+	cout << "Double charged R-hadrons :  " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << endl;
+
 
 	distrib = new TFile(distribvarZ.c_str(),"RECREATE");
 	
 	distrib->cd();
 
+	//********************************WRITING THXD**********************************
+	//******************************************************************************
 	DISTRIB_NB_RHADRONS->Write();
 
 	DISTRIB_IAS->Write();
@@ -206,6 +217,8 @@ void AnaEff::Loop()
 	DISTRIB_P1MP2CHCH->Write();
 	DISTRIB_P1MP2CHN->Write();
 	DISTRIB_PT1_PT2->Write();
+	//******************************************************************************
+	//******************************************************************************
 
 	distrib->Close();
 	cout << "Program terminated without any logic call out of bound" << endl;
@@ -445,15 +458,17 @@ void AnaEff::AssoGenId(int indexcandidate){
 
 
 	else if(candidatesrh.size() >= 2 && candidatesneutral.size() == 0){
-		//cout << "charged + charged " << endl;
+		//*********** P of charged candidate 1 ***************
 		double p1chch = (gen_pt[candidatesrh[candidatesrh.size()-1]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]));
+		//*********** P of charged candidate 2 ***************
 		double p2chch = (gen_pt[candidatesrh[candidatesrh.size()-2]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]));
-		DISTRIB_MET_CHCH->Fill(pfmet_pt[0]);
-		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
 
+
+		DISTRIB_MET_CHCH->Fill(pfmet_pt[0]);
+
+		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
 		DISTRIB_PT1_PT2->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesrh[candidatesrh.size()-2]]);
 		DISTRIB_P1_P2_CHCH->Fill(p1chch,p2chch);
-		
 		
 		nbchch+=1;
 		double deltatranfr1 = deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]);
@@ -465,6 +480,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		poverm1 = ((gen_pt[candidatesrh[candidatesrh.size()-1]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]))/TheorMass);
 		poverm2 = ((gen_pt[candidatesrh[candidatesrh.size()-2]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]))/TheorMass);
 
+		// Need help sorting this out
 		if(finaldelta1 < 0.3 || finaldelta2 < 0.3){
 			alo=true;
 			DISTRIB_IHCHCH->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
