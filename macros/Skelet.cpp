@@ -176,7 +176,7 @@ void AnaEff::Loop()
 	DISTRIB_IHCHCH->Sumw2();
 	DISTRIB_IHDCH->Sumw2();
 	
-	ISTRIB_METNOSEL->Sumw2();
+	DISTRIB_METNOSEL->Sumw2();
 	DISTRIB_METPRESEL->Sumw2();
 	DISTRIB_METSEL->Sumw2();
 
