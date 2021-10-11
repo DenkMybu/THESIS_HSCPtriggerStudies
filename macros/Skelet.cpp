@@ -47,7 +47,7 @@ void AnaEff::Loop()
 	//************************************** DECLARATION OF THXD *******************************************************
 	//******************************************************************************************************************
 
-	DISTRIB_NB_RHADRONS = new TH1D ("DISTRIB_NB_RHADRONS" , " ( nb r hadrons (all scenarios) )", 6,0,4);
+	DISTRIB_NB_RHADRONS = new TH1D ("DISTRIB_NB_RHADRONS" , " ( nb r hadrons (all scenarios) )", 16,1,3);
 	DISTRIB_NB_RHADRONS->GetXaxis()->SetTitle("# R-hadrons");
 	DISTRIB_NB_RHADRONS->GetYaxis()->SetTitle("# events");
 
@@ -84,16 +84,8 @@ void AnaEff::Loop()
 	DISTRIB_IHDCH->GetXaxis()->SetTitle("Ih");
 	DISTRIB_IHDCH->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_P1_P2_CHN = new TH2D("DISTRIB_P1_P2_CHN", "P1_P2CHN", 600 , 0 , 4000 , 600, 0 , 4000 );
-	DISTRIB_P1_P2_CHN->GetXaxis()->SetTitle("P candidate 1");
-	DISTRIB_P1_P2_CHN->GetYaxis()->SetTitle("P candidate 2");
-
-	DISTRIB_P1_P2_CHCH = new TH2D("DISTRIB_P1_P2_CHCH", "P1_P2CHCH", 600 , 0 , 4000 , 600, 0 , 4000 );
-	DISTRIB_P1_P2_CHCH->GetXaxis()->SetTitle("P candidate 1");
-	DISTRIB_P1_P2_CHCH->GetYaxis()->SetTitle("P candidate 2");
-
 	DISTRIB_ETA_DCH = new TH1D("DISTRIB_ETA_DCH", "( ETA dch )", 100, -3, 3);
-	DISTRIB_ETA_DCH->GetXaxis()->SetTitle(" #eta ");
+	DISTRIB_ETA_DCH->GetXaxis()->SetTitle(" #Eta ");
 	DISTRIB_ETA_DCH->GetYaxis()->SetTitle("# HSCP");
 
 	DISTRIB_MET_CHN = new TH1D ("DISTRIB_MET_CHN", " ( MET CHN) " , 100,0,4000);
@@ -103,7 +95,6 @@ void AnaEff::Loop()
 	DISTRIB_MET_NN = new TH1D ("DISTRIB_MET_NN", " ( MET NN) " , 100,0,4000);
 	DISTRIB_MET_NN->GetXaxis()->SetTitle("MET (GeV)");
 	DISTRIB_MET_NN->GetYaxis()->SetTitle("# HSCP");
-
 
 	DISTRIB_MET_CHCH = new TH1D ("DISTRIB_MET_CHCH", " ( MET CHCH) " , 100,0,4000);
 	DISTRIB_MET_CHCH->GetXaxis()->SetTitle("MET (GeV)");
@@ -141,6 +132,13 @@ void AnaEff::Loop()
 	DISTRIB_PT1_PT2_NN->GetXaxis()->SetTitle("PT candidate 1");
 	DISTRIB_PT1_PT2_NN->GetYaxis()->SetTitle("PT candidate 2");
 
+	DISTRIB_P1_P2_CHN = new TH2D("DISTRIB_P1_P2_CHN", "P1_P2CHN", 600 , 0 , 4000 , 600, 0 , 4000 );
+	DISTRIB_P1_P2_CHN->GetXaxis()->SetTitle("P candidate 1");
+	DISTRIB_P1_P2_CHN->GetYaxis()->SetTitle("P candidate 2");
+
+	DISTRIB_P1_P2_CHCH = new TH2D("DISTRIB_P1_P2_CHCH", "P1_P2CHCH", 600 , 0 , 4000 , 600, 0 , 4000 );
+	DISTRIB_P1_P2_CHCH->GetXaxis()->SetTitle("P candidate 1");
+	DISTRIB_P1_P2_CHCH->GetYaxis()->SetTitle("P candidate 2");
 	//******************************************************************************************************************
 	//******************************************************************************************************************
 
