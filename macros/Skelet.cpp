@@ -216,7 +216,7 @@ void AnaEff::Loop()
 
 
 	
-	InfosData << "# events : " << nentries << " , # passing preselection : " << passedpresel << "# selection IAS > 0.2" << passedevent << ", should equal nbtot = " << nbtot << endl;
+	InfosData << "# events : " << nentries << " , # passing preselection : " << passedpresel << "# selection IAS > 0.2" << passedevent << ", should equal nbtot = " << nbtot << " ¦¦ nb missmatched : " << nbmissmatch << endl;
 	InfosData << "*******************************SCENARIOS*******************************" << "\n\n" << endl;
 	InfosData << " # Charged-Charged : " << nbchch << " / " << nbtot << " = " << nbchch*1.0/nbtot << endl;
 	InfosData << " # Charged-Neutral : " << nbchn << " / " << nbtot << " = " << nbchn*1.0/nbtot << endl;
@@ -394,12 +394,10 @@ void AnaEff::AssoGenId(int indexcandidate){
 				}
 			}
 		}
-
+		
 		if (candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size() != 2 ){
-			cout << " There weren't two different rhadrons (mis-matching may be the cause) " << endl;
-			break;
-
-
+			//cout << " There weren't two different rhadrons from all the scenarios possible (mis-matching may be the cause) " << endl;
+			nbmissmatch +=1;
 		}
 	}
 	DISTRIB_NB_RHADRONS->Fill(candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size());

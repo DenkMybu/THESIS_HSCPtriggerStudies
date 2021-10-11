@@ -166,7 +166,7 @@ public :
 private :
 
   TFile* distrib;
-  Int_t nbchch=0,nbchn=0,nbnn=0,nbdch=0,nbtot=0,nbn=0,nbch=0, nbtch=0, nbnx=0;
+  Int_t nbchch=0,nbchn=0,nbnn=0,nbdch=0,nbtot=0,nbn=0,nbch=0, nbtch=0, nbnx=0,nbmissmatch=0;
   Double_t p1=0,p2=0,eta1=0,eta2=0,pt1=0,pt2=0,poverm1=0,poverm2=0;
 
 
@@ -226,13 +226,11 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_NB_RHADRONS=0;
 
 	DISTRIB_IAS=0;
-
 	DISTRIB_IASCHN=0;
 	DISTRIB_IASCHCH=0;
 	DISTRIB_IASDCH=0;
 
 	DISTRIB_IH=0;
-
 	DISTRIB_IHCHN=0;
 	DISTRIB_IHCHCH=0;
 	DISTRIB_IHDCH=0;
