@@ -48,7 +48,9 @@ public:
 
    void FillMass(double INVMASS,int choice= 1);
 
-   
+   void FindTurnOn(int which, bool trig1, float Obs);
+
+   void NameTEff();
 
 
 
@@ -71,9 +73,7 @@ public:
 
 
    // ************** TURN ON OF TRIGGERS *********************
-   void FindTurnOn(int which, bool trig1, float Obs);
-
-   void NameTEff();
+  
 
 
    // ************** LOGICAL OR OF TRIGGERS *********************

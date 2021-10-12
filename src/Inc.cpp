@@ -51,6 +51,7 @@ TrigEff::~TrigEff(){
 void TrigEff::LoadNoMap(const vector<string> &triggerNames, const vector<string> &SelectedTriggerNames,int ErrorType, string NameVar,string FileName){ 
 	
 	EffvsObs.resize(2); // nb of trigger we study
+	TString outputfilename="TestStop";//FileName.c_str();
 	OutputHisto = new TFile(outputfilename,"RECREATE");
 }
 
@@ -74,7 +75,7 @@ void TrigEff::NameTEff(){
 }
 
 void TrigEff::FindTurnOn(int which,bool trig1, float Obs){
-
+	NameTEff();
 	EffvsObs[which]->TEfficiency::Fill(trig1,Obs);
 }
 
