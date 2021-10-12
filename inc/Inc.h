@@ -70,6 +70,12 @@ public:
    
 
 
+   // ************** TURN ON OF TRIGGERS *********************
+   void FindTurnOn(bool trig1, float Obs);
+
+
+
+
    // ************** LOGICAL OR OF TRIGGERS *********************
    void ComputeLogicalOr();
 
@@ -106,7 +112,7 @@ public:
 
 // ******************************MEMBERS**************************
 
-
+   vector <TEfficiency*> EffvsObs;
 
 
   

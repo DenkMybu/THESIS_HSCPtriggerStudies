@@ -33,7 +33,7 @@ TrigEff::TrigEff(){
 
 TrigEff::~TrigEff(){ 
 
-
+	EffvsObs.clear();
 	
 }
 
@@ -47,6 +47,7 @@ TrigEff::~TrigEff(){
 
 void TrigEff::LoadNoMap(const vector<string> &triggerNames, const vector<string> &SelectedTriggerNames,int ErrorType, string NameVar,string FileName){ 
 	
+	EffvsObs.resize(2); // nb of trigger we study
 	
 }
 
@@ -62,8 +63,15 @@ void TrigEff::FillNoMap2(vector< pair<int, bool > > PosPass, float Obs, double w
 	
 }
 
+void TrigEff::FindTurnOn(bool trig1, float Obs){
 
-
+	for(int j = 0; j < EffvsObs.size() ; j++){
+		EffvsObs[i]->TEfficiency::Fill(trig1,Obs);
+		
+	}
+	EffvsObs[0]->SetName("Charged+Charged");
+	EffvsObs[1]->SetName("Charged+Neutral");
+}
 
 
 
