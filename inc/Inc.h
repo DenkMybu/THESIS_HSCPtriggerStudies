@@ -71,9 +71,9 @@ public:
 
 
    // ************** TURN ON OF TRIGGERS *********************
-   void FindTurnOn(bool trig1, float Obs);
+   void FindTurnOn(int which, bool trig1, float Obs);
 
-
+   void NameTEff();
 
 
    // ************** LOGICAL OR OF TRIGGERS *********************
@@ -111,6 +111,7 @@ public:
 
 
 // ******************************MEMBERS**************************
+   TFile* OutputHisto;
 
    vector <TEfficiency*> EffvsObs;
 

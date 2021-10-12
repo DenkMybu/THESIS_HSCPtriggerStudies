@@ -203,6 +203,9 @@ void AnaEff::Loop()
 	
 	int counter=0,passedevent=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
 
+	string trigger1="",trigger2="";
+
+
 	cout << "Working on " << DataType << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { //All entries
 		Long64_t ientry = LoadTree(jentry);
@@ -220,9 +223,9 @@ void AnaEff::Loop()
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
-				AssoGenId(indexcandidatesel);
 				
-				
+				//Find trigger bool
+				AssoGenId(indexcandidatesel,trig1);
 			}
 		}
 
@@ -388,7 +391,7 @@ int AnaEff::Selection(int indexcandidate){
 //*******************************************************************************
 
 
-void AnaEff::AssoGenId(int indexcandidate){
+void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 
 	vector<int> indexpdgch{1009213, 1009323, 1092214, 1091114, 1093114, 1093224, 1093314, 1093334, 1000612, 1000632, 1000652, 1006211, 1006213, 1006313, 1006321, 1006323 }, indexpdgn{1000622, 1093324, 1092114, 1000993, 1009113, 1009223, 1009313, 1009333, 1093214, 1000642, 1006113, 1006311, 1006313}, indexpdgch2{1006223, 1092224};
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
@@ -441,7 +444,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 			}
 		}
 		
-		if (candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size() != 2 ){
+		if ((candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size()) != 2 ){
 			//cout << " There weren't two different rhadrons from all the scenarios possible (mis-matching may be the cause) " << endl;
 			nbmissmatch +=1;
 		}
@@ -511,6 +514,10 @@ void AnaEff::AssoGenId(int indexcandidate){
 			}
 		}
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
+
+		
+		trigEff_presel.FindTurnOn(1,trig1,pfmet_pt[0]);
+		
 	}
 
 
@@ -556,6 +563,10 @@ void AnaEff::AssoGenId(int indexcandidate){
 				DISTRIB_MET_pt_CHCH->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-2]]);
 			}
 		}
+
+
+		trigEff_presel.FindTurnOn(0,trig1,pfmet_pt[0]);
+
 	}
 	
 	if(alo==false && alo2 == false){

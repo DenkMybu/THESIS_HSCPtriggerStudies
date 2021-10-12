@@ -26,7 +26,7 @@ using namespace std;
 
 
 TrigEff::TrigEff(){
-	
+	OutputHisto=0;
 }
 
 
@@ -34,7 +34,10 @@ TrigEff::TrigEff(){
 TrigEff::~TrigEff(){ 
 
 	EffvsObs.clear();
-	
+
+	if(!OutputHisto){
+		delete OutputHisto;
+	}
 }
 
 
@@ -48,7 +51,7 @@ TrigEff::~TrigEff(){
 void TrigEff::LoadNoMap(const vector<string> &triggerNames, const vector<string> &SelectedTriggerNames,int ErrorType, string NameVar,string FileName){ 
 	
 	EffvsObs.resize(2); // nb of trigger we study
-	
+	OutputHisto = new TFile(outputfilename,"RECREATE");
 }
 
 
@@ -63,14 +66,16 @@ void TrigEff::FillNoMap2(vector< pair<int, bool > > PosPass, float Obs, double w
 	
 }
 
-void TrigEff::FindTurnOn(bool trig1, float Obs){
 
-	for(int j = 0; j < EffvsObs.size() ; j++){
-		EffvsObs[i]->TEfficiency::Fill(trig1,Obs);
-		
-	}
+
+void TrigEff::NameTEff(){
 	EffvsObs[0]->SetName("Charged+Charged");
 	EffvsObs[1]->SetName("Charged+Neutral");
+}
+
+void TrigEff::FindTurnOn(int which,bool trig1, float Obs){
+
+	EffvsObs[which]->TEfficiency::Fill(trig1,Obs);
 }
 
 
@@ -159,7 +164,13 @@ void TrigEff::ComputeError(){
 }
 
 void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
+	OutputHisto->cd();
+	
+	for(int i=0;i < EffvsObs.size();i++){
+		EffvsObs[i]->Write();
+	}
 
+	OutputHisto->Close();
 }
 
 void TrigEff::FillMass(double INVMASS,int choice){
