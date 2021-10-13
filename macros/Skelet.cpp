@@ -224,6 +224,7 @@ void AnaEff::Loop()
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				trig1=passTrigger[188];
+				cout << "before AssoGenId" << endl;
 				//Find trigger bool
 				AssoGenId(indexcandidatesel,trig1);
 			}
