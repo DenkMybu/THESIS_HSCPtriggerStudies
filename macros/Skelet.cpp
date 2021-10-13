@@ -204,7 +204,7 @@ void AnaEff::Loop()
 	int counter=0,passedevent=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
 
 	string trigger1="",trigger2="";
-
+	trigEff_presel.InitTEff();
 	cout << "Trigger 188 in list : " << triggerName->at(188) << " , and 199 : " << triggerName->at(197) << endl;
 	cout << "Working on " << DataType << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { //All entries
