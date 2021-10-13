@@ -35,7 +35,7 @@ void AnaEff::Loop()
 	nbi = fChain->GetEntry(initializing);   nbytes += nbi;
 	cout << "Number of triggers for this file  : " << ntrigger << " , number of events : " << nentries << endl;
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass));
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "StopUi3", DataType = Data + to_string(int(TheorMass));
 	
 	string NameCompleteListTest = "ListeInteretTriggers";
 
@@ -126,6 +126,8 @@ void AnaEff::Loop()
 	DISTRIB_P1MP2CHN->GetXaxis()->SetTitle("2*(p1 - p2) / (p1 + p2)");
 	DISTRIB_P1MP2CHN->GetYaxis()->SetTitle("# HSCP");
 
+
+	//Good MET choice
 	DISTRIB_MET_pt_CHN = new TH2D("DISTRIB_MET_pt_CHN", "Met vs pt chn", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_MET_pt_CHN->GetXaxis()->SetTitle("Reco MET [GeV]");
 	DISTRIB_MET_pt_CHN->GetYaxis()->SetTitle("Pt [GeV]");
@@ -205,9 +207,9 @@ void AnaEff::Loop()
 
 	string trigger1="",trigger2="";
 	trigEff_presel.InitTEff();
-	cout << "Trigger 188 in list : " << triggerName->at(188) << " , and 199 : " << triggerName->at(197) << endl;
+	cout << "Trigger 188 in list : " << triggerName->at(188) << " , and 197 : " << triggerName->at(197) << endl;
 	cout << "Working on " << DataType << endl;
-	for (Long64_t jentry=0; jentry<nentries;jentry++) { //All entries
+	for (Long64_t jentry=0; jentry<1001;jentry++) { //All entries
 		Long64_t ientry = LoadTree(jentry);
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
@@ -216,8 +218,9 @@ void AnaEff::Loop()
 
 		if(triggerName->at(188)!="HLT_PFMET120_PFMHT120_IDTight_v16"){
 			cout << "+1 event with trigger not in the right position"<< endl;
-
 		}
+
+
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 
 
