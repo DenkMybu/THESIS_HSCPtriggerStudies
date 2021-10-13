@@ -564,8 +564,7 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 				DISTRIB_MET_pt_CHCH->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-2]]);
 			}
 		}
-
-		
+		cout << "Before FindTurnOn" << endl;
 		trigEff_presel.FindTurnOn(0,trig1,pfmet_pt[0]);
 
 	}
