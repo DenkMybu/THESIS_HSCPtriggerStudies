@@ -74,7 +74,7 @@ void TrigEff::NameTEff(){
 
 void TrigEff::InitTEff(){
 	EffvsObs.resize(2); // nb of trigger we study
-	TString outputfilename="TestStop";//FileName.c_str();
+	TString outputfilename="TestStop.root";//FileName.c_str();
 	OutputHisto = new TFile(outputfilename,"RECREATE");
 
 	for(int j=0; j < EffvsObs.size(); j++){	

@@ -213,7 +213,14 @@ void AnaEff::Loop()
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 		counter+=1;
+
+		if(triggerName->at(188)!="HLT_PFMET120_PFMHT120_IDTight_v16"){
+			cout << "+1 event with trigger not in the right position"<< endl;
+
+		}
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
+
+
 		indexcandidate=Preselection();
 		if(indexcandidate!=64){
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
@@ -232,6 +239,7 @@ void AnaEff::Loop()
 
 	}
 	trigEff_presel.WritePlots("","");
+
 	ofstream InfosData;
 	InfosData.open (NameOfTxt);
 
@@ -440,7 +448,6 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 				if(gen_status[i] == 1){
 					nbdch+=1;
 					candidatesdoublech.push_back(i);
-					cout << "double charge gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
 				}
 			}
 		}
