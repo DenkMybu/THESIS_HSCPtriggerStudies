@@ -223,7 +223,7 @@ void AnaEff::Loop()
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
-				
+				trig1=passTrigger[188];
 				//Find trigger bool
 				AssoGenId(indexcandidatesel,trig1);
 			}
@@ -515,7 +515,7 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		}
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 
-		trig1=passTrigger[188];
+		
 		trigEff_presel.FindTurnOn(1,trig1,pfmet_pt[0]);
 		
 	}
@@ -564,7 +564,7 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 			}
 		}
 
-		trig1=passTrigger[188];
+		
 		trigEff_presel.FindTurnOn(0,trig1,pfmet_pt[0]);
 
 	}
