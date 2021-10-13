@@ -224,7 +224,7 @@ void AnaEff::Loop()
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				trig1=passTrigger[188];
-				cout << "before AssoGenId" << endl;
+				//cout << "before AssoGenId" << endl;
 				//Find trigger bool
 				AssoGenId(indexcandidatesel,trig1);
 			}
@@ -564,9 +564,9 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 				DISTRIB_MET_pt_CHCH->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-2]]);
 			}
 		}
-		cout << "Before FindTurnOn" << endl;
+		//cout << "Before FindTurnOn" << endl;
 		trigEff_presel.FindTurnOn(0,trig1,pfmet_pt[0]);
-		cout << "After FindTurnOn" << endl;
+		//cout << "After FindTurnOn" << endl;
 
 	}
 	
