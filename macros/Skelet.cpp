@@ -35,7 +35,7 @@ void AnaEff::Loop()
 	nbi = fChain->GetEntry(initializing);   nbytes += nbi;
 	cout << "Number of triggers for this file  : " << ntrigger << " , number of events : " << nentries << endl;
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "StopUi6", DataType = Data + to_string(int(TheorMass));
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "StopUi3", DataType = Data + to_string(int(TheorMass));
 	
 	string NameCompleteListTest = "ListeInteretTriggers";
 
@@ -209,7 +209,7 @@ void AnaEff::Loop()
 	trigEff_presel.InitTEff();
 	cout << "Trigger 188 in list : " << triggerName->at(188) << " , and 197 : " << triggerName->at(197) << endl;
 	cout << "Working on " << DataType << endl;
-	for (Long64_t jentry=0; jentry<1001;jentry++) { //All entries
+	for (Long64_t jentry=0; jentry<10001;jentry++) { //All entries
 		Long64_t ientry = LoadTree(jentry);
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
