@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <array>
 #include <cstdlib>
+#include <TLorentzVector.h>
 #include <iomanip>
 #include <cmath>
 #include <fstream>
@@ -35,7 +36,7 @@ void AnaEff::Loop()
 	nbi = fChain->GetEntry(initializing);   nbytes += nbi;
 	cout << "Number of triggers for this file  : " << ntrigger << " , number of events : " << nentries << endl;
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "StopUi3", DataType = Data + to_string(int(TheorMass));
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass));
 	
 	string NameCompleteListTest = "ListeInteretTriggers";
 
@@ -208,8 +209,8 @@ void AnaEff::Loop()
 	string trigger1="",trigger2="";
 	trigEff_presel.InitTEff();
 	cout << "Trigger 188 in list : " << triggerName->at(188) << " , and 197 : " << triggerName->at(197) << endl;
-	cout << "Working on " << DataType << endl;
-	for (Long64_t jentry=0; jentry<10001;jentry++) { //All entries
+	cout << "Working on " << DataType << endl; 
+	for (Long64_t jentry=0; jentry<1nentries;jentry++) { //All entries
 		Long64_t ientry = LoadTree(jentry);
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
@@ -405,6 +406,10 @@ int AnaEff::Selection(int indexcandidate){
 
 
 void AnaEff::AssoGenId(int indexcandidate,bool trig1){
+	
+	TLorentzVector cand1,cand2,homemet;
+
+	
 
 	vector<int> indexpdgch{1009213, 1009323, 1092214, 1091114, 1093114, 1093224, 1093314, 1093334, 1000612, 1000632, 1000652, 1006211, 1006213, 1006313, 1006321, 1006323 }, indexpdgn{1000622, 1093324, 1092114, 1000993, 1009113, 1009223, 1009313, 1009333, 1093214, 1000642, 1006113, 1006311, 1006313}, indexpdgch2{1006223, 1092224};
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
@@ -531,6 +536,12 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		trigEff_presel.FindTurnOn(1,trig1,trig2,pfmet_pt[0],1);
 
 		trigEff_presel.FindTurnOn(1,trig1,trig2,pfmet_pt[0],0);
+
+		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
+cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
+		double v = sqrt(cand1.Dot(cand2));
+		double a = cand1.Angle(cand2.Vect());
+		cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
 		
 	}
 
@@ -552,6 +563,8 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		DISTRIB_P1_P2_CHCH->Fill(p1chch,p2chch);
 		
 		nbchch+=1;
+
+		//flag chargé ou neutre 
 		double deltatranfr1 = deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]);
 		double finaldelta1 = deltaR(deltatranfr1);
 
@@ -567,8 +580,6 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 			DISTRIB_IHCHCH->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_IASCHCH->Fill(track_ias_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_P1_P2_CHCH->Fill(p1chch,p2chch);
-
-			
 
 			if(finaldelta1 < finaldelta2 ){
 				DISTRIB_MET_pt_CHCH->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);
@@ -600,7 +611,6 @@ double AnaEff::deltaR2(float track_eta,float track_phi, float muon_eta, float mu
 		dp -= 2.0 * M_PI;
 	}
 	return (track_eta - muon_eta)*(track_eta - muon_eta) + dp * dp;
-
 }
 
 double AnaEff::deltaR(double delta) {
