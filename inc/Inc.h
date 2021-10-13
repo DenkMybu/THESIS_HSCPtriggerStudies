@@ -48,7 +48,7 @@ public:
 
    void FillMass(double INVMASS,int choice= 1);
 
-   void FindTurnOn(int which, bool trig1, float Obs);
+   void FindTurnOn(int which, bool trig1, bool trig2, float Obs, bool munomu);
 
    void NameTEff();
 
@@ -114,7 +114,7 @@ public:
    TFile* OutputHisto;
 
    vector <TEfficiency*> EffvsObs;
-
+   vector <TEfficiency*> EffvsObsNo;
 
   
    
