@@ -52,7 +52,7 @@ public:
 
    void NameTEff();
 
-
+   void InitTEff();
 
  private :
 	

@@ -50,9 +50,7 @@ TrigEff::~TrigEff(){
 
 void TrigEff::LoadNoMap(const vector<string> &triggerNames, const vector<string> &SelectedTriggerNames,int ErrorType, string NameVar,string FileName){ 
 	
-	EffvsObs.resize(2); // nb of trigger we study
-	TString outputfilename="TestStop";//FileName.c_str();
-	OutputHisto = new TFile(outputfilename,"RECREATE");
+	
 }
 
 
@@ -74,8 +72,18 @@ void TrigEff::NameTEff(){
 	EffvsObs[1]->SetName("Charged+Neutral");
 }
 
-void TrigEff::FindTurnOn(int which,bool trig1, float Obs){
+void TrigEff::InitTEff(){
+	EffvsObs.resize(2); // nb of trigger we study
+	TString outputfilename="TestStop";//FileName.c_str();
+	OutputHisto = new TFile(outputfilename,"RECREATE");
+
+	for(int j=0; j < EffvsObs.size(); j++){	
+		EffvsObs[j] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",50,0,2000);
+	}
 	NameTEff();
+}		
+
+void TrigEff::FindTurnOn(int which,bool trig1, float Obs){
 	EffvsObs[which]->TEfficiency::Fill(trig1,Obs);
 }
 

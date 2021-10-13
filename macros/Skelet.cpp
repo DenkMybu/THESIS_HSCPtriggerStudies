@@ -205,7 +205,7 @@ void AnaEff::Loop()
 
 	string trigger1="",trigger2="";
 
-
+	cout << "Trigger 190 in list : " << triggerName->at(190) << " , and 199 : " << triggerName->at(199) << endl;
 	cout << "Working on " << DataType << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { //All entries
 		Long64_t ientry = LoadTree(jentry);
@@ -230,7 +230,7 @@ void AnaEff::Loop()
 		}
 
 	}
-
+	trigEff_presel.WritePlots("","");
 	ofstream InfosData;
 	InfosData.open (NameOfTxt);
 
@@ -515,7 +515,7 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		}
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 
-		
+		trig1=passTrigger[190];
 		trigEff_presel.FindTurnOn(1,trig1,pfmet_pt[0]);
 		
 	}
@@ -564,7 +564,7 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 			}
 		}
 
-
+		trig1=passTrigger[190];
 		trigEff_presel.FindTurnOn(0,trig1,pfmet_pt[0]);
 
 	}
