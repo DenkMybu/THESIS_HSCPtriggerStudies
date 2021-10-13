@@ -566,6 +566,7 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		}
 		cout << "Before FindTurnOn" << endl;
 		trigEff_presel.FindTurnOn(0,trig1,pfmet_pt[0]);
+		cout << "After FindTurnOn" << endl;
 
 	}
 	
