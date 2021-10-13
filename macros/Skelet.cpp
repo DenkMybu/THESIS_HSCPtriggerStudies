@@ -210,7 +210,7 @@ void AnaEff::Loop()
 	trigEff_presel.InitTEff();
 	cout << "Trigger 188 in list : " << triggerName->at(188) << " , and 197 : " << triggerName->at(197) << endl;
 	cout << "Working on " << DataType << endl; 
-	for (Long64_t jentry=0; jentry<1nentries;jentry++) { //All entries
+	for (Long64_t jentry=0; jentry<nentries;jentry++) { //All entries
 		Long64_t ientry = LoadTree(jentry);
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
