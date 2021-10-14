@@ -215,7 +215,7 @@ private :
 
   TH2D* DISTRIB_MET_pt_CHCH;
   TH2D* DISTRIB_MET_pt_CHN;
-
+  TH2D* DISTRIB_MET_ptN_CHN;
 
 
   //*************************************************************************************************************************
@@ -272,6 +272,7 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 
 	DISTRIB_MET_pt_CHCH=0;
 	DISTRIB_MET_pt_CHN=0;
+	DISTRIB_MET_ptN_CHN=0;
 
 	triggerName = 0;
 // if parameter tree is not specified (or zero), connect the file
@@ -397,7 +398,9 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_MET_pt_CHN){
    	delete DISTRIB_MET_pt_CHN;
   }
-
+  if(!DISTRIB_MET_ptN_CHN){
+   	delete DISTRIB_MET_ptN_CHN;
+  }
    //delete[] passTrigger;
 }
 

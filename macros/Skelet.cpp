@@ -137,6 +137,11 @@ void AnaEff::Loop()
 	DISTRIB_MET_pt_CHN->GetXaxis()->SetTitle("Reco MET [GeV]");
 	DISTRIB_MET_pt_CHN->GetYaxis()->SetTitle("Pt [GeV]");
 
+	DISTRIB_MET_ptN_CHN = new TH2D("DISTRIB_MET_ptN_CHN", "Met vs pt of neutral in chn", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_MET_ptN_CHN->GetXaxis()->SetTitle("Reco MET [GeV]");
+	DISTRIB_MET_ptN_CHN->GetYaxis()->SetTitle("Pt [GeV]");
+
+
 	DISTRIB_MET_pt_CHCH = new TH2D("DISTRIB_MET_pt_CHCH", "Met vs pt chch", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_MET_pt_CHCH->GetXaxis()->SetTitle("Reco MET [GeV]");
 	DISTRIB_MET_pt_CHCH->GetYaxis()->SetTitle("Pt [GeV]");
@@ -199,6 +204,8 @@ void AnaEff::Loop()
 
 	DISTRIB_MET_pt_CHN->Sumw2();
 	DISTRIB_MET_pt_CHCH->Sumw2();
+	DISTRIB_MET_ptN_CHN->Sumw2();
+
 	DISTRIB_P1MP2CHCH->Sumw2();
 	DISTRIB_P1MP2CHN->Sumw2();
 
@@ -320,8 +327,10 @@ void AnaEff::Loop()
 	
 	DISTRIB_TLV_MET->Write();
 
-	DISTRIB_MET_pt_CHN->Write();
+
 	DISTRIB_MET_pt_CHCH->Write();
+	DISTRIB_MET_pt_CHN->Write();
+	DISTRIB_MET_ptN_CHN->Write();
 	DISTRIB_P1MP2CHCH->Write();
 	DISTRIB_P1MP2CHN->Write();
 
@@ -492,7 +501,9 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		nbtch+=1;
 		double eta_track = track_eta[hscp_track_idx[indexcandidate]],phi_track = track_phi[hscp_track_idx[indexcandidate]],eta_gen = gen_eta[candidatesdoublech[candidatesdoublech.size()-1]], phi_gen = gen_phi[candidatesdoublech[candidatesdoublech.size()-1]];
 		double deltatranfrdch = deltaR2(eta_track, phi_track, eta_gen, phi_gen);
-		double finaldeltadch = deltaR(deltatranfrdch);	
+		double finaldeltadch = deltaR(deltatranfrdch);
+
+	
 
 		if(finaldeltadch < 0.3 ){
 			DISTRIB_IHDCH->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
@@ -530,9 +541,11 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		
 		//cout << " p1 = " << p1 << " , p2 = " << p2 << endl;
 		double deltatranfr1chn = deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]);
+
 		double finaldeltachn1 = deltaR(deltatranfr1chn);
 
 		double deltatranfr2chn = deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]);
+
 		double finaldeltachn2 = deltaR(deltatranfr2chn);
 		
 		DISTRIB_P1MP2CHN->Fill((2*(p1-p2))/(p1+p2));
@@ -546,9 +559,11 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);// PT of charged candidate
 			}
 			else{
-				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesneutral.size()-1]]);
+				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 			}
 		}
+		DISTRIB_MET_ptN_CHN->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
+
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 
 		
@@ -564,10 +579,16 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		double v = homemet.Mag();
 		double a = cand1.Angle(cand2.Vect());
 		cout << " Charged pt : " << gen_pt[candidatesrh[candidatesrh.size()-1]] << " Neutral pt : " << gen_pt[candidatesneutral[candidatesneutral.size()-1]] << endl;
-		//double CalEt = sqrt(TheorMass*TheorMass + 
+		//double CalcEt = sqrt(TheorMass*TheorMass + gen_pt * gen_pt);
+			
 		//cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
 		DISTRIB_TLV_MET->Fill(pfmet_pt[0],v);
 		DISTRIB_ANGLE_RAD->Fill(a);
+
+		/* Calcul du recul potentiel entre les deux candidats pour voir si la MET provient bien du candidat neutre. Quadri-vecteurs Pt_eta_phi_M pour les deux candidats et norme du vecteur MET
+			si cand1 (pt1 eta1 phi1 et M1) et cand2, possible de calculer la met  
+
+		*/
 		
 	}
 
