@@ -127,6 +127,10 @@ void AnaEff::Loop()
 	DISTRIB_P1MP2CHN->GetXaxis()->SetTitle("2*(p1 - p2) / (p1 + p2)");
 	DISTRIB_P1MP2CHN->GetYaxis()->SetTitle("# HSCP");
 
+	 
+	DISTRIB_ANGLE_RAD = new TH1D ("DISTRIB_ANGLE_RAD", "Angle between 1 & 2", 100, -5, 5);
+	DISTRIB_ANGLE_RAD->GetXaxis()->SetTitle("Angle [rad]");
+	DISTRIB_ANGLE_RAD->GetYaxis()->SetTitle("# HSCP");
 
 	//Good MET choice
 	DISTRIB_MET_pt_CHN = new TH2D("DISTRIB_MET_pt_CHN", "Met vs pt chn", 600, 0, 4000, 600, 0, 4000);
@@ -185,26 +189,29 @@ void AnaEff::Loop()
 	DISTRIB_METPRESEL->Sumw2();
 	DISTRIB_METSEL->Sumw2();
 
-	DISTRIB_P1_P2_CHN->Sumw2();
-	DISTRIB_P1_P2_CHCH->Sumw2();
-
 	DISTRIB_ETA_DCH->Sumw2();
 
 	DISTRIB_MET_CHN->Sumw2();
 	DISTRIB_MET_NN->Sumw2();
 	DISTRIB_MET_CHCH->Sumw2();
 	
-	DISTRIB_TLV_MET->Sumw2();
+	
 
 	DISTRIB_MET_pt_CHN->Sumw2();
 	DISTRIB_MET_pt_CHCH->Sumw2();
 	DISTRIB_P1MP2CHCH->Sumw2();
 	DISTRIB_P1MP2CHN->Sumw2();
 
+	DISTRIB_ANGLE_RAD->Sumw2();
+
 	DISTRIB_PT1_PT2->Sumw2();
 	DISTRIB_PT1_PT2_CHCH->Sumw2();
 	DISTRIB_PT1_PT2_CHN->Sumw2();
 	DISTRIB_PT1_PT2_NN->Sumw2();
+	DISTRIB_P1_P2_CHN->Sumw2();
+	DISTRIB_P1_P2_CHCH->Sumw2();
+
+	DISTRIB_TLV_MET->Sumw2();
 	//trigEff_presel.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);
 	
 	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
@@ -317,6 +324,9 @@ void AnaEff::Loop()
 	DISTRIB_MET_pt_CHCH->Write();
 	DISTRIB_P1MP2CHCH->Write();
 	DISTRIB_P1MP2CHN->Write();
+
+	DISTRIB_ANGLE_RAD->Write();
+
 	DISTRIB_PT1_PT2->Write();
 	DISTRIB_PT1_PT2_CHCH->Write();
 	DISTRIB_PT1_PT2_CHN->Write();
@@ -555,8 +565,9 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		double a = cand1.Angle(cand2.Vect());
 		cout << " Charged pt : " << gen_pt[candidatesrh[candidatesrh.size()-1]] << " Neutral pt : " << gen_pt[candidatesneutral[candidatesneutral.size()-1]] << endl;
 		//double CalEt = sqrt(TheorMass*TheorMass + 
-		cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
+		//cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
 		DISTRIB_TLV_MET->Fill(pfmet_pt[0],v);
+		DISTRIB_ANGLE_RAD->Fill(a);
 		
 	}
 
