@@ -612,7 +612,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		homemet = cand1 - cand2; // change here 
 		double v = homemet.Mag();
 		double a = cand1.Angle(cand2.Vect());
-		cout << " Charged pt : " << gen_pt[candidatesrh[candidatesrh.size()-1]] << " Neutral pt : " << gen_pt[candidatesneutral[candidatesneutral.size()-1]] << endl;
+		//cout << " Charged pt : " << gen_pt[candidatesrh[candidatesrh.size()-1]] << " Neutral pt : " << gen_pt[candidatesneutral[candidatesneutral.size()-1]] << endl;
 		//double CalcEt = sqrt(TheorMass*TheorMass + gen_pt * gen_pt);
 			
 		//cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
