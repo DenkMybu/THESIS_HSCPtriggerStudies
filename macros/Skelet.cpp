@@ -541,7 +541,7 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
 		
 		
-		homemet = cand1 - cand2;
+		homemet = cand1 + cand2;
 		double v = homemet.Mag();
 		double a = cand1.Angle(cand2.Vect());
 		cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
