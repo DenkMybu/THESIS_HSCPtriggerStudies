@@ -196,9 +196,12 @@ private :
 
   TH1D* DISTRIB_P1MP2CHCH;
   TH1D* DISTRIB_P1MP2CHN;
+  TH1D* DISTRIB_PT1MPT2CHCH;
+  TH1D* DISTRIB_PT1MPT2CHN;
 
   TH1D* DISTRIB_ANGLE_RAD;
-
+  TH1D* DISTRIB_POVERMN_CHN;
+  TH1D* DISTRIB_POVERMCH_CHN;
   //*************************************************************************************************************************
 
 
@@ -259,8 +262,14 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 
 	DISTRIB_P1MP2CHCH=0;
 	DISTRIB_P1MP2CHN=0;
-	
+	DISTRIB_PT1MPT2CHCH=0;
+	DISTRIB_PT1MPT2CHN=0;
+
+
 	DISTRIB_ANGLE_RAD=0;
+
+	DISTRIB_POVERMN_CHN=0;
+	DISTRIB_POVERMCH_CHN=0;
 
 	DISTRIB_P1_P2_CHN=0;
 	DISTRIB_P1_P2_CHCH=0;
@@ -360,12 +369,27 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_MET_CHCH){
   	delete DISTRIB_MET_CHCH;
   }
+
   if(!DISTRIB_P1MP2CHCH){
   	delete DISTRIB_P1MP2CHCH;
   }
   if(!DISTRIB_P1MP2CHN){
   	delete DISTRIB_P1MP2CHN;
   }	
+  if(!DISTRIB_PT1MPT2CHCH){
+  	delete DISTRIB_PT1MPT2CHCH;
+  }
+  if(!DISTRIB_PT1MPT2CHN){
+  	delete DISTRIB_PT1MPT2CHN;
+  }
+
+
+  if(!DISTRIB_POVERMN_CHN){
+   	delete DISTRIB_POVERMN_CHN;
+  }
+  if(!DISTRIB_POVERMCH_CHN){
+   	delete DISTRIB_POVERMCH_CHN;
+  }
 
   if(!DISTRIB_ANGLE_RAD){
    	delete DISTRIB_ANGLE_RAD;

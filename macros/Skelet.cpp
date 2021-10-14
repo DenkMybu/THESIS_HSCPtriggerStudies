@@ -127,10 +127,25 @@ void AnaEff::Loop()
 	DISTRIB_P1MP2CHN->GetXaxis()->SetTitle("2*(p1 - p2) / (p1 + p2)");
 	DISTRIB_P1MP2CHN->GetYaxis()->SetTitle("# HSCP");
 
-	 
+	DISTRIB_PT1MPT2CHCH = new TH1D ("DISTRIB_PT1MPT2CHCH", "PT1MPT2CHCH", 100, -5, 5);
+	DISTRIB_PT1MPT2CHCH->GetXaxis()->SetTitle("2*(pt1 - pt2) / (pt1 + pt2)");
+	DISTRIB_PT1MPT2CHCH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_PT1MPT2CHN = new TH1D ("DISTRIB_PT1MPT2CHN", "PT1MPT2CHN", 100, -5, 5);
+	DISTRIB_PT1MPT2CHN->GetXaxis()->SetTitle("2*(pt1 - pt2) / (pt1 + pt2)");
+	DISTRIB_PT1MPT2CHN->GetYaxis()->SetTitle("# HSCP");
+
 	DISTRIB_ANGLE_RAD = new TH1D ("DISTRIB_ANGLE_RAD", "Angle between 1 & 2", 100, -5, 5);
 	DISTRIB_ANGLE_RAD->GetXaxis()->SetTitle("Angle [rad]");
 	DISTRIB_ANGLE_RAD->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_POVERMN_CHN = new TH1D ("DISTRIB_POVERMN_CHN", "P/m of neutral candidate in CH-N", 600 , 0 , 3);
+	DISTRIB_POVERMN_CHN->GetXaxis()->SetTitle("p/m = #beta #gamma");
+	DISTRIB_POVERMN_CHN->GetYaxis()->SetTitle("# Neutral R-hadrons");
+
+	DISTRIB_POVERMCH_CHN = new TH1D ("DISTRIB_POVERMCH_CHN", "P/m of charged candidate in CH-N", 600 , 0 , 3);
+	DISTRIB_POVERMCH_CHN->GetXaxis()->SetTitle("p/m = #beta #gamma");
+	DISTRIB_POVERMCH_CHN->GetYaxis()->SetTitle("# Charged R-hadrons");
 
 	//Good MET choice
 	DISTRIB_MET_pt_CHN = new TH2D("DISTRIB_MET_pt_CHN", "Met vs pt chn", 600, 0, 4000, 600, 0, 4000);
@@ -173,6 +188,7 @@ void AnaEff::Loop()
 	DISTRIB_TLV_MET = new TH2D("DISTRIB_TLV_MET", "TLV_MET_Com", 600 , 0 , 4000 , 600, 0 , 4000 );
 	DISTRIB_TLV_MET->GetXaxis()->SetTitle("Reco pf_MET [GeV]");
 	DISTRIB_TLV_MET->GetYaxis()->SetTitle("TLV Charged - TLV Neutral");
+
 	//******************************************************************************************************************
 	//******************************************************************************************************************
 
@@ -208,9 +224,16 @@ void AnaEff::Loop()
 
 	DISTRIB_P1MP2CHCH->Sumw2();
 	DISTRIB_P1MP2CHN->Sumw2();
+	DISTRIB_PT1MPT2CHCH->Sumw2();
+	DISTRIB_PT1MPT2CHN->Sumw2();
+
 
 	DISTRIB_ANGLE_RAD->Sumw2();
 
+	DISTRIB_POVERMN_CHN->Sumw2();
+	DISTRIB_POVERMCH_CHN->Sumw2();
+
+	
 	DISTRIB_PT1_PT2->Sumw2();
 	DISTRIB_PT1_PT2_CHCH->Sumw2();
 	DISTRIB_PT1_PT2_CHN->Sumw2();
@@ -327,12 +350,17 @@ void AnaEff::Loop()
 	
 	DISTRIB_TLV_MET->Write();
 
+	DISTRIB_POVERMN_CHN->Write();
+	DISTRIB_POVERMCH_CHN->Write();
 
 	DISTRIB_MET_pt_CHCH->Write();
 	DISTRIB_MET_pt_CHN->Write();
 	DISTRIB_MET_ptN_CHN->Write();
+
 	DISTRIB_P1MP2CHCH->Write();
 	DISTRIB_P1MP2CHN->Write();
+	DISTRIB_PT1MPT2CHCH->Write();
+	DISTRIB_PT1MPT2CHN->Write();
 
 	DISTRIB_ANGLE_RAD->Write();
 
@@ -535,8 +563,10 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
 		//cout << " charged + neutral " << endl;
-		double p1 = gen_pt[candidatesrh[candidatesrh.size()-1]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
-		double p2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]] * cosh(gen_eta[candidatesneutral[candidatesneutral.size()-1]]);
+		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
+
+		double p1 = pt1 * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
+		double p2 = pt2 * cosh(gen_eta[candidatesneutral[candidatesneutral.size()-1]]);
 		DISTRIB_MET_CHN->Fill(pfmet_pt[0]);
 		
 		//cout << " p1 = " << p1 << " , p2 = " << p2 << endl;
@@ -549,6 +579,7 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		double finaldeltachn2 = deltaR(deltatranfr2chn);
 		
 		DISTRIB_P1MP2CHN->Fill((2*(p1-p2))/(p1+p2));
+		DISTRIB_PT1MPT2CHN->Fill((2*(pt1-pt2))/(pt1+pt2));
 
 		if(finaldeltachn1 < 0.3 || finaldeltachn2 < 0.3){
 			alo=true;
@@ -563,6 +594,8 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 			}
 		}
 		DISTRIB_MET_ptN_CHN->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
+		DISTRIB_POVERMCH_CHN->Fill(p1/TheorMass);
+		DISTRIB_POVERMN_CHN->Fill(p2/TheorMass);
 
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 
@@ -570,6 +603,7 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		trigEff_presel.FindTurnOn(1,trig1,trig2,pfmet_pt[0],1);
 
 		trigEff_presel.FindTurnOn(1,trig1,trig2,pfmet_pt[0],0);
+
 
 		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
@@ -597,15 +631,20 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	//*******************************************************************************
 
 	else if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
+
+		double pt1chch = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2chch = gen_pt[candidatesrh[candidatesrh.size()-2]]; 
+
 		//*********** P of charged candidate 1 ***************
-		double p1chch = (gen_pt[candidatesrh[candidatesrh.size()-1]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]));
+		double p1chch = (pt1chch * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]));
 		//*********** P of charged candidate 2 ***************
-		double p2chch = (gen_pt[candidatesrh[candidatesrh.size()-2]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]));
+		double p2chch = (pt2chch * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]));
 
-
+		
 		DISTRIB_MET_CHCH->Fill(pfmet_pt[0]);
 
 		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
+		DISTRIB_PT1MPT2CHCH->Fill((2*(pt1chch-pt2chch))/(pt1chch+pt2chch));
+
 		DISTRIB_PT1_PT2_CHCH->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesrh[candidatesrh.size()-2]]);
 		DISTRIB_P1_P2_CHCH->Fill(p1chch,p2chch);
 		
