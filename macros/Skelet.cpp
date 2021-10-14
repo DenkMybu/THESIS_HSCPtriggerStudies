@@ -280,7 +280,9 @@ void AnaEff::Loop()
 				trig2=passTrigger[197];
 				//cout << "before AssoGenId" << endl;
 				//Find trigger bool
-				AssoGenId(indexcandidatesel,trig1);
+				AssoGenId(indexcandidatesel);
+
+				trigEff_presel.StudyRecoMet(trig1,pfmet_pt[0]);
 			}
 		}
 
@@ -461,7 +463,7 @@ int AnaEff::Selection(int indexcandidate){
 //*******************************************************************************
 
 
-void AnaEff::AssoGenId(int indexcandidate,bool trig1){
+void AnaEff::AssoGenId(int indexcandidate){
 	
 	TLorentzVector cand1,cand2,homemet;
 

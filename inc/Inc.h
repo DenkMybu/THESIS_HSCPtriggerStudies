@@ -50,6 +50,8 @@ public:
 
    void FindTurnOn(int which, bool trig1, bool trig2, float Obs, bool munomu);
 
+   void StudyRecoMet(bool trig,double Obs);
+
    void NameTEff();
 
    void InitTEff();
@@ -116,6 +118,7 @@ public:
    vector <TEfficiency*> EffvsObs;
    vector <TEfficiency*> EffvsObsNo;
 
+   TEfficiency* EffvsObsMet;
   
    
 };

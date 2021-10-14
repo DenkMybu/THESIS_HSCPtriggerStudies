@@ -160,7 +160,7 @@ public :
    virtual int      Selection(int indexcandidate);
    virtual double   deltaR2(float track_eta,float track_phi, float muon_eta, float muon_phi);
    virtual double   deltaR(double delta);
-   virtual void	    AssoGenId(int indexcandidate,bool trig1);
+   virtual void	    AssoGenId(int indexcandidate);
 
    
 private :

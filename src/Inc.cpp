@@ -36,6 +36,9 @@ TrigEff::~TrigEff(){
 	EffvsObs.clear();
 	EffvsObsNo.clear();
 
+	//if(!EffvsObsMet){
+		//delete EffvsObsMet;
+	//}
 	if(!OutputHisto){
 		delete OutputHisto;
 	}
@@ -66,13 +69,19 @@ void TrigEff::FillNoMap2(vector< pair<int, bool > > PosPass, float Obs, double w
 	
 }
 
-
+void TrigEff::StudyRecoMet(bool trig,double Obs){
+	
+	EffvsObsMet->Fill(trig,Obs);
+	
+}
 
 void TrigEff::NameTEff(){
 	EffvsObs[0]->SetName("Charged+Charged Mu");
 	EffvsObs[1]->SetName("Charged+Neutral Mu");
 	EffvsObsNo[0]->SetName("Charged+Charged NoMu");
 	EffvsObsNo[1]->SetName("Charged+Neutral NoMu");
+
+	
 }
 
 void TrigEff::InitTEff(){
@@ -80,6 +89,8 @@ void TrigEff::InitTEff(){
 	EffvsObsNo.resize(2);
 	TString outputfilename="TestStop.root";//FileName.c_str();
 	OutputHisto = new TFile(outputfilename,"RECREATE");
+
+	EffvsObsMet = new TEfficiency("Eff of PFMET120_PFMHT120", "Efficiency of PFMET120_PFMHT120;Reco pf_MET [GeV];#epsilon",50,0,2000);
 
 	for(int j=0; j < EffvsObs.size(); j++){	
 		EffvsObs[j] = new TEfficiency("Eff Mu","Efficiency;Reco pf_MET [GeV];#epsilon",50,0,2000);
@@ -190,6 +201,7 @@ void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 		EffvsObsNo[i]->Write();
 	}
 
+	EffvsObsMet->Write();
 	OutputHisto->Close();
 }
 
