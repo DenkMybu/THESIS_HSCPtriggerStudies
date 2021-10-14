@@ -210,6 +210,8 @@ private :
   TH2D* DISTRIB_PT1_PT2_CHN;
   TH2D* DISTRIB_PT1_PT2_NN;
 	
+  TH2D* DISTRIB_TLV_MET;
+
   TH2D* DISTRIB_MET_pt_CHCH;
   TH2D* DISTRIB_MET_pt_CHN;
 
@@ -248,6 +250,8 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_MET_CHN=0;
 	DISTRIB_MET_CHCH=0;
 	DISTRIB_MET_NN=0;
+
+	DISTRIB_TLV_MET=0;
 
 	DISTRIB_P1MP2CHCH=0;
 	DISTRIB_P1MP2CHN=0;
@@ -357,7 +361,9 @@ AnaEff::~AnaEff() //deconstruct
   }	
 
 
-
+  if(!DISTRIB_TLV_MET){
+   	delete DISTRIB_TLV_MET;
+  }
   if(!DISTRIB_P1_P2_CHN){
    	delete DISTRIB_P1_P2_CHN;
   }
