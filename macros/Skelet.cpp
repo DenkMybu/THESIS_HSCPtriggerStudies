@@ -161,7 +161,9 @@ void AnaEff::Loop()
 	DISTRIB_P1_P2_CHCH->GetXaxis()->SetTitle("P charged candidate 1");
 	DISTRIB_P1_P2_CHCH->GetYaxis()->SetTitle("P charged candidate 2");
 
-
+	DISTRIB_TLV_MET = new TH2D("DISTRIB_TLV_MET", "TLV_MET_Com", 600 , 0 , 4000 , 600, 0 , 4000 );
+	DISTRIB_TLV_MET->GetXaxis()->SetTitle("Reco pf_MET [GeV]");
+	DISTRIB_TLV_MET->GetYaxis()->SetTitle("TLV Charged - TLV Neutral");
 	//******************************************************************************************************************
 	//******************************************************************************************************************
 
@@ -191,6 +193,9 @@ void AnaEff::Loop()
 	DISTRIB_MET_CHN->Sumw2();
 	DISTRIB_MET_NN->Sumw2();
 	DISTRIB_MET_CHCH->Sumw2();
+	
+	DISTRIB_TLV_MET->Sumw2();
+
 	DISTRIB_MET_pt_CHN->Sumw2();
 	DISTRIB_MET_pt_CHCH->Sumw2();
 	DISTRIB_P1MP2CHCH->Sumw2();
@@ -297,6 +302,7 @@ void AnaEff::Loop()
 	DISTRIB_METPRESEL->Write();
 	DISTRIB_METSEL->Write();
 
+	
 	DISTRIB_P1_P2_CHN->Write();
 	DISTRIB_P1_P2_CHCH->Write();
 	
@@ -304,6 +310,9 @@ void AnaEff::Loop()
 	DISTRIB_MET_CHN->Write();
 	DISTRIB_MET_CHCH->Write();
 	DISTRIB_MET_NN->Write();
+	
+	DISTRIB_TLV_MET->Write();
+
 	DISTRIB_MET_pt_CHN->Write();
 	DISTRIB_MET_pt_CHCH->Write();
 	DISTRIB_P1MP2CHCH->Write();
@@ -541,10 +550,13 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
 		
 		
-		homemet = cand1 + cand2;
+		homemet = cand1 - cand2; // change here 
 		double v = homemet.Mag();
 		double a = cand1.Angle(cand2.Vect());
+		cout << " Charged pt : " << gen_pt[candidatesrh[candidatesrh.size()-1]] << " Neutral pt : " << gen_pt[candidatesneutral[candidatesneutral.size()-1]] << endl;
+		//double CalEt = sqrt(TheorMass*TheorMass + 
 		cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
+		DISTRIB_TLV_MET->Fill(pfmet_pt[0],v);
 		
 	}
 
