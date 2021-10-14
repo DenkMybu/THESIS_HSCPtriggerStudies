@@ -540,8 +540,8 @@ void AnaEff::AssoGenId(int indexcandidate,bool trig1){
 		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
 		
-		
-		homemet = cand1 * cand2;
+		cout << "TLorentz vector for candidate 2 : " << 
+		homemet = cand1 - cand2;
 		double v = sqrt(homemet.Dot(homemet));
 		double a = cand1.Angle(cand2.Vect());
 		cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
