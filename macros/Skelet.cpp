@@ -290,7 +290,9 @@ void AnaEff::Loop()
 					for (int j = 0 ; j < triggerName->size() ; j++){
 						if(triggerName->at(j) == triggerNames[i]){
 							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[i], pfmet_pt[0]);
-							cout << triggerNames[i] << " has trigger value " << passTrigger[i] << endl;
+							if(passTrigger[i] == 0 )
+								cout << triggerNames[i] << " has trigger value " << passTrigger[i] << endl;
+
 							trig.push_back(make_pair(triggerNames[i], passTrigger[i]));
 							break;
 						}
