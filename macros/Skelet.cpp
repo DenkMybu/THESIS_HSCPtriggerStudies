@@ -272,14 +272,6 @@ void AnaEff::Loop()
 			cout << "+1 event with trigger not in the right position"<< endl;
 		}
 
-		for(int k=0; k< ntrigger; k++){
-
-			cout << passTrigger[k] << endl;
-			//if(passTrigger[k]==0){
-			//	cout << "trigger " << k << " = 0 " << endl;
-			//}
-
-		}
 
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 
@@ -301,11 +293,11 @@ void AnaEff::Loop()
 					for (int j = 0 ; j < triggerName->size() ; j++){
 						if(triggerName->at(j) == triggerNames[i]){
 							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[i], pfmet_pt[0]);
-							if(passTrigger[i] == 0 )
-								cout << triggerNames[i] << " has trigger value " << passTrigger[i] << endl;
+							
+							cout << triggerNames[i] << " has trigger value " << passTrigger[i] << endl;
 
 							trig.push_back(make_pair(triggerNames[i], passTrigger[i]));
-							break;
+							//break;
 						}
 
 					}
