@@ -192,7 +192,7 @@ void AnaEff::Loop()
 
 	DISTRIB_TLV_MET = new TH2D("DISTRIB_TLV_MET", "TLV_MET_Com", 600 , 0 , 4000 , 600, 0 , 4000 );
 	DISTRIB_TLV_MET->GetXaxis()->SetTitle("Reco pf_MET [GeV]");
-	DISTRIB_TLV_MET->GetYaxis()->SetTitle("TLV Charged - TLV Neutral");
+	DISTRIB_TLV_MET->GetYaxis()->SetTitle("Reco pf_MET - MET from LorentzVector");
 
 	//******************************************************************************************************************
 	//******************************************************************************************************************
@@ -625,15 +625,24 @@ void AnaEff::AssoGenId(int indexcandidate){
 		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
 		
+		// 
 		
-		homemet = cand1 - cand2; // change here 
-		double v = homemet.Mag();
-		double a = cand1.Angle(cand2.Vect());
+		//qqs GeV difference entre stop / Rhadron s~q 
+
+	
+		homemet = cand1 + cand2; // change here 
+
+		//double v = homemet.Mag();
+		double v = homemet[0];
+
+		double a = (gen_phi[candidatesrh[candidatesrh.size()-1]] - gen_phi[candidatesneutral[candidatesneutral.size()-1]]) ; // delta phi 1-2
+
+			
 		//cout << " Charged pt : " << gen_pt[candidatesrh[candidatesrh.size()-1]] << " Neutral pt : " << gen_pt[candidatesneutral[candidatesneutral.size()-1]] << endl;
 		//double CalcEt = sqrt(TheorMass*TheorMass + gen_pt * gen_pt);
 			
 		//cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
-		DISTRIB_TLV_MET->Fill(pfmet_pt[0],v);
+		DISTRIB_TLV_MET->Fill((pfmet_pt[0]-v),pfmet_pt[0]);
 		DISTRIB_ANGLE_RAD->Fill(a);
 
 		/* Calcul du recul potentiel entre les deux candidats pour voir si la MET provient bien du candidat neutre. Quadri-vecteurs Pt_eta_phi_M pour les deux candidats et norme du vecteur MET
