@@ -265,10 +265,21 @@ void AnaEff::Loop()
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 		counter+=1;
 
+
+
+
 		if(triggerName->at(188)!="HLT_PFMET120_PFMHT120_IDTight_v16"){
 			cout << "+1 event with trigger not in the right position"<< endl;
 		}
 
+		for(int k=0; k< ntrigger; k++){
+
+			cout << passTrigger[k] << endl;
+			//if(passTrigger[k]==0){
+			//	cout << "trigger " << k << " = 0 " << endl;
+			//}
+
+		}
 
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 
