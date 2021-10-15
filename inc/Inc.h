@@ -34,10 +34,10 @@ public:
    ~TrigEff();
    
 
-   void LoadNoMap(const vector<string> &triggerNames,const vector<string> &SelectedTriggerNames,int ErrorType=1, string NameVar="a",string FileName="testnewdata.root");
+   void LoadNoMap(const vector<string> &triggerNames,int ErrorType=1, string NameVar="a",string FileName="testnewdata.root");
 
 
-   void FillNoMap2(vector< pair<int, bool > > PosPass, float Obs = 0.0, double weight = 1,string mode = "all");
+   void FillNoMap(string TriggerName, bool trig,float Obs = 0.0, double weight = 1,string mode = "all");
 
 
    void Compute(string NameOutputFile, string NameListEff, string ListAllTriggers, string EffTriggers, string ErrorEffTriggers,string EffOrAllTriggers);
@@ -119,10 +119,15 @@ public:
 
    vector <TEfficiency*> EffvsObs;
    vector <TEfficiency*> EffvsObsNo;
+   vector <TEfficiency*> EffvsObsAll;
+
+   vector< pair<string, int > > NamesPos; 
+   vector<string> TriggerNames;
+
 
    TEfficiency* EffvsObsMet;
-  
-   vector<string> triggerNames;
+
+
 
 };
 

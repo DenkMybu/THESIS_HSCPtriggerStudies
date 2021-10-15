@@ -48,8 +48,10 @@ void AnaEff::Loop()
 	
 	
 	string NameListForType = NameCompleteList + DataType + ExtTxt;
-	trigEff_presel.ReadFromTxt(NameListForType);
-	
+
+
+	ReadFromTxt(NameListForType);
+	//trigEff_presel.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);
 
 
 	//************************************** DECLARATION OF THXD *******************************************************
@@ -245,7 +247,8 @@ void AnaEff::Loop()
 	DISTRIB_P1_P2_CHCH->Sumw2();
 
 	DISTRIB_TLV_MET->Sumw2();
-	//trigEff_presel.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);
+
+	
 	
 	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
 	
@@ -283,6 +286,15 @@ void AnaEff::Loop()
 				trig2=passTrigger[197];
 				//cout << "before AssoGenId" << endl;
 				//Find trigger bool
+				for(int i = 0 ; i < triggerNames.size(); i++){
+					for (int j = 0 ; j < triggerName->size() ; j++){
+						if(triggerName->at(j) == triggerNames[i]){
+							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[i], pfmet_pt[0]);
+						}
+
+					}
+				}
+
 				AssoGenId(indexcandidatesel);
 
 				trigEff_presel.StudyRecoMet(trig1,pfmet_pt[0]);
@@ -708,6 +720,16 @@ double AnaEff::deltaR(double delta) {
 	return std::sqrt(delta);
 }
 
+
+void AnaEff::ReadFromTxt(const string NameListForType){
+	ifstream ifile(NameListForType.c_str()); 
+	string tmp;
+	while(getline(ifile,tmp)){
+   		triggerNames.push_back(tmp);
+	}
+	cout << triggerNames.size() << endl;
+	ifile.close();
+}
 
 int main(){
 

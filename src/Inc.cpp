@@ -35,7 +35,11 @@ TrigEff::~TrigEff(){
 
 	EffvsObs.clear();
 	EffvsObsNo.clear();
-	triggerNames.clear();
+	EffvsObsAll.clear();
+
+	NamesPos.clear();
+	TriggerNames.clear();
+
 	//if(!EffvsObsMet){
 		//delete EffvsObsMet;
 	//}
@@ -52,36 +56,37 @@ TrigEff::~TrigEff(){
 //LOAD THE USER'S CONFIG
 
 
-void TrigEff::LoadNoMap(const vector<string> &triggerNames, const vector<string> &SelectedTriggerNames,int ErrorType, string NameVar,string FileName){ 
+void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string NameVar,string FileName){ 
 	
-	
-}
+	EffvsObsAll.resize(triggerNames.size());
+	NamesPos.resize(triggerNames.size());
 
+	this->TriggerNames = triggerNames;
 
-
-
-//***************************************************************************************************************************
-
-//***************************************************************************************************************************
-
-
-void TrigEff::FillNoMap2(vector< pair<int, bool > > PosPass, float Obs, double weight,string mode){  //const vector<bool> 
-	
-}
-
-
-void TrigEff::ReadFromTxt(const string NameListForType){
-
-	ifstream ifile(NameListForType.c_str()); 
-	string tmp;
-
-	while(getline(ifile,tmp)){
-   		triggerNames.push_back(tmp);
+	for(int i =0; i < triggerNames.size(); i++){
+		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",50,0,2000); 
+		EffvsObsAll[i]->SetName(triggerNames[i].c_str());
+		NamesPos[i] = make_pair(triggerNames[i],i);
 	}
-	cout << triggerNames.size() << endl;
-	ifile.close();
+	
 }
 
+
+
+
+//***************************************************************************************************************************
+
+//***************************************************************************************************************************
+
+
+void TrigEff::FillNoMap(string TriggerName, bool trig, float Obs, double weight,string mode){  //const vector<bool> 
+	for(int i = 0; i < TriggerNames.size(); i++){
+		if(NamesPos[i].first == TriggerName){
+			EffvsObsAll[NamesPos[i].second]->Fill(trig,Obs);
+		}
+
+	}
+}
 
 
 void TrigEff::StudyRecoMet(bool trig,double Obs){
@@ -216,6 +221,10 @@ void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 		EffvsObsNo[i]->Write();
 	}
 
+	for(int j=0; j < EffvsObsAll.size() ; j++){
+		EffvsObsAll[j]->Write();
+	}
+	
 	EffvsObsMet->Write();
 	OutputHisto->Close();
 }
