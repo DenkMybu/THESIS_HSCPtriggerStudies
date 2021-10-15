@@ -171,6 +171,9 @@ private :
   Double_t p1=0,p2=0,eta1=0,eta2=0,pt1=0,pt2=0,poverm1=0,poverm2=0;
   bool trig1,trig2;
 
+  //vector<bool> trig;
+  vector< pair<string, bool > > trig; 
+
   vector<string> triggerNames;
 
   //*************************************** TH1D compiled by main class *****************************************************
@@ -287,6 +290,7 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_MET_ptN_CHN=0;
 
 	triggerName = 0;
+	
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 	if (tree == 0) {
@@ -430,6 +434,7 @@ AnaEff::~AnaEff() //deconstruct
   }
 
   triggerNames.clear();
+  trig.clear();
    //delete[] passTrigger;
 }
 

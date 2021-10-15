@@ -40,7 +40,7 @@ public:
    void FillNoMap(string TriggerName, bool trig,float Obs = 0.0, double weight = 1,string mode = "all");
 
 
-   void Compute(string NameOutputFile, string NameListEff, string ListAllTriggers, string EffTriggers, string ErrorEffTriggers,string EffOrAllTriggers);
+   void Compute(string NameOutputFile="", string NameListEff="", string ListAllTriggers="", string EffTriggers="", string ErrorEffTriggers="",string EffOrAllTriggers="");
    
    //void CreateHisto(string NameVar="random", const vector<string> &SelectedTriggerNames);
 
@@ -57,6 +57,8 @@ public:
    void InitTEff();
  
    void ReadFromTxt(const string NameListForType);
+  
+   void func(vector< pair<string, bool > > Trig);
 
  private :
 	
@@ -124,9 +126,16 @@ public:
    vector< pair<string, int > > NamesPos; 
    vector<string> TriggerNames;
 
-
+   
    TEfficiency* EffvsObsMet;
 
+
+   vector<double> Efficiency;
+
+   vector<double> NumEfficiency;
+   vector<double> DenomEfficiency;
+
+   vector<double> EffErr;
 
 
 };

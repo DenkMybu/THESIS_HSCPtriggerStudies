@@ -290,18 +290,24 @@ void AnaEff::Loop()
 					for (int j = 0 ; j < triggerName->size() ; j++){
 						if(triggerName->at(j) == triggerNames[i]){
 							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[i], pfmet_pt[0]);
+
+							trig.push_back(make_pair(triggerNames[i], passTrigger[i]));
+							break;
 						}
 
 					}
 				}
-
+				
 				AssoGenId(indexcandidatesel);
 
 				trigEff_presel.StudyRecoMet(trig1,pfmet_pt[0]);
+				trig.clear();
 			}
 		}
 
 	}
+	
+	trigEff_presel.Compute();
 	trigEff_presel.WritePlots("","");
 
 	ofstream InfosData;
@@ -634,20 +640,17 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		//double v = homemet.Mag();
 		double v = homemet[0];
-
 		double a = (gen_phi[candidatesrh[candidatesrh.size()-1]] - gen_phi[candidatesneutral[candidatesneutral.size()-1]]) ; // delta phi 1-2
-
-			
-		//cout << " Charged pt : " << gen_pt[candidatesrh[candidatesrh.size()-1]] << " Neutral pt : " << gen_pt[candidatesneutral[candidatesneutral.size()-1]] << endl;
-		//double CalcEt = sqrt(TheorMass*TheorMass + gen_pt * gen_pt);
-			
-		//cout << " Angle between both vectors : " << a << " norm of the dot product = " << v << " , and reco pfMET = : " << pfmet_pt[0] << endl;
-		DISTRIB_TLV_MET->Fill((pfmet_pt[0]-v),pfmet_pt[0]);
+		DISTRIB_TLV_MET->Fill(pfmet_pt[0],v);
 		DISTRIB_ANGLE_RAD->Fill(a);
 
-		/* Calcul du recul potentiel entre les deux candidats pour voir si la MET provient bien du candidat neutre. Quadri-vecteurs Pt_eta_phi_M pour les deux candidats et norme du vecteur MET
-			si cand1 (pt1 eta1 phi1 et M1) et cand2, possible de calculer la met  
-
+		//Fill raw efficiency 
+		
+		trigEff_presel.func(trig);
+	
+		/*	EFFICIENCY OF TRIGGERS IN SCENARIOS
+			
+			
 		*/
 		
 	}

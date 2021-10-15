@@ -39,7 +39,14 @@ TrigEff::~TrigEff(){
 
 	NamesPos.clear();
 	TriggerNames.clear();
+	
 
+	Efficiency.clear();
+	
+	NumEfficiency.clear();
+	DenomEfficiency.clear();
+	
+	EffErr.clear();
 	//if(!EffvsObsMet){
 		//delete EffvsObsMet;
 	//}
@@ -60,6 +67,15 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	
 	EffvsObsAll.resize(triggerNames.size());
 	NamesPos.resize(triggerNames.size());
+
+	
+	Efficiency.resize(triggerNames.size(), 0.0);
+	
+	NumEfficiency.resize(triggerNames.size(), 0.0);
+	DenomEfficiency.resize(triggerNames.size(), 0.0);
+	
+	EffErr.resize(triggerNames.size(), 0.0);
+	//Trig.resize(triggerNames.size());
 
 	this->TriggerNames = triggerNames;
 
@@ -128,6 +144,15 @@ void TrigEff::FindTurnOn(int which,bool trig1, bool trig2, float Obs,bool munomu
 	}
 }
 
+void TrigEff::func(vector< pair<string, bool > > Trig){
+
+	for(int j=0; j<Trig.size(); j++){
+		DenomEfficiency[j] +=1;
+		if(Trig[j].second == 1){
+			NumEfficiency[j]+=1;
+		}	
+	}
+}
 
 
 //***************************************************************************************************************************
@@ -167,6 +192,18 @@ void TrigEff::PrintDenomCorr(){
 
 void TrigEff::ComputeEff(){
 	
+	for(int i=0;i< Efficiency.size();i++){
+		if(DenomEfficiency[i]==0 && NumEfficiency[i] == 0){
+			Efficiency[i]=0;
+		}
+		else if(DenomEfficiency[i]==0){
+			Efficiency[i]=0;
+		}
+		else{	
+			Efficiency[i] = ((NumEfficiency[i]*1.0) / DenomEfficiency[i]*1.0);
+		}
+		
+	}	
 }
 
 
@@ -194,7 +231,9 @@ void TrigEff::PrintNumEff(){
 
 
 void TrigEff::PrintDenomEff(){
-	
+	for ( int i = 0; i < DenomEfficiency.size(); i++ ){
+      		cout << i << NamesPos[i].first << " : " << Efficiency[i]*100.0 << " +/- " << EffErr[i]*100.0 << endl ;
+	}
 }
 
 
@@ -204,13 +243,16 @@ void TrigEff::ComputeErrorLogicalOr(){
 }
 
 
-
-
-
-
-
 void TrigEff::ComputeError(){
-	
+
+	for(int i=0;i< EffErr.size();i++){
+		if(Efficiency[i]==0){
+			EffErr[i]=0;
+		}
+		else{
+			EffErr[i]=sqrt((Efficiency[i]*(1.0-Efficiency[i]))/DenomEfficiency[i]);
+		}
+	}
 }
 
 void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
@@ -235,11 +277,11 @@ void TrigEff::FillMass(double INVMASS,int choice){
 
 void TrigEff::Compute(string NameOutputFile,string NameListEff, string ListAllTriggers, string EffTriggers, string ErrorEffTriggers,string EffOrAllTriggers){
 	
-	//ComputeEff();
-	//ComputeError();
+	ComputeEff();
+	ComputeError();
 	
 	//PrintNumEff();
-	//PrintDenomEff();
+	PrintDenomEff();
 	//PrintEff();
 	//ComputeCorAll();
 	//SaveIntTrigs(NameOutputFile,NameListEff,ListAllTriggers,EffTriggers, ErrorEffTriggers,EffOrAllTriggers);
