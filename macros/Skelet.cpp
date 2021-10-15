@@ -285,8 +285,7 @@ void AnaEff::Loop()
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
-				trig1=passTrigger[188];
-				trig2=passTrigger[197];
+				
 				//cout << "before AssoGenId" << endl;
 				//Find trigger bool
 				for(int i = 0 ; i < triggerNames.size(); i++){
@@ -305,7 +304,6 @@ void AnaEff::Loop()
 				
 				AssoGenId(indexcandidatesel);
 
-				trigEff_presel.StudyRecoMet(trig1,pfmet_pt[0]);
 				trig.clear();
 			}
 		}
@@ -628,10 +626,6 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 
 		
-		trigEff_presel.FindTurnOn(1,trig1,trig2,pfmet_pt[0],1);
-
-		trigEff_presel.FindTurnOn(1,trig1,trig2,pfmet_pt[0],0);
-
 
 		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
@@ -709,11 +703,6 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 			}
 		}
 		//cout << "Before FindTurnOn" << endl;
-		trigEff_presel.FindTurnOn(0,trig1,trig2,pfmet_pt[0],1);
-		
-
-		trigEff_presel.FindTurnOn(0,trig1,trig2,pfmet_pt[0],0);
-		
 
 		trigEff_presel.func(trig);
 		//cout << "After FindTurnOn" << endl;
