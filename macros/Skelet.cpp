@@ -296,7 +296,7 @@ void AnaEff::Loop()
 							
 							cout << triggerNames[i] << " has trigger value " << passTrigger[i] << endl;
 
-							trig.push_back(make_pair(triggerNames[i], passTrigger[i]));
+							trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 							break;
 						}
 
