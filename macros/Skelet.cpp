@@ -38,15 +38,18 @@ void AnaEff::Loop()
 
 	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass));
 	
-	string NameCompleteListTest = "ListeInteretTriggers";
+	string NameCompleteList = "ListeInteretTriggers";
 
 	string StudyTxt = TransferTxt + DataType + Date;
 	string NameOfTxt = StudyTxt + SubNum + ExtTxt;
 
 	string StudyDistribZ = TransferDistribZ + DataType + Date;
-
-
 	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
+	
+	
+	string NameListForType = NameCompleteList + DataType + ExtTxt;
+	trigEff_presel.ReadFromTxt(NameListForType);
+	
 
 
 	//************************************** DECLARATION OF THXD *******************************************************

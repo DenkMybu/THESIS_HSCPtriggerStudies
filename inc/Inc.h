@@ -55,6 +55,8 @@ public:
    void NameTEff();
 
    void InitTEff();
+ 
+   void ReadFromTxt(const string NameListForType);
 
  private :
 	
@@ -120,7 +122,8 @@ public:
 
    TEfficiency* EffvsObsMet;
   
-   
+   vector<string> triggerNames;
+
 };
 
 #endif

@@ -35,7 +35,7 @@ TrigEff::~TrigEff(){
 
 	EffvsObs.clear();
 	EffvsObsNo.clear();
-
+	triggerNames.clear();
 	//if(!EffvsObsMet){
 		//delete EffvsObsMet;
 	//}
@@ -68,6 +68,21 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames, const vector<string>
 void TrigEff::FillNoMap2(vector< pair<int, bool > > PosPass, float Obs, double weight,string mode){  //const vector<bool> 
 	
 }
+
+
+void TrigEff::ReadFromTxt(const string NameListForType){
+
+	ifstream ifile(NameListForType.c_str()); 
+	string tmp;
+
+	while(getline(ifile,tmp)){
+   		triggerNames.push_back(tmp);
+	}
+	cout << triggerNames.size() << endl;
+	ifile.close();
+}
+
+
 
 void TrigEff::StudyRecoMet(bool trig,double Obs){
 	
