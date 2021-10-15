@@ -651,7 +651,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		//Fill raw efficiency 
 		
-		trigEff_presel.func(trig);
+		//trigEff_presel.func(trig);
 	
 		/*	EFFICIENCY OF TRIGGERS IN SCENARIOS
 			
@@ -713,6 +713,9 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		
 
 		trigEff_presel.FindTurnOn(0,trig1,trig2,pfmet_pt[0],0);
+		
+
+		trigEff_presel.func(trig);
 		//cout << "After FindTurnOn" << endl;
 
 	}
