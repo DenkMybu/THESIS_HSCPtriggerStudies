@@ -96,10 +96,10 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 
 
 void TrigEff::FillNoMap(string TriggerName, bool trig, float Obs, double weight,string mode){  //const vector<bool> 
-	cout << "FillNoMap" << endl;
-	for(int i = 0; i < TriggerNames.size(); i++){
+	cout << "NamesPos.size() = " << NamesPos.size() << endl;
+	for(int i = 0; i < NamesPos.size(); i++){
 		if(NamesPos[i].first == TriggerName){
-			cout << " bool " << i << " = " << trig << endl;
+			//cout << " bool " << i << " = " << trig << endl;
 			EffvsObsAll[NamesPos[i].second]->Fill(trig,Obs);
 		}
 
