@@ -51,7 +51,7 @@ void AnaEff::Loop()
 
 
 	ReadFromTxt(NameListForType);
-	//trigEff_presel.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);
+	trigEff_presel.LoadNoMap(triggerNames,1);
 
 
 	//************************************** DECLARATION OF THXD *******************************************************
