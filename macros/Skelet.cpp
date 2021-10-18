@@ -369,7 +369,7 @@ void AnaEff::Loop()
 	InfosData << " Zones in p/m : " << "\n\n" << endl;
 	InfosData << " p/m < 0.1 : " << (nbinfpom/(nbinfpom+nbinpom+nbsuppom))*100 << endl;
 	InfosData << " 0.1 < p/m < 0.9 " <<  (nbinpom/(nbinfpom+nbinpom+nbsuppom))*100  << endl;
-	InfosData << " p/m > 0.9 " << nbsuppom/(nbinfpom+nbinpom+nbsuppom))*100 << endl;
+	InfosData << " p/m > 0.9 " << (nbsuppom/(nbinfpom+nbinpom+nbsuppom))*100 << endl;
 
 	//******************************************************************************
 	//******************************************************************************
