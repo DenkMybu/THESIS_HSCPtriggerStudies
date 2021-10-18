@@ -259,10 +259,13 @@ void AnaEff::Loop()
 	cout << "Working on " << DataType << endl;
 	cout << " Association of passTrigger and TriggerName" << endl;
 
+	posa.resize(triggerNames.size(), 0.0);
+
 	/*for(int l = 0; l < triggerName->size(); l++){
 			for(int i = 0; i<triggerNames.size();i++){
 				if(triggerName->at(l) == triggerNames[i]){
-					pos1=l;
+					posa[i]=l;
+					break;
 				}
 			}
 
@@ -287,9 +290,8 @@ void AnaEff::Loop()
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
-				//cout << "before AssoGenId" << endl;
-				//Find trigger bool
-				for(int i = 0 ; i < triggerNames.size(); i++){
+				
+				/*for(int i = 0 ; i < triggerNames.size(); i++){
 					for (int j = 0 ; j < triggerName->size() ; j++){
 						if(triggerName->at(j) == triggerNames[i]){
 							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
@@ -299,7 +301,30 @@ void AnaEff::Loop()
 						}
 
 					}
+				}*/
+	
+					
+				for(int i=0; i < posa.size(); i++){
+					for(int j=0; j < triggerNames.size(); j++){
+						if(triggerNames[j] == triggerName->at(posa[i])){
+							trigEff_presel.FillNoMap(triggerNames[j], passTrigger[posa[i]], pfmet_pt[0]);
+							//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
+							trig.push_back(make_pair(triggerNames[j], passTrigger[posa[i]]));
+							break;
+							
+						}
+						else{
+
+							cout << "+1 event where triggernames do not match expected ints" << endl;
+						}
+					}
+
 				}
+
+
+			
+
+				
 				
 				AssoGenId(indexcandidatesel);
 

@@ -169,7 +169,7 @@ private :
   TFile* distrib;
 
   Int_t nbchch=0,nbchn=0,nbnn=0,nbdch=0,nbtot=0,nbn=0,nbch=0, nbtch=0, nbnx=0,nbmissmatch=0;
-  Int_t pos1,pos2,pos3,pos4,pos5;
+  
 
   Double_t p1=0,p2=0,eta1=0,eta2=0,pt1=0,pt2=0,poverm1=0,poverm2=0;
 
@@ -179,6 +179,8 @@ private :
   vector< pair<string, bool > > trig; 
 
   vector<string> triggerNames;
+
+  vector<int> posa;
 
   //*************************************** TH1D compiled by main class *****************************************************
   TH1D* DISTRIB_NB_RHADRONS;
@@ -251,8 +253,6 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_IASDCH=0;
 
 	
-
-
 	DISTRIB_IH=0;
 	DISTRIB_IHCHN=0;
 	DISTRIB_IHCHCH=0;
@@ -294,7 +294,6 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_MET_ptN_CHN=0;
 
 	triggerName = 0;
-	
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 	if (tree == 0) {
@@ -438,6 +437,7 @@ AnaEff::~AnaEff() //deconstruct
   }
 
   triggerNames.clear();
+  posa.clear();
   trig.clear();
    //delete[] passTrigger;
 }
