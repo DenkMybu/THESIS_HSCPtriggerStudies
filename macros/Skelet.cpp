@@ -73,7 +73,7 @@ void AnaEff::Loop()
 	DISTRIB_IASCHCH->GetXaxis()->SetTitle("Ias");
 	DISTRIB_IASCHCH->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_IASDCH = new TH1D("DISTRIB_IASDCH", "( IAS )DCH",80,0,1.2)
+	DISTRIB_IASDCH = new TH1D("DISTRIB_IASDCH", "( IAS )DCH",80,0,1.2);
 	DISTRIB_IASDCH->GetXaxis()->SetTitle("Ias");
 	DISTRIB_IASDCH->GetYaxis()->SetTitle("# HSCP");
 
