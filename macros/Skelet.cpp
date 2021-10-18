@@ -256,23 +256,24 @@ void AnaEff::Loop()
 
 	string trigger1="",trigger2="";
 	trigEff_presel.InitTEff();
-	cout << "Trigger 188 in list : " << triggerName->at(188) << " , and 197 : " << triggerName->at(197) << endl;
-	cout << "Working on " << DataType << endl; 
+	cout << "Working on " << DataType << endl;
+	cout << " Association of passTrigger and TriggerName" << endl;
+
+	/*for(int l = 0; l < triggerName->size(); l++){
+			for(int i = 0; i<triggerNames.size();i++){
+				if(triggerName->at(l) == triggerNames[i]){
+					pos1=l;
+				}
+			}
+
+	}*/
+	
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { //All entries
 		Long64_t ientry = LoadTree(jentry);
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 		counter+=1;
-
-
-
-
-		if(triggerName->at(188)!="HLT_PFMET120_PFMHT120_IDTight_v16"){
-			cout << "+1 event with trigger not in the right position"<< endl;
-		}
-
-
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 
 
@@ -292,9 +293,7 @@ void AnaEff::Loop()
 					for (int j = 0 ; j < triggerName->size() ; j++){
 						if(triggerName->at(j) == triggerNames[i]){
 							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
-							
 							//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
-
 							trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 							break;
 						}
@@ -548,6 +547,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 			nbmissmatch +=1;
 		}
 	}
+
 	DISTRIB_NB_RHADRONS->Fill(candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size());
 	bool alo = false,alo2=false;
 	nbtot+=1;
@@ -645,7 +645,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		//Fill raw efficiency 
 		
-		//trigEff_presel.func(trig);
+		trigEff_presel.func(trig);
 	
 		/*	EFFICIENCY OF TRIGGERS IN SCENARIOS
 			
@@ -658,7 +658,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	//*******************************CHARGED + CHARGED*******************************
 	//*******************************************************************************
 
-	else if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
+	if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
 
 		double pt1chch = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2chch = gen_pt[candidatesrh[candidatesrh.size()-2]]; 
 
@@ -704,7 +704,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		}
 		//cout << "Before FindTurnOn" << endl;
 
-		trigEff_presel.func(trig);
+		//trigEff_presel.func(trig);
 		//cout << "After FindTurnOn" << endl;
 
 	}

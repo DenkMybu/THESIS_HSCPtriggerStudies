@@ -126,6 +126,7 @@ void TrigEff::InitTEff(){
 	EffvsObs.resize(2); // nb of trigger we study
 	EffvsObsNo.resize(2);
 	TString outputfilename="TestStop.root";//FileName.c_str();
+	
 	OutputHisto = new TFile(outputfilename,"RECREATE");
 
 	EffvsObsMet = new TEfficiency("Eff of PFMET120_PFMHT120", "Efficiency of PFMET120_PFMHT120;Reco pf_MET [GeV];#epsilon",50,0,2000);
@@ -234,7 +235,7 @@ void TrigEff::PrintNumEff(){
 
 void TrigEff::PrintDenomEff(){
 	for ( int i = 0; i < DenomEfficiency.size(); i++ ){
-      		cout << i << NamesPos[i].first << " : " << Efficiency[i]*100.0 << " +/- " << EffErr[i]*100.0 << endl ;
+      		cout << i << NamesPos[i].first << " -> " << NumEfficiency[i] << " /" << DenomEfficiency[i] << " = " << Efficiency[i]*100.0 << " +/- " << EffErr[i]*100.0 << endl ;
 	}
 }
 
