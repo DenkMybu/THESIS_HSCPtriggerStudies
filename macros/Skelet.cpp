@@ -73,7 +73,7 @@ void AnaEff::Loop()
 	DISTRIB_IASCHCH->GetXaxis()->SetTitle("Ias");
 	DISTRIB_IASCHCH->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_IASDCH = new TH1D("DISTRIB_IASDCH", "( IAS )DCH",80,0,1.2);
+	DISTRIB_IASDCH = new TH1D("DISTRIB_IASDCH", "( IAS )DCH",80,0,1.2)
 	DISTRIB_IASDCH->GetXaxis()->SetTitle("Ias");
 	DISTRIB_IASDCH->GetYaxis()->SetTitle("# HSCP");
 
@@ -291,7 +291,7 @@ void AnaEff::Loop()
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
 				
-				/*for(int i = 0 ; i < triggerNames.size(); i++){
+				for(int i = 0 ; i < triggerNames.size(); i++){
 					for (int j = 0 ; j < triggerName->size() ; j++){
 						if(triggerName->at(j) == triggerNames[i]){
 							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
@@ -301,10 +301,10 @@ void AnaEff::Loop()
 						}
 
 					}
-				}*/
+				}
 	
 					
-				for(int i=0; i < posa.size(); i++){
+				/*for(int i=0; i < posa.size(); i++){
 					for(int j=0; j < triggerNames.size(); j++){
 						if(triggerNames[j] == triggerName->at(posa[i])){
 							trigEff_presel.FillNoMap(triggerNames[j], passTrigger[posa[i]], pfmet_pt[0]);
@@ -319,11 +319,19 @@ void AnaEff::Loop()
 						}
 					}
 
+				}*/
+
+
+				if( (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) < 0.1){
+					nbinfpom+=1;
+
 				}
-
-
-			
-
+				else if( (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) > 0.9){
+					nbsuppom+=1;
+				}
+				else{
+					nbinpom+=1;
+				}
 				
 				
 				AssoGenId(indexcandidatesel);
@@ -357,7 +365,11 @@ void AnaEff::Loop()
 	InfosData << " # Charged-Neutral : " << nbchn << " / " << nbtot << " = " << nbchn*1.0/nbtot << endl;
 	InfosData << " # Neutral-Neutral : " << nbnn << " / " << nbtot << " = " << nbnn*1.0/nbtot << endl;
 	InfosData << " # Neutral-X : " << nbnx << " / " << nbtot << " = " << nbnx*1.0/nbtot << endl;
-	InfosData << " # Double charged - X " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << endl;
+	InfosData << " # Double charged - X " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << "\n\n" << endl;
+	InfosData << " Zones in p/m : " << "\n\n" << endl;
+	InfosData << " p/m < 0.1 : " << (nbinfpom/(nbinfpom+nbinpom+nbsuppom))*100 << endl;
+	InfosData << " 0.1 < p/m < 0.9 " <<  (nbinpom/(nbinfpom+nbinpom+nbsuppom))*100  << endl;
+	InfosData << " p/m > 0.9 " << nbsuppom/(nbinfpom+nbinpom+nbsuppom))*100 << endl;
 
 	//******************************************************************************
 	//******************************************************************************
@@ -670,7 +682,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		//Fill raw efficiency 
 		
-		trigEff_presel.func(trig);
+		//trigEff_presel.func(trig);
 	
 		/*	EFFICIENCY OF TRIGGERS IN SCENARIOS
 			
@@ -729,7 +741,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		}
 		//cout << "Before FindTurnOn" << endl;
 
-		//trigEff_presel.func(trig);
+		trigEff_presel.func(trig);
 		//cout << "After FindTurnOn" << endl;
 
 	}

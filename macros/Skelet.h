@@ -169,7 +169,7 @@ private :
   TFile* distrib;
 
   Int_t nbchch=0,nbchn=0,nbnn=0,nbdch=0,nbtot=0,nbn=0,nbch=0, nbtch=0, nbnx=0,nbmissmatch=0;
-  
+  Int_t nbinfpom=0,nbsuppom=0,nbinpom=0;
 
   Double_t p1=0,p2=0,eta1=0,eta2=0,pt1=0,pt2=0,poverm1=0,poverm2=0;
 
