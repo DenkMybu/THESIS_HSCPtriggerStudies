@@ -320,7 +320,7 @@ void AnaEff::Loop()
 					}
 
 				}*/
-				cout << " p / m = " << (track_p[hscp_track_idx[indexcandidatesel]]*1.0) << " / " << TheorMass << = (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) <<endl;
+				cout << " p / m = " << (track_p[hscp_track_idx[indexcandidatesel]]*1.0) << " / " << TheorMass <<" = " << (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) <<endl;
 
 				if( (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) < 0.1){
 					nbinfpom+=1;
@@ -332,7 +332,7 @@ void AnaEff::Loop()
 					cout << " nb > 0.9 " << nbsuppom << endl;
 				}
 
-				if( (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) < 0.9 && ((track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) >0.1)){
+				if( (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) < 0.9 && (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) >0.1){
 					nbinpom+=1;
 					cout << " 0.9 < nb < 0.1 " << nbinpom << endl;
 				}
