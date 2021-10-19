@@ -29,14 +29,12 @@ int ListNameTriggers::ListNameTriggersReverse(string name){
 }
 
 int ListNameTriggers::IsInList(string name){
-	int ct=0;
 	cout << InfoTriggers.size() << endl;
 	for(int i = 0 ; i < InfoTriggers.size() ; i++){
 		//cout << i << endl;
 		if(InfoTriggers[i].first == name){
-			return ct;
+			return i;
 		}
-		ct+=1;
 	}
 	return 9999;
 }
@@ -109,7 +107,9 @@ void ListNameTriggers::FindAllNames(){
 		cout << "in loop" << ntrigger << endl;
 		
 		//cout << "----------------------------- new event -----------------------------" << endl;
-		//if(ntrigger > InfoTriggers.size()){
+		if(ntrigger > InfoTriggers.size()){
+			
+		}
 			//cout << " --------NEW EVENT ------- "<< endl;
 			for(int i=0; i< ntrigger; i++){
 				cout << i <<"is ok"<< triggerName->at(i) <<  endl;
