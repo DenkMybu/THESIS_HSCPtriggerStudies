@@ -738,10 +738,21 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		//Fill raw efficiency 
 		DISTRIB_METSEL_CHN->Fill(pfmet_pt[0]);
-		
+
+		for(int i = 0 ; i < triggerNames.size(); i++){
+			for (int j = 0 ; j < triggerName->size() ; j++){
+				if(triggerName->at(j) == triggerNames[i]){
+					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
+					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
+					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
+					break;
+				}
+
+			}
+		}
 		
 
-		//trigEff_presel.func(trig);
+		trigEff_presel.func(trig);
 	
 		/*	EFFICIENCY OF TRIGGERS IN SCENARIOS
 			
@@ -801,20 +812,10 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 			}
 		}
 
-		for(int i = 0 ; i < triggerNames.size(); i++){
-			for (int j = 0 ; j < triggerName->size() ; j++){
-				if(triggerName->at(j) == triggerNames[i]){
-					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
-					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
-					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
-					break;
-				}
-
-			}
-		}
+		
 		//cout << "Before FindTurnOn" << endl;
 		DISTRIB_METSEL_CHCH->Fill(pfmet_pt[0]);
-		trigEff_presel.func(trig);
+		//trigEff_presel.func(trig);
 		//cout << "After FindTurnOn" << endl;
 
 	}
