@@ -361,7 +361,7 @@ void AnaEff::Loop()
 					}
 
 				}*/
-				cout << " p / m = " << (track_p[hscp_track_idx[indexcandidatesel]]*1.0) << " / " << TheorMass <<" = " << (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) <<endl;
+				//cout << " p / m = " << (track_p[hscp_track_idx[indexcandidatesel]]*1.0) << " / " << TheorMass <<" = " << (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) <<endl;
 
 				if( (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) < 0.1){
 					nbinfpom+=1;
