@@ -201,6 +201,16 @@ private :
   TH1D* DISTRIB_METPRESEL;
   TH1D* DISTRIB_METSEL;
 
+  TH1D* DISTRIB_METNOSEL_CHN;
+  TH1D* DISTRIB_METPRESEL_CHN;
+  TH1D* DISTRIB_METSEL_CHN;
+
+  TH1D* DISTRIB_METNOSEL_CHCH;
+  TH1D* DISTRIB_METPRESEL_CHCH;
+  TH1D* DISTRIB_METSEL_CHCH;
+
+
+
   TH1D* DISTRIB_ETA_DCH;
   TH1D* DISTRIB_MET_CHN;
   TH1D* DISTRIB_MET_CHCH;
@@ -228,10 +238,11 @@ private :
 	
   TH2D* DISTRIB_TLV_MET;
 
+
   TH2D* DISTRIB_MET_pt_CHCH;
   TH2D* DISTRIB_MET_pt_CHN;
   TH2D* DISTRIB_MET_ptN_CHN;
-
+  TH2D* DISTRIB_MET_pt;
 
   //*************************************************************************************************************************
 };
@@ -262,6 +273,15 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_METPRESEL=0;
 	DISTRIB_METNOSEL=0;
 
+	DISTRIB_METSEL_CHCH=0;
+	DISTRIB_METPRESEL_CHCH=0;
+	DISTRIB_METNOSEL_CHCH=0;
+	
+
+	DISTRIB_METSEL_CHN=0;
+	DISTRIB_METPRESEL_CHN=0;
+	DISTRIB_METNOSEL_CHN=0;
+
 	DISTRIB_ETA_DCH=0;
 
 	DISTRIB_MET_CHN=0;
@@ -289,6 +309,7 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_PT1_PT2_CHN=0;
 	DISTRIB_PT1_PT2_NN=0;
 
+	DISTRIB_MET_pt=0;
 	DISTRIB_MET_pt_CHCH=0;
 	DISTRIB_MET_pt_CHN=0;
 	DISTRIB_MET_ptN_CHN=0;
@@ -358,6 +379,7 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_IHDCH){
   	delete DISTRIB_IHDCH;
   }
+
   if(!DISTRIB_METSEL){
    	delete DISTRIB_METSEL;
   }
@@ -367,6 +389,29 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_METPRESEL){
    	delete DISTRIB_METPRESEL;
   }
+
+
+  if(!DISTRIB_METSEL_CHN){
+   	delete DISTRIB_METSEL_CHN;
+  }
+  if(!DISTRIB_METNOSEL_CHN){
+   	delete DISTRIB_METNOSEL_CHN;
+  }
+  if(!DISTRIB_METPRESEL_CHN){
+   	delete DISTRIB_METPRESEL_CHN;
+  }
+
+  if(!DISTRIB_METSEL_CHCH){
+   	delete DISTRIB_METSEL_CHCH;
+  }
+  if(!DISTRIB_METNOSEL_CHCH){
+   	delete DISTRIB_METNOSEL_CHCH;
+  }
+  if(!DISTRIB_METPRESEL_CHCH){
+   	delete DISTRIB_METPRESEL_CHCH;
+  }
+
+
   if(!DISTRIB_ETA_DCH){
   	delete DISTRIB_ETA_DCH;
   }
@@ -426,6 +471,10 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_PT1_PT2_NN){
    	delete DISTRIB_PT1_PT2_NN;
   }
+  if(!DISTRIB_MET_pt){
+   	delete DISTRIB_MET_pt;
+  }
+
   if(!DISTRIB_MET_pt_CHCH){
    	delete DISTRIB_MET_pt_CHCH;
   }

@@ -106,6 +106,34 @@ void AnaEff::Loop()
 	DISTRIB_METSEL->GetXaxis()->SetTitle("MET [GeV]");
 	DISTRIB_METSEL->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_METNOSEL_CHN = new TH1D("DISTRIB_METNOSEL_CHN", "( MET )", 100,0,4000);
+	DISTRIB_METNOSEL_CHN->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METNOSEL_CHN->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_METPRESEL_CHN = new TH1D("DISTRIB_METPRESEL_CHN", "( MET )", 100,0,4000);
+	DISTRIB_METPRESEL_CHN->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METPRESEL_CHN->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_METSEL_CHN = new TH1D("DISTRIB_METSEL_CHN", "( MET )", 100,0,4000);
+	DISTRIB_METSEL_CHN->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METSEL_CHN->GetYaxis()->SetTitle("# HSCP");
+
+
+	DISTRIB_METNOSEL_CHCH = new TH1D("DISTRIB_METNOSEL_CHCH", "( MET )", 100,0,4000);
+	DISTRIB_METNOSEL_CHCH->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METNOSEL_CHCH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_METPRESEL_CHCH = new TH1D("DISTRIB_METPRESEL_CHCH", "( MET )", 100,0,4000);
+	DISTRIB_METPRESEL_CHCH->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METPRESEL_CHCH->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_METSEL_CHCH = new TH1D("DISTRIB_METSEL_CHCH", "( MET )", 100,0,4000);
+	DISTRIB_METSEL_CHCH->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METSEL_CHCH->GetYaxis()->SetTitle("# HSCP");
+
+
+
+
 
 
 	DISTRIB_ETA_DCH = new TH1D("DISTRIB_ETA_DCH", "( ETA dch )", 100, -3, 3);
@@ -153,6 +181,10 @@ void AnaEff::Loop()
 	DISTRIB_POVERMCH_CHN->GetYaxis()->SetTitle("# Charged R-hadrons");
 
 	//Good MET choice
+	DISTRIB_MET_pt = new TH2D("DISTRIB_MET_pt", "Met vs pt overall", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_MET_pt->GetXaxis()->SetTitle("Reco MET [GeV]");
+	DISTRIB_MET_pt->GetYaxis()->SetTitle("Pt [GeV]");
+
 	DISTRIB_MET_pt_CHN = new TH2D("DISTRIB_MET_pt_CHN", "Met vs pt chn", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_MET_pt_CHN->GetXaxis()->SetTitle("Reco MET [GeV]");
 	DISTRIB_MET_pt_CHN->GetYaxis()->SetTitle("Pt [GeV]");
@@ -215,14 +247,23 @@ void AnaEff::Loop()
 	DISTRIB_METPRESEL->Sumw2();
 	DISTRIB_METSEL->Sumw2();
 
+	DISTRIB_METNOSEL_CHN->Sumw2();
+	DISTRIB_METPRESEL_CHN->Sumw2();
+	DISTRIB_METSEL_CHN->Sumw2();
+
+	DISTRIB_METNOSEL_CHCH->Sumw2();
+	DISTRIB_METPRESEL_CHCH->Sumw2();
+	DISTRIB_METSEL_CHCH->Sumw2();
+
+
 	DISTRIB_ETA_DCH->Sumw2();
 
 	DISTRIB_MET_CHN->Sumw2();
 	DISTRIB_MET_NN->Sumw2();
 	DISTRIB_MET_CHCH->Sumw2();
 	
+	DISTRIB_MET_pt->Sumw2();
 	
-
 	DISTRIB_MET_pt_CHN->Sumw2();
 	DISTRIB_MET_pt_CHCH->Sumw2();
 	DISTRIB_MET_ptN_CHN->Sumw2();
@@ -324,17 +365,17 @@ void AnaEff::Loop()
 
 				if( (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) < 0.1){
 					nbinfpom+=1;
-					cout << " nb < 0.1 " << nbinfpom << endl;
+					//cout << " nb < 0.1 " << nbinfpom << endl;
 				}
 
 				if( (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) > 0.9){
 					nbsuppom+=1;
-					cout << " nb > 0.9 " << nbsuppom << endl;
+					//cout << " nb > 0.9 " << nbsuppom << endl;
 				}
 
 				if( (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) < 0.9 && (track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass) >0.1){
 					nbinpom+=1;
-					cout << " 0.9 < nb < 0.1 " << nbinpom << endl;
+					//cout << " 0.9 < nb < 0.1 " << nbinpom << endl;
 				}
 				
 				
@@ -405,6 +446,14 @@ void AnaEff::Loop()
 	DISTRIB_METPRESEL->Write();
 	DISTRIB_METSEL->Write();
 
+	DISTRIB_METNOSEL_CHN->Write();
+	DISTRIB_METPRESEL_CHN->Write();
+	DISTRIB_METSEL_CHN->Write();
+
+	DISTRIB_METNOSEL_CHCH->Write();
+	DISTRIB_METPRESEL_CHCH->Write();
+	DISTRIB_METSEL_CHCH->Write();
+
 	
 	DISTRIB_P1_P2_CHN->Write();
 	DISTRIB_P1_P2_CHCH->Write();
@@ -419,6 +468,7 @@ void AnaEff::Loop()
 	DISTRIB_POVERMN_CHN->Write();
 	DISTRIB_POVERMCH_CHN->Write();
 
+	DISTRIB_MET_pt->Write();
 	DISTRIB_MET_pt_CHCH->Write();
 	DISTRIB_MET_pt_CHN->Write();
 	DISTRIB_MET_ptN_CHN->Write();
@@ -655,9 +705,11 @@ void AnaEff::AssoGenId(int indexcandidate){
 				DISTRIB_IASCHN->Fill(track_ias_ampl[hscp_track_idx[indexcandidate]]);
 				DISTRIB_P1_P2_CHN->Fill(p1,p2);
 				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);// PT of charged candidate
+				DISTRIB_MET_pt->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);
 			}
 			else{
 				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
+				DISTRIB_MET_pt->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 			}
 		}
 		DISTRIB_MET_ptN_CHN->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
@@ -685,7 +737,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		DISTRIB_ANGLE_RAD->Fill(a);
 
 		//Fill raw efficiency 
-		
+		DISTRIB_METSEL_CHN->Fill(pfmet_pt[0]);
 		//trigEff_presel.func(trig);
 	
 		/*	EFFICIENCY OF TRIGGERS IN SCENARIOS
@@ -738,13 +790,15 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 			if(finaldelta1 < finaldelta2 ){
 				DISTRIB_MET_pt_CHCH->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);
+				DISTRIB_MET_pt->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);
 			}
 			else{
 				DISTRIB_MET_pt_CHCH->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-2]]);
+				DISTRIB_MET_pt->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-2]]);
 			}
 		}
 		//cout << "Before FindTurnOn" << endl;
-
+		DISTRIB_METSEL_CHCH->Fill(pfmet_pt[0]);
 		trigEff_presel.func(trig);
 		//cout << "After FindTurnOn" << endl;
 
