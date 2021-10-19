@@ -332,7 +332,7 @@ void AnaEff::Loop()
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
 				
-				for(int i = 0 ; i < triggerNames.size(); i++){
+				/*for(int i = 0 ; i < triggerNames.size(); i++){
 					for (int j = 0 ; j < triggerName->size() ; j++){
 						if(triggerName->at(j) == triggerNames[i]){
 							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
@@ -342,7 +342,7 @@ void AnaEff::Loop()
 						}
 
 					}
-				}
+				}*/
 	
 					
 				/*for(int i=0; i < posa.size(); i++){
@@ -412,9 +412,9 @@ void AnaEff::Loop()
 	InfosData << " # Neutral-X : " << nbnx << " / " << nbtot << " = " << nbnx*1.0/nbtot << endl;
 	InfosData << " # Double charged - X " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << "\n\n" << endl;
 	InfosData << " Zones in p/m : " << "\n\n" << endl;
-	InfosData << " p/m < 0.1 : " << (nbinfpom/(nbinfpom+nbinpom+nbsuppom))*100 << endl;
-	InfosData << " 0.1 < p/m < 0.9 " <<  (nbinpom/(nbinfpom+nbinpom+nbsuppom))*100  << endl;
-	InfosData << " p/m > 0.9 " << (nbsuppom/(nbinfpom+nbinpom+nbsuppom))*100 << endl;
+	InfosData << " p/m < 0.1 : " << (nbinfpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << endl;
+	InfosData << " 0.1 < p/m < 0.9 " <<  (nbinpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100  << endl;
+	InfosData << " p/m > 0.9 " << (nbsuppom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << endl;
 
 	//******************************************************************************
 	//******************************************************************************
@@ -738,7 +738,20 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		//Fill raw efficiency 
 		DISTRIB_METSEL_CHN->Fill(pfmet_pt[0]);
-		//trigEff_presel.func(trig);
+		
+		for(int i = 0 ; i < triggerNames.size(); i++){
+			for (int j = 0 ; j < triggerName->size() ; j++){
+				if(triggerName->at(j) == triggerNames[i]){
+					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
+					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
+					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
+					break;
+				}
+
+			}
+		}
+
+		trigEff_presel.func(trig);
 	
 		/*	EFFICIENCY OF TRIGGERS IN SCENARIOS
 			
