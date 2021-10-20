@@ -332,7 +332,7 @@ void AnaEff::Loop()
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
 				
-				/*for(int i = 0 ; i < triggerNames.size(); i++){
+				for(int i = 0 ; i < triggerNames.size(); i++){
 					for (int j = 0 ; j < triggerName->size() ; j++){
 						if(triggerName->at(j) == triggerNames[i]){
 							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
@@ -342,7 +342,7 @@ void AnaEff::Loop()
 						}
 
 					}
-				}*/
+				}
 	
 					
 				/*for(int i=0; i < posa.size(); i++){
@@ -738,19 +738,6 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		//Fill raw efficiency 
 		DISTRIB_METSEL_CHN->Fill(pfmet_pt[0]);
-
-		for(int i = 0 ; i < triggerNames.size(); i++){
-			for (int j = 0 ; j < triggerName->size() ; j++){
-				if(triggerName->at(j) == triggerNames[i]){
-					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
-					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
-					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
-					break;
-				}
-
-			}
-		}
-		
 
 		trigEff_presel.func(trig);
 	
