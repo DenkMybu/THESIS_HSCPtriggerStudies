@@ -306,7 +306,7 @@ void AnaEff::Loop()
 	
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { 
 		Long64_t ientry = LoadTree(jentry);
-		cout << "nb entrees : " << nentries << endl;
+		cout << "nb entröees : " << nentries << endl;
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
@@ -351,7 +351,7 @@ void AnaEff::Loop()
 
 				}*/
 
-				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
+				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);	
 				AssoGenId(indexcandidatesel);
 				trig.clear();
 			}
@@ -734,7 +734,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		
 		
-		DISTRIB_MET_CHCH->Fill(pfmet_pt[0]);
+		
 
 		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
 		DISTRIB_PT1MPT2CHCH->Fill((2*(pt1chch-pt2chch))/(pt1chch+pt2chch));

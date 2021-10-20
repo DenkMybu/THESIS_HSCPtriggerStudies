@@ -213,6 +213,7 @@ private :
 
 
   TH1D* DISTRIB_ETA_DCH;
+
   TH1D* DISTRIB_MET_NN;
 
   TH1D* DISTRIB_P1MP2CHCH;
@@ -283,8 +284,7 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 
 	DISTRIB_ETA_DCH=0;
 
-	DISTRIB_MET_CHN=0;
-	DISTRIB_MET_CHCH=0;
+	
 	DISTRIB_MET_NN=0;
 
 	DISTRIB_TLV_MET=0;
@@ -414,15 +414,11 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_ETA_DCH){
   	delete DISTRIB_ETA_DCH;
   }
-  if(!DISTRIB_MET_CHN){
-  	delete DISTRIB_MET_CHN;
-  }
+
   if(!DISTRIB_MET_NN){
   	delete DISTRIB_MET_NN;
   }
-  if(!DISTRIB_MET_CHCH){
-  	delete DISTRIB_MET_CHCH;
-  }
+
 
   if(!DISTRIB_P1MP2CHCH){
   	delete DISTRIB_P1MP2CHCH;
