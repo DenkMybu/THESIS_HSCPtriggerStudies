@@ -162,6 +162,7 @@ public :
    virtual double   deltaR(double delta);
    virtual void	    AssoGenId(int indexcandidate);
    virtual void     ReadFromTxt(const string NameListForType);
+   virtual void     CountZones(double impulsion);
 
    
 private :
@@ -212,8 +213,6 @@ private :
 
 
   TH1D* DISTRIB_ETA_DCH;
-  TH1D* DISTRIB_MET_CHN;
-  TH1D* DISTRIB_MET_CHCH;
   TH1D* DISTRIB_MET_NN;
 
   TH1D* DISTRIB_P1MP2CHCH;
