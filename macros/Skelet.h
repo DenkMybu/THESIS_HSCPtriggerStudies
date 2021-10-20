@@ -158,8 +158,8 @@ public :
    virtual void     Show(Long64_t entry = -1);
    virtual int      Preselection();
    virtual int      Selection(int indexcandidate);
-   virtual double   deltaR2(float track_eta,float track_phi, float muon_eta, float muon_phi);
-   virtual double   deltaR(double delta);
+   virtual double   deltaR2(const float &track_eta,const float &track_phi,const float &muon_eta,const float &muon_phi);
+   virtual double   deltaR(const double &delta);
    virtual void	    AssoGenId(int indexcandidate);
    virtual void     ReadFromTxt(const string NameListForType);
    virtual void     CountZones(double impulsion);
@@ -238,6 +238,8 @@ private :
 	
   TH2D* DISTRIB_TLV_MET;
 
+  TH2D* DISTRIB_DEDX_POVERM_CHCH;
+  TH2D* DISTRIB_DEDX_POVERM_CHN;
 
   TH2D* DISTRIB_MET_pt_CHCH;
   TH2D* DISTRIB_MET_pt_CHN;
@@ -286,6 +288,9 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 
 	
 	DISTRIB_MET_NN=0;
+
+	DISTRIB_DEDX_POVERM_CHCH=0;
+	DISTRIB_DEDX_POVERM_CHN=0;
 
 	DISTRIB_TLV_MET=0;
 
@@ -389,7 +394,12 @@ AnaEff::~AnaEff() //deconstruct
    	delete DISTRIB_METPRESEL;
   }
 
-
+  if(!DISTRIB_DEDX_POVERM_CHCH){
+   	delete DISTRIB_DEDX_POVERM_CHCH;
+  }
+  if(!DISTRIB_DEDX_POVERM_CHN){
+   	delete DISTRIB_DEDX_POVERM_CHN;
+  }
   if(!DISTRIB_METSEL_CHN){
    	delete DISTRIB_METSEL_CHN;
   }

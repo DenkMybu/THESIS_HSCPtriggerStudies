@@ -186,6 +186,16 @@ void AnaEff::Loop()
 	DISTRIB_MET_ptN_CHN->GetYaxis()->SetTitle("Pt [GeV]");
 
 
+	DISTRIB_DEDX_POVERM_CHCH = new TH2D("DISTRIB_IH_POVERM_CHCH", "IH vs #beta #gamma in CH-CH",100, 0,10,100,0,5);
+	DISTRIB_DEDX_POVERM_CHCH->GetYaxis()->SetTitle("IH");
+	DISTRIB_DEDX_POVERM_CHCH->GetXaxis()->SetTitle("#beta #gamma");
+
+	DISTRIB_DEDX_POVERM_CHN = new TH2D("DISTRIB_IH_POVERM_CHN", "IH vs #beta #gamma in CH-N",100, 0,10,100,0,5);
+	DISTRIB_DEDX_POVERM_CHN->GetYaxis()->SetTitle("IH");
+	DISTRIB_DEDX_POVERM_CHN->GetXaxis()->SetTitle("#beta #gamma");
+
+
+
 	DISTRIB_MET_pt_CHCH = new TH2D("DISTRIB_MET_pt_CHCH", "Met vs pt chch", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_MET_pt_CHCH->GetXaxis()->SetTitle("Reco MET [GeV]");
 	DISTRIB_MET_pt_CHCH->GetYaxis()->SetTitle("Pt [GeV]");
@@ -246,7 +256,8 @@ void AnaEff::Loop()
 	DISTRIB_METNOSEL_CHCH->Sumw2();
 	DISTRIB_METPRESEL_CHCH->Sumw2();
 	DISTRIB_METSEL_CHCH->Sumw2();
-
+	DISTRIB_DEDX_POVERM_CHN->Sumw2();
+	DISTRIB_DEDX_POVERM_CHCH->Sumw2();
 
 	DISTRIB_ETA_DCH->Sumw2();
 
@@ -303,10 +314,10 @@ void AnaEff::Loop()
 			}
 
 	}*/
-	
+	cout << "nb entrees : " << nentries << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { 
 		Long64_t ientry = LoadTree(jentry);
-		cout << "nb entröees : " << nentries << endl;
+		
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
@@ -436,6 +447,9 @@ void AnaEff::Loop()
 	DISTRIB_MET_NN->Write();
 	
 	DISTRIB_TLV_MET->Write();
+
+	DISTRIB_DEDX_POVERM_CHN->Write();
+	DISTRIB_DEDX_POVERM_CHCH->Write();
 
 	DISTRIB_POVERMN_CHN->Write();
 	DISTRIB_POVERMCH_CHN->Write();
@@ -676,7 +690,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_MET_ptN_CHN->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 		DISTRIB_POVERMCH_CHN->Fill(p1/TheorMass);
 		DISTRIB_POVERMN_CHN->Fill(p2/TheorMass);
-
+		DISTRIB_DEDX_POVERM_CHN->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]],(track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass));
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 
 		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
@@ -735,7 +749,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		
 		
 		
-
+		DISTRIB_DEDX_POVERM_CHCH->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]],(track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass));
 		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
 		DISTRIB_PT1MPT2CHCH->Fill((2*(pt1chch-pt2chch))/(pt1chch+pt2chch));
 
@@ -767,7 +781,7 @@ void AnaEff::CountZones(double impulsion){
 	}
 }
 
-double AnaEff::deltaR2(float track_eta,float track_phi, float muon_eta, float muon_phi){
+double AnaEff::deltaR2(const float &track_eta,const float &track_phi, const float &muon_eta, const float &muon_phi){
 	float dp = std::abs(track_phi - muon_phi);
 	if (dp > M_PI){
 		dp -= 2.0 * M_PI;
@@ -775,7 +789,7 @@ double AnaEff::deltaR2(float track_eta,float track_phi, float muon_eta, float mu
 	return (track_eta - muon_eta)*(track_eta - muon_eta) + dp * dp;
 }
 
-double AnaEff::deltaR(double delta) {
+double AnaEff::deltaR(const double &delta) {
 	return std::sqrt(delta);
 }
 
@@ -788,6 +802,7 @@ void AnaEff::ReadFromTxt(const string NameListForType){
 	}
 	cout << triggerNames.size() << endl;
 	ifile.close();
+	//bool ReadFromTxt, return 1 if no problem
 }
 
 int main(){
