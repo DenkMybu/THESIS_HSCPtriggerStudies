@@ -661,7 +661,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
-		cout << "Charged + Neutral " << endl;
+		//cout << "Charged + Neutral " << endl;
 		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
 
 		double p1 = pt1 * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
@@ -693,7 +693,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_DEDX_POVERM_CHN->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]],(track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass));
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 		
-		
+		cout << "before loop CH-N" << endl;
 		for(int i = 0 ; i < triggerNames.size(); i++){
 			for (int j = 0 ; j < triggerName->size() ; j++){
 				if(triggerName->at(j) == triggerNames[i]){
