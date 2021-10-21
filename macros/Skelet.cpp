@@ -694,22 +694,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 		
 		//cout << "before loop CH-N" << endl;
-		for(int i = 0 ; i < triggerNames.size(); i++){
-			for (int j = 0 ; j < triggerName->size() ; j++){
-				if(triggerName->at(j) == triggerNames[i]){
-					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
-
-					//cout << " Calling fillnomap with POM = " << (track_p[hscp_track_idx[indexcandidate]]/TheorMass) << endl;
-
-					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j],(track_p[hscp_track_idx[indexcandidate]]/TheorMass),1.0,"POM");
-					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
-					
-					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
-					break;
-				}
-
-			}
-		}	
+			
 		
 		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
@@ -720,7 +705,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		DISTRIB_TLV_MET->Fill(pfmet_pt[0],v);
 		DISTRIB_ANGLE_RAD->Fill(a);
 		DISTRIB_METSEL_CHN->Fill(pfmet_pt[0]);
-		trigEff_presel.func(trig);
+		//trigEff_presel.func(trig);
 	
 		
 	}
@@ -731,6 +716,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 	if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
 		//cout << "Charged + Charged " << endl;
+		
 		double pt1chch = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2chch = gen_pt[candidatesrh[candidatesrh.size()-2]]; 
 
 		double p1chch = (pt1chch * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]));
@@ -761,8 +747,22 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 			}
 		}
 
-		
-		
+		for(int i = 0 ; i < triggerNames.size(); i++){
+			for (int j = 0 ; j < triggerName->size() ; j++){
+				if(triggerName->at(j) == triggerNames[i]){
+					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
+
+					//cout << " Calling fillnomap with POM = " << (track_p[hscp_track_idx[indexcandidate]]/TheorMass) << endl;
+
+					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j],(track_p[hscp_track_idx[indexcandidate]]/TheorMass),1.0,"POM");
+					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
+					
+					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
+					break;
+				}
+
+			}
+		}
 		
 		DISTRIB_DEDX_POVERM_CHCH->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]],(track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass));
 		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
@@ -771,14 +771,14 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		DISTRIB_PT1_PT2_CHCH->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesrh[candidatesrh.size()-2]]);
 		DISTRIB_P1_P2_CHCH->Fill(p1chch,p2chch);
 		DISTRIB_METSEL_CHCH->Fill(pfmet_pt[0]);
-		//trigEff_presel.func(trig);
+		trigEff_presel.func(trig);
 	}
 	
 	if(alo==false && alo2 == false){
 		//cout << "no track matched any gluino" << endl;
 	}
 
-
+	
 	candidatesrh.clear();
 	candidatesneutral.clear();
 	candidatesdoublech.clear();
