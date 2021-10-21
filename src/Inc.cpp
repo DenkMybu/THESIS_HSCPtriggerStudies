@@ -79,13 +79,13 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	//Trig.resize(triggerNames.size());
 
 	this->TriggerNames = triggerNames;
-
+	string pom = "POM";
 	for(int i =0; i < triggerNames.size(); i++){
 		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",100,0,2000); 
 		EffvsObsAll[i]->SetName(triggerNames[i].c_str());
 		EffvsPom[i] = new TEfficiency("Eff","Efficiency;#beta #gamma;#epsilon",100,0,5);
-		string namepom = triggerNames[i].c_str() + "pom";
-		EffvsPom[i]->SetName(namepom);
+		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
+		EffvsPom[i]->SetName(namepom.c_str());
 		NamesPos[i] = make_pair(triggerNames[i],i);
 	}
 	
