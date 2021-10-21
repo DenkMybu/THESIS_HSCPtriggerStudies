@@ -113,6 +113,7 @@ void TrigEff::FillNoMap(string TriggerName, bool trig, float Obs, double weight,
 			if(NamesPos[i].first == TriggerName){
 				//cout << " bool " << i << " = " << trig << endl;
 				EffvsPom[NamesPos[i].second]->Fill(trig,Obs);
+				cout << "Filled with P/M = " << Obs << endl;
 			}
 		}
 
