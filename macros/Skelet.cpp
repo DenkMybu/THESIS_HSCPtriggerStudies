@@ -697,10 +697,11 @@ void AnaEff::AssoGenId(int indexcandidate){
 		for(int i = 0 ; i < triggerNames.size(); i++){
 			for (int j = 0 ; j < triggerName->size() ; j++){
 				if(triggerName->at(j) == triggerNames[i]){
-					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1,"MET");
+					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
 
-					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j],(track_p[hscp_track_idx[indexcandidate]]/TheorMass),1,"POM");
+					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j],(track_p[hscp_track_idx[indexcandidate]]/TheorMass),1.0,"POM");
 					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
+					cout << " Calling fillnomap with POM = " << (track_p[hscp_track_idx[indexcandidate]]/TheorMass) << endl;
 					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 					break;
 				}
