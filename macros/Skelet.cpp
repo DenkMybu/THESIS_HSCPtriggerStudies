@@ -699,16 +699,18 @@ void AnaEff::AssoGenId(int indexcandidate){
 				if(triggerName->at(j) == triggerNames[i]){
 					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
 
+					cout << " Calling fillnomap with POM = " << (track_p[hscp_track_idx[indexcandidate]]/TheorMass) << endl;
+
 					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j],(track_p[hscp_track_idx[indexcandidate]]/TheorMass),1.0,"POM");
 					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
-					cout << " Calling fillnomap with POM = " << (track_p[hscp_track_idx[indexcandidate]]/TheorMass) << endl;
+					
 					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 					break;
 				}
 
 			}
 		}	
-
+		
 		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
 		
