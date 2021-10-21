@@ -84,7 +84,8 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",100,0,2000); 
 		EffvsObsAll[i]->SetName(triggerNames[i].c_str());
 		EffvsPom[i] = new TEfficiency("Eff","Efficiency;#beta #gamma;#epsilon",100,0,5);
-		EffvsPom[i]->SetName(triggerNames[i].c_str());
+		string namepom = triggerNames[i].c_str() + "pom";
+		EffvsPom[i]->SetName(namepom);
 		NamesPos[i] = make_pair(triggerNames[i],i);
 	}
 	
