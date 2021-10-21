@@ -36,7 +36,7 @@ TrigEff::~TrigEff(){
 	EffvsObs.clear();
 	EffvsObsNo.clear();
 	EffvsObsAll.clear();
-
+	EffvsPom.clear();
 	NamesPos.clear();
 	TriggerNames.clear();
 	
@@ -68,6 +68,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	EffvsObsAll.resize(triggerNames.size());
 	NamesPos.resize(triggerNames.size());
 
+	EffvsPom.resize(triggerNames.size());
 	
 	Efficiency.resize(triggerNames.size(), 0.0);
 	
@@ -80,8 +81,10 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	this->TriggerNames = triggerNames;
 
 	for(int i =0; i < triggerNames.size(); i++){
-		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",50,0,2000); 
+		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",100,0,2000); 
 		EffvsObsAll[i]->SetName(triggerNames[i].c_str());
+		EffvsPom[i] = new TEfficiency("Eff","Efficiency;#beta #gamma;#epsilon",100,0,5);
+		EffvsPom[i]->SetName(triggerNames[i].c_str());
 		NamesPos[i] = make_pair(triggerNames[i],i);
 	}
 	
@@ -97,10 +100,20 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 
 void TrigEff::FillNoMap(string TriggerName, bool trig, float Obs, double weight,string mode){  //const vector<bool> 
 	//cout << "NamesPos.size() = " << NamesPos.size() << endl;
-	for(int i = 0; i < NamesPos.size(); i++){
-		if(NamesPos[i].first == TriggerName){
-			//cout << " bool " << i << " = " << trig << endl;
-			EffvsObsAll[NamesPos[i].second]->Fill(trig,Obs);
+	if(mode == "MET"){	
+		for(int i = 0; i < NamesPos.size(); i++){
+			if(NamesPos[i].first == TriggerName){
+				//cout << " bool " << i << " = " << trig << endl;
+				EffvsObsAll[NamesPos[i].second]->Fill(trig,Obs);
+			}
+		}
+	}
+	else if(mode == "POM"){
+		for(int i = 0; i < NamesPos.size(); i++){
+			if(NamesPos[i].first == TriggerName){
+				//cout << " bool " << i << " = " << trig << endl;
+				EffvsPom[NamesPos[i].second]->Fill(trig,Obs);
+			}
 		}
 
 	}
@@ -268,6 +281,7 @@ void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 
 	for(int j=0; j < EffvsObsAll.size() ; j++){
 		EffvsObsAll[j]->Write();
+		EffvsPom[j]->Write();
 	}
 	
 	EffvsObsMet->Write();

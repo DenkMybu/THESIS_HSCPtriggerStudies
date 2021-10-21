@@ -334,7 +334,7 @@ void AnaEff::Loop()
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
 				
-				for(int i = 0 ; i < triggerNames.size(); i++){
+				/*for(int i = 0 ; i < triggerNames.size(); i++){
 					for (int j = 0 ; j < triggerName->size() ; j++){
 						if(triggerName->at(j) == triggerNames[i]){
 							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
@@ -344,7 +344,7 @@ void AnaEff::Loop()
 						}
 
 					}
-				}	
+				}	*/
 				/*for(int i=0; i < posa.size(); i++){
 					for(int j=0; j < triggerNames.size(); j++){
 						if(triggerNames[j] == triggerName->at(posa[i])){
@@ -692,19 +692,30 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_POVERMN_CHN->Fill(p2/TheorMass);
 		DISTRIB_DEDX_POVERM_CHN->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]],(track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass));
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
+	
+		for(int i = 0 ; i < triggerNames.size(); i++){
+			for (int j = 0 ; j < triggerName->size() ; j++){
+				if(triggerName->at(j) == triggerNames[i]){
+					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1,"MET");
+
+					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j],(track_p[hscp_track_idx[indexcandidate]]/TheorMass),1,"POM");
+					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
+					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
+					break;
+				}
+
+			}
+		}	
 
 		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
 		
 		homemet = cand1 + cand2; 
-
 		double v = homemet[0];
 		double a = (gen_phi[candidatesrh[candidatesrh.size()-1]] - gen_phi[candidatesneutral[candidatesneutral.size()-1]]) ; 
-
 		DISTRIB_TLV_MET->Fill(pfmet_pt[0],v);
 		DISTRIB_ANGLE_RAD->Fill(a);
 		DISTRIB_METSEL_CHN->Fill(pfmet_pt[0]);
-
 		trigEff_presel.func(trig);
 	
 		
