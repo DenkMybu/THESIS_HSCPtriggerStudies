@@ -661,7 +661,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
-		
+		cout << "Charged + Neutral " << endl;
 		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
 
 		double p1 = pt1 * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
@@ -728,7 +728,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	//*****************************************************
 
 	if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
-
+		cout << "Charged + Charged " << endl;
 		double pt1chch = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2chch = gen_pt[candidatesrh[candidatesrh.size()-2]]; 
 
 		double p1chch = (pt1chch * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]));
