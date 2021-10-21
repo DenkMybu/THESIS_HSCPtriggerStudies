@@ -23,7 +23,7 @@ const double uncertaintyMu = 0.0000000024;
 const double massW = 80.379;
 const double uncertaintyW = 0.012;
 
-const double TheorMass = 2400;
+const double TheorMass = 1800;
 
  
 void AnaEff::Loop()
@@ -36,7 +36,7 @@ void AnaEff::Loop()
 	nbi = fChain->GetEntry(initializing);   nbytes += nbi;
 	cout << "Number of triggers for this file  : " << ntrigger << " , number of events : " << nentries << endl;
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass));
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass));
 	
 	string NameCompleteList = "ListeInteretTriggers";
 
@@ -692,7 +692,8 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_POVERMN_CHN->Fill(p2/TheorMass);
 		DISTRIB_DEDX_POVERM_CHN->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]],(track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass));
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
-	
+		
+		
 		for(int i = 0 ; i < triggerNames.size(); i++){
 			for (int j = 0 ; j < triggerName->size() ; j++){
 				if(triggerName->at(j) == triggerNames[i]){
