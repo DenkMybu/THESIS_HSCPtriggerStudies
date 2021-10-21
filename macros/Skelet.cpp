@@ -693,13 +693,13 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_DEDX_POVERM_CHN->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]],(track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass));
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 		
-		cout << "before loop CH-N" << endl;
+		//cout << "before loop CH-N" << endl;
 		for(int i = 0 ; i < triggerNames.size(); i++){
 			for (int j = 0 ; j < triggerName->size() ; j++){
 				if(triggerName->at(j) == triggerNames[i]){
 					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
 
-					cout << " Calling fillnomap with POM = " << (track_p[hscp_track_idx[indexcandidate]]/TheorMass) << endl;
+					//cout << " Calling fillnomap with POM = " << (track_p[hscp_track_idx[indexcandidate]]/TheorMass) << endl;
 
 					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j],(track_p[hscp_track_idx[indexcandidate]]/TheorMass),1.0,"POM");
 					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
@@ -730,7 +730,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	//*****************************************************
 
 	if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
-		cout << "Charged + Charged " << endl;
+		//cout << "Charged + Charged " << endl;
 		double pt1chch = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2chch = gen_pt[candidatesrh[candidatesrh.size()-2]]; 
 
 		double p1chch = (pt1chch * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]));

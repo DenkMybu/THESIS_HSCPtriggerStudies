@@ -106,7 +106,7 @@ void TrigEff::FillNoMap(string TriggerName, bool trig, float Obs, double weight,
 			if(NamesPos[i].first == TriggerName){
 				//cout << " bool " << i << " = " << trig << endl;
 				EffvsObsAll[NamesPos[i].second]->Fill(trig,Obs);
-				cout << "Filled with MET = " << Obs << endl;
+				//cout << "Filled with MET = " << Obs << endl;
 			}
 		}
 	}
@@ -115,7 +115,7 @@ void TrigEff::FillNoMap(string TriggerName, bool trig, float Obs, double weight,
 			if(NamesPos[i].first == TriggerName){
 				//cout << " bool " << i << " = " << trig << endl;
 				EffvsPom[NamesPos[i].second]->Fill(trig,Obs);
-				cout << "Filled with P/M = " << Obs << endl;
+				//cout << "Filled with P/M = " << Obs << endl;
 			}
 		}
 
