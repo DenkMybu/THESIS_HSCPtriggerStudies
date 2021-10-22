@@ -803,7 +803,7 @@ void AnaEff::TrackRhadron(){
 	bool vtab[2] = {false};
 	int gen1,gen2;
 	for(int i=0; i < ngenpart ; i++){
-
+		cout << j << " gen : " << gen_pdg[j] << " , gen_moth : " << gen_moth_pdg[j] << " , status : " << gen_status[j] << " , p = pt * cosh(eta) : " << gen_pt[j] * cosh(gen_eta[j]) << endl;
 		
 	
 
