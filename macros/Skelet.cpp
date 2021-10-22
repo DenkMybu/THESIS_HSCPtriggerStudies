@@ -690,7 +690,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_MET_ptN_CHN->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 		DISTRIB_POVERMCH_CHN->Fill(p1/TheorMass);
 		DISTRIB_POVERMN_CHN->Fill(p2/TheorMass);
-		DISTRIB_DEDX_POVERM_CHN->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]],(track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass));
+		DISTRIB_DEDX_POVERM_CHN->Fill((track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass),track_ih_ampl[hscp_track_idx[indexcandidate]]);
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 		
 		//cout << "before loop CH-N" << endl;
@@ -705,6 +705,8 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		DISTRIB_TLV_MET->Fill(pfmet_pt[0],v);
 		DISTRIB_ANGLE_RAD->Fill(a);
 		DISTRIB_METSEL_CHN->Fill(pfmet_pt[0]);
+
+		//FillEff();
 		//trigEff_presel.func(trig);
 	
 		
@@ -747,31 +749,17 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 			}
 		}
 
-		for(int i = 0 ; i < triggerNames.size(); i++){
-			for (int j = 0 ; j < triggerName->size() ; j++){
-				if(triggerName->at(j) == triggerNames[i]){
-					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
+		FillEff(indexcandidate);
+		trigEff_presel.func(trig);
 
-					//cout << " Calling fillnomap with POM = " << (track_p[hscp_track_idx[indexcandidate]]/TheorMass) << endl;
-
-					trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j],(track_p[hscp_track_idx[indexcandidate]]/TheorMass),1.0,"POM");
-					//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
-					
-					trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
-					break;
-				}
-
-			}
-		}
-		
-		DISTRIB_DEDX_POVERM_CHCH->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]],(track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass));
+		DISTRIB_DEDX_POVERM_CHCH->Fill((track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass),track_ih_ampl[hscp_track_idx[indexcandidate]]);
 		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
 		DISTRIB_PT1MPT2CHCH->Fill((2*(pt1chch-pt2chch))/(pt1chch+pt2chch));
 
 		DISTRIB_PT1_PT2_CHCH->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesrh[candidatesrh.size()-2]]);
 		DISTRIB_P1_P2_CHCH->Fill(p1chch,p2chch);
 		DISTRIB_METSEL_CHCH->Fill(pfmet_pt[0]);
-		trigEff_presel.func(trig);
+		
 	}
 	
 	if(alo==false && alo2 == false){
@@ -795,6 +783,26 @@ void AnaEff::CountZones(double impulsion){
 		nbsuppom+=1;
 	}
 }
+
+void AnaEff::FillEff(int indexcandidate){
+
+	for(int i = 0 ; i < triggerNames.size(); i++){
+		for (int j = 0 ; j < triggerName->size() ; j++){
+			if(triggerName->at(j) == triggerNames[i]){
+				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
+				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]),1.0,"POM");
+				cout << "called fillnomap with : " << triggerNames[i] << " , " << passTrigger[j] << " , " << pfmet_pt[0] << endl;
+				//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
+				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
+				break;
+			}
+
+		}
+	}
+
+
+}
+
 
 double AnaEff::deltaR2(const float &track_eta,const float &track_phi, const float &muon_eta, const float &muon_phi){
 	float dp = std::abs(track_phi - muon_phi);
