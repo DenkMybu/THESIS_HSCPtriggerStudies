@@ -853,7 +853,7 @@ void AnaEff::TrackRhadron(){
 		}
 		
 	}
-	//cout << " Our two interesting events are labelled : " << tab[0] << " with gen : " << gen1 << " and " << tab[1] << " with gen : " << gen2 << endl;
+	cout << " Our two interesting events are labelled : " << tab[0] << " with gen : " << gen1 << " and " << tab[1] << " with gen : " << gen2 << endl;
 	
 	for(int j=tab[0]; j<ngenpart; j++){
 		
