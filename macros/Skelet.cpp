@@ -800,12 +800,17 @@ double AnaEff::deltaR(const double &delta) {
 
 void AnaEff::TrackRhadron(){
 	int tab[2];
-	bool vtab[2] = {false};
+	bool vtab[2] = {false},bool flag = false;
 	int gen1,gen2;
 	for(int i=0; i < ngenpart ; i++){
-		cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+		if(gen_status[i] == 1){
+			flag=true;
+		}
+
+		if(flag){
+			cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
 		
-	
+		}
 
 		
 		//***************** CHARGED RHADRONS *****************
