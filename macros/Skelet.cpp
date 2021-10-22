@@ -800,7 +800,7 @@ double AnaEff::deltaR(const double &delta) {
 
 void AnaEff::TrackRhadron(){
 	int tab[2];
-	bool vtab[2] = {false},bool flag = false;
+	bool vtab[2] = {false}, flag = false;
 	int gen1,gen2;
 	for(int i=0; i < ngenpart ; i++){
 		if(gen_status[i] == 1){
