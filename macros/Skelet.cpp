@@ -361,8 +361,9 @@ void AnaEff::Loop()
 					}
 
 				}*/
-
-				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);	
+		
+				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
+				TrackRhadron();	
 				AssoGenId(indexcandidatesel);
 				trig.clear();
 			}
