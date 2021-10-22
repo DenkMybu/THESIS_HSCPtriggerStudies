@@ -806,7 +806,7 @@ void AnaEff::TrackRhadron(){
 		
 	
 
-		cout << "gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+		cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
 		//***************** CHARGED RHADRONS *****************
 		//****************************************************
 		for(int k = 0; k < indexpdgch.size() ; k++){
