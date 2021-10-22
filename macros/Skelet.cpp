@@ -801,14 +801,17 @@ double AnaEff::deltaR(const double &delta) {
 void AnaEff::TrackRhadron(){
 	int tab[2];
 	bool vtab[2] = {false};
+	int gen1,gen2;
 	for(int i=0; i < ngenpart ; i++){
 
 		
 	
 
-		cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+		
 		//***************** CHARGED RHADRONS *****************
 		//****************************************************
+
+		
 		for(int k = 0; k < indexpdgch.size() ; k++){
 			if(abs(gen_pdg[i]) == indexpdgch[k]){
 				if(gen_status[i] == 1){
@@ -816,11 +819,12 @@ void AnaEff::TrackRhadron(){
 					if(vtab[0] == false){
 						tab[0] = i;
 						vtab[0] = true;
+						gen1 = gen_pdg[i];
 					}
 					if(vtab[0] == true){
 						tab[1] = i;
 						vtab[1] = true;
-
+						gen2 = gen_pdg[i];
 					}
 					
 				}
@@ -847,10 +851,19 @@ void AnaEff::TrackRhadron(){
 				}
 			}
 		}
-
+		
 	}
+	cout << " Our two interesting events are labelled : " << tab[0] << " with gen : " << gen1 << " and " << tab[1] << " with gen : " << gen2 << endl;
+	
+	for(int j=tab[0]+1; j<ngenpart; j++){
+		
+		if(gen_moth_pdg[j] == gen1){
+			gen1 = gen_pdg[j];
+			cout << j << " gen : " << gen_pdg[j] << " , gen_moth : " << gen_moth_pdg[j] << " , status : " << gen_status[j] << " , p = pt * cosh(eta) : " << gen_pt[j] * cosh(gen_eta[j]) << endl;
 
-	cout << " Our two interesting events are labelled : " << tab[0] << " and " << tab[1] << endl;
+		}
+		
+	}
 }
 
 void AnaEff::ReadFromTxt(const string NameListForType){
