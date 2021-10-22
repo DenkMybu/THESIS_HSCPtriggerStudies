@@ -363,7 +363,7 @@ void AnaEff::Loop()
 				}*/
 		
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
-				cout << "There are " << ngenpart << " particles in this event" << "\n\n";
+				//cout << "There are " << ngenpart << " particles in this event" << "\n\n";
 				TrackRhadron();	
 				AssoGenId(indexcandidatesel);
 				trig.clear();
