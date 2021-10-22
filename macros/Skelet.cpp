@@ -855,7 +855,7 @@ void AnaEff::TrackRhadron(){
 	}
 	//cout << " Our two interesting events are labelled : " << tab[0] << " with gen : " << gen1 << " and " << tab[1] << " with gen : " << gen2 << endl;
 	
-	for(int j=tab[0]+1; j<ngenpart; j++){
+	for(int j=tab[0]; j<ngenpart; j++){
 		
 		if(gen_moth_pdg[j] == gen1){
 			gen1 = gen_pdg[j];
