@@ -591,8 +591,6 @@ void AnaEff::AssoGenId(int indexcandidate){
 		//*****************************************************
 		//*****************************************************
 
-
-
 		//***************** NEUTRAL RHADRONS *****************
 		//****************************************************
 		for(int j=0; j < indexpdgn.size(); j++){
@@ -605,8 +603,6 @@ void AnaEff::AssoGenId(int indexcandidate){
 		}
 		//****************************************************
 		//****************************************************
-		
-
 		for(int j=0; j < indexpdgch2.size(); j++){
 			if(abs(gen_pdg[i]) == indexpdgch2[j]){
 				if(gen_status[i] == 1){
@@ -615,10 +611,9 @@ void AnaEff::AssoGenId(int indexcandidate){
 				}
 			}
 		}
-		
-		if ((candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size()) != 2 ){
-			nbmissmatch +=1;
-		}
+	}
+	if ((candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size()) != 2 ){
+		nbmissmatch +=1;
 	}
 
 	DISTRIB_NB_RHADRONS->Fill(candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size());
@@ -791,7 +786,7 @@ void AnaEff::FillEff(int indexcandidate){
 			if(triggerName->at(j) == triggerNames[i]){
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]),1.0,"POM");
-				cout << "called fillnomap with : " << triggerNames[i] << " , " << passTrigger[j] << " , " << pfmet_pt[0] << endl;
+				//cout << "called fillnomap with : " << triggerNames[i] << " , " << passTrigger[j] << " , " << pfmet_pt[0] << endl;
 				//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 				break;
