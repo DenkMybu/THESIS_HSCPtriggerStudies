@@ -164,7 +164,7 @@ public :
    virtual void     ReadFromTxt(const string NameListForType);
    virtual void     CountZones(double impulsion);
    virtual void     FillEff(int indexcandidate);
-
+   virtual void     TrackRhadron();
    
 private :
 
@@ -183,6 +183,8 @@ private :
   vector<string> triggerNames;
 
   vector<int> posa;
+
+  vector<int> indexpdgch{1009213, 1009323, 1092214, 1091114, 1093114, 1093224, 1093314, 1093334, 1000612, 1000632, 1000652, 1006211, 1006213, 1006313, 1006321, 1006323 }, indexpdgn{1000622, 1093324, 1092114, 1000993, 1009113, 1009223, 1009313, 1009333, 1093214, 1000642, 1006113, 1006311, 1006313}, indexpdgch2{1006223, 1092224};
 
   //*************************************** TH1D compiled by main class *****************************************************
   TH1D* DISTRIB_NB_RHADRONS;

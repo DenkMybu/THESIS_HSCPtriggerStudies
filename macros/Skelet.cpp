@@ -566,15 +566,10 @@ int AnaEff::Selection(int indexcandidate){
 void AnaEff::AssoGenId(int indexcandidate){
 	
 	TLorentzVector cand1,cand2,homemet;
-
-	
-
-	vector<int> indexpdgch{1009213, 1009323, 1092214, 1091114, 1093114, 1093224, 1093314, 1093334, 1000612, 1000632, 1000652, 1006211, 1006213, 1006313, 1006321, 1006323 }, indexpdgn{1000622, 1093324, 1092114, 1000993, 1009113, 1009223, 1009313, 1009333, 1093214, 1000642, 1006113, 1006311, 1006313}, indexpdgch2{1006223, 1092224};
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
 	int nbmothgen=0;
 
 	for(int i=0; i < ngenpart ; i++){
-		
 		if(gen_moth_pdg[i] == 1000021){
 			nbmothgen+=1;
 		}
@@ -625,8 +620,6 @@ void AnaEff::AssoGenId(int indexcandidate){
 		double deltatranfrdch = deltaR2(eta_track, phi_track, eta_gen, phi_gen);
 		double finaldeltadch = deltaR(deltatranfrdch);
 
-	
-
 		if(finaldeltadch < 0.3 ){
 			DISTRIB_IHDCH->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_IASDCH->Fill(track_ias_ampl[hscp_track_idx[indexcandidate]]);
@@ -636,20 +629,16 @@ void AnaEff::AssoGenId(int indexcandidate){
 	//***************** NEUTRAL + NEUTRAL *****************
 	//*****************************************************
 
-
 	if(candidatesrh.size() == 0 && candidatesneutral.size() == 2){
 		DISTRIB_MET_NN->Fill(pfmet_pt[0]);
 		nbnn+=1;
 		DISTRIB_PT1_PT2_NN->Fill(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-2]]);
 	}
-
 	//***************** NEUTRAL + XXXXXXX *****************
 	//*****************************************************
-
 	if( candidatesrh.size() == 0 && candidatesneutral.size() == 1 ){
 		nbnx+=1;
 	}
-
 
 	//***************** CHARGED + NEUTRAL *****************
 	//*****************************************************
@@ -665,7 +654,6 @@ void AnaEff::AssoGenId(int indexcandidate){
 		double finaldeltachn1 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]));
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
 
-		
 		if(finaldeltachn1 < 0.3 || finaldeltachn2 < 0.3){
 			alo=true;
 			if(finaldeltachn1 < finaldeltachn2 ){
@@ -688,9 +676,6 @@ void AnaEff::AssoGenId(int indexcandidate){
 		DISTRIB_DEDX_POVERM_CHN->Fill((track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass),track_ih_ampl[hscp_track_idx[indexcandidate]]);
 		DISTRIB_PT1_PT2_CHN->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 		
-		//cout << "before loop CH-N" << endl;
-			
-		
 		cand1.SetPtEtaPhiM(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_eta[candidatesrh[candidatesrh.size()-1]],gen_phi[candidatesrh[candidatesrh.size()-1]],TheorMass);
 cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta[candidatesneutral[candidatesneutral.size()-1]],gen_phi[candidatesneutral[candidatesneutral.size()-1]],TheorMass);
 		
@@ -703,8 +688,6 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		//FillEff();
 		//trigEff_presel.func(trig);
-	
-		
 	}
 
 
@@ -811,6 +794,61 @@ double AnaEff::deltaR(const double &delta) {
 	return std::sqrt(delta);
 }
 
+
+void AnaEff::TrackRhadron(){
+	int tab[2];
+	bool vtab[2] = {false};
+	for(int i=0; i < ngenpart ; i++){
+
+		
+	
+
+		cout << "gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+		//***************** CHARGED RHADRONS *****************
+		//****************************************************
+		for(int k = 0; k < indexpdgch.size() ; k++){
+			if(abs(gen_pdg[i]) == indexpdgch[k]){
+				if(gen_status[i] == 1){
+					nbch+=1;
+					if(vtab[0] == false){
+						tab[0] = i;
+						vtab[0] = true;
+					}
+					if(vtab[0] == true){
+						tab[1] = i;
+						vtab[1] = true;
+
+					}
+					
+				}
+			}
+		}
+		//*****************************************************
+		//*****************************************************
+
+		//***************** NEUTRAL RHADRONS *****************
+		//****************************************************
+		for(int j=0; j < indexpdgn.size(); j++){
+			if(abs(gen_pdg[i]) == indexpdgn[j]){
+				if(gen_status[i] == 1){
+					nbn+=1;
+					if(vtab[0] == false){
+						tab[0] = i;
+						vtab[0] = true;
+					}
+					if(vtab[0] == true){
+						tab[1]=i;
+						vtab[1] = true;
+
+					}
+				}
+			}
+		}
+
+	}
+
+	cout << " Our two interesting events are labelled : " << tab[0] << " and " << tab[1] << endl;
+}
 
 void AnaEff::ReadFromTxt(const string NameListForType){
 	ifstream ifile(NameListForType.c_str()); 
