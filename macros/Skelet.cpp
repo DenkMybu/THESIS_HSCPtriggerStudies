@@ -379,7 +379,7 @@ void AnaEff::Loop()
 
 				//TrackRhadron();	
 				cout << "before assogenID" << endl;
-				AssoGenId(indexcandidatesel, "Dump_delta_r.txt", jentry);
+				AssoGenId(indexcandidatesel, "DumpdeltaR.txt", jentry);
 				cout << "after assogenID" << endl;
 				//FillTEff(indexcandidatesel);
 				trig.clear();
@@ -592,9 +592,9 @@ int AnaEff::Selection(int indexcandidate){
 void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 	
 	
-	ofstream Dump;
+	/*ofstream Dump;
 	Dump.open (Filename);
-	Dump << "--------------------------------------------------------------" << "\n"<<endl;
+	Dump << "--------------------------------------------------------------" << "\n"<<endl;*/
 	
 	TLorentzVector cand1,cand2,homemet;
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
@@ -699,9 +699,9 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 		}
 		sort(deltaRmuon.begin(), deltaRmuon.end());
 
-		if(deltaRmuon[0] > 0.3 ){
+		/*if(deltaRmuon[0] > 0.3 ){
 			Dump << "Event nb " << nbevent << " has a missmathing, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track " << "\n" ;
-		}
+		}*/
 
 		DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
 		deltaRmuon.clear();
