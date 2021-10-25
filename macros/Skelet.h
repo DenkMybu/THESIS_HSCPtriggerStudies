@@ -213,7 +213,8 @@ private :
   TH1D* DISTRIB_METPRESEL_CHCH;
   TH1D* DISTRIB_METSEL_CHCH;
 
-
+  TH1D* DISTRIB_DELTARN_CHN;
+  TH1D* DISTRIB_DELTAR_ALL;
 
   TH1D* DISTRIB_ETA_DCH;
 
@@ -248,7 +249,8 @@ private :
   TH2D* DISTRIB_MET_pt_CHN;
   TH2D* DISTRIB_MET_ptN_CHN;
   TH2D* DISTRIB_MET_pt;
-
+  
+  TH2D* DISTRIB_DELTAR_CH_VS_N;
   //*************************************************************************************************************************
 };
 
@@ -278,14 +280,16 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_METPRESEL=0;
 	DISTRIB_METNOSEL=0;
 
+	DISTRIB_METSEL_CHN=0;
+	DISTRIB_METPRESEL_CHN=0;
+	DISTRIB_METNOSEL_CHN=0;
+
 	DISTRIB_METSEL_CHCH=0;
 	DISTRIB_METPRESEL_CHCH=0;
 	DISTRIB_METNOSEL_CHCH=0;
 	
-
-	DISTRIB_METSEL_CHN=0;
-	DISTRIB_METPRESEL_CHN=0;
-	DISTRIB_METNOSEL_CHN=0;
+	DISTRIB_DELTARN_CHN=0;
+	DISTRIB_DELTAR_ALL=0;
 
 	DISTRIB_ETA_DCH=0;
 
@@ -320,6 +324,7 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_MET_pt_CHCH=0;
 	DISTRIB_MET_pt_CHN=0;
 	DISTRIB_MET_ptN_CHN=0;
+	DISTRIB_DELTAR_CH_VS_N=0;
 
 	triggerName = 0;
 // if parameter tree is not specified (or zero), connect the file
@@ -422,7 +427,12 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_METPRESEL_CHCH){
    	delete DISTRIB_METPRESEL_CHCH;
   }
-
+  if(!DISTRIB_DELTARN_CHN){
+   	delete DISTRIB_DELTARN_CHN;
+  }
+  if(!DISTRIB_DELTAR_ALL){
+   	delete DISTRIB_DELTAR_ALL;
+  }
 
   if(!DISTRIB_ETA_DCH){
   	delete DISTRIB_ETA_DCH;
@@ -432,7 +442,9 @@ AnaEff::~AnaEff() //deconstruct
   	delete DISTRIB_MET_NN;
   }
 
-
+  if(!DISTRIB_DELTAR_CH_VS_N){
+  	delete DISTRIB_DELTAR_CH_VS_N;
+  }
   if(!DISTRIB_P1MP2CHCH){
   	delete DISTRIB_P1MP2CHCH;
   }

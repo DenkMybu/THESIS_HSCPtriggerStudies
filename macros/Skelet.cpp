@@ -131,7 +131,19 @@ void AnaEff::Loop()
 	DISTRIB_METSEL_CHCH->GetXaxis()->SetTitle("MET [GeV]");
 	DISTRIB_METSEL_CHCH->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_DELTARN_CHN = new TH1D("DISTRIB_DELTARN_CHN", "( #Delta R )", 100,0,2);
+	DISTRIB_DELTARN_CHN->GetXaxis()->SetTitle("#Delta R");
+	DISTRIB_DELTARN_CHN->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_DELTARCH_CHN = new TH1D("DISTRIB_DELTARCH_CHN", "( #Delta R )", 100,0,2);
+	DISTRIB_DELTARCH_CHN->GetXaxis()->SetTitle("#Delta R");
+	DISTRIB_DELTARCH_CHN->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_DELTAR_ALL = new TH1D("DISTRIB_DELTAR_ALL", "( #Delta R )", 100,0,2);
+	DISTRIB_DELTAR_ALL->GetXaxis()->SetTitle("#Delta R");
+	DISTRIB_DELTAR_ALL->GetYaxis()->SetTitle("# HSCP");
+
+	
 
 
 
@@ -194,8 +206,6 @@ void AnaEff::Loop()
 	DISTRIB_DEDX_POVERM_CHN->GetYaxis()->SetTitle("IH");
 	DISTRIB_DEDX_POVERM_CHN->GetXaxis()->SetTitle("#beta #gamma");
 
-
-
 	DISTRIB_MET_pt_CHCH = new TH2D("DISTRIB_MET_pt_CHCH", "Met vs pt chch", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_MET_pt_CHCH->GetXaxis()->SetTitle("Reco MET [GeV]");
 	DISTRIB_MET_pt_CHCH->GetYaxis()->SetTitle("Pt [GeV]");
@@ -228,6 +238,12 @@ void AnaEff::Loop()
 	DISTRIB_TLV_MET->GetXaxis()->SetTitle("Reco pf_MET [GeV]");
 	DISTRIB_TLV_MET->GetYaxis()->SetTitle("Reco pf_MET - MET from LorentzVector");
 
+	DISTRIB_DELTAR_CH_VS_N = new TH2D("DISTRIB_DELTAR_CH_VS_N", "TLV_MET_Com", 100 , 0 , 2 , 100, 0 , 2 );
+	DISTRIB_DELTAR_CH_VS_N->GetXaxis()->SetTitle("#Delta R of charged particle vs track");
+	DISTRIB_DELTAR_CH_VS_N->GetYaxis()->SetTitle("#Delta R of neutral particle vs track");
+
+	
+
 	//******************************************************************************************************************
 	//******************************************************************************************************************
 
@@ -256,6 +272,9 @@ void AnaEff::Loop()
 	DISTRIB_METNOSEL_CHCH->Sumw2();
 	DISTRIB_METPRESEL_CHCH->Sumw2();
 	DISTRIB_METSEL_CHCH->Sumw2();
+	DISTRIB_DELTARN_CHN->Sumw2();
+	DISTRIB_DELTARCH_CHN->Sumw2();
+	DISTRIB_DELTAR_ALL->Sumw2();
 	DISTRIB_DEDX_POVERM_CHN->Sumw2();
 	DISTRIB_DEDX_POVERM_CHCH->Sumw2();
 
@@ -291,7 +310,7 @@ void AnaEff::Loop()
 	DISTRIB_P1_P2_CHCH->Sumw2();
 
 	DISTRIB_TLV_MET->Sumw2();
-
+	DISTRIB_DELTAR_CH_VS_N->Sumw2();
 	
 	
 	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
@@ -333,18 +352,6 @@ void AnaEff::Loop()
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
-				
-				/*for(int i = 0 ; i < triggerNames.size(); i++){
-					for (int j = 0 ; j < triggerName->size() ; j++){
-						if(triggerName->at(j) == triggerNames[i]){
-							trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0]);
-							//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
-							trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
-							break;
-						}
-
-					}
-				}	*/
 				/*for(int i=0; i < posa.size(); i++){
 					for(int j=0; j < triggerNames.size(); j++){
 						if(triggerNames[j] == triggerName->at(posa[i])){
@@ -363,9 +370,10 @@ void AnaEff::Loop()
 				}*/
 		
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
-				//cout << "There are " << ngenpart << " particles in this event" << "\n\n";
+
 				TrackRhadron();	
 				AssoGenId(indexcandidatesel);
+				//FillEff(indexcandidatesel);
 				trig.clear();
 			}
 		}
@@ -439,7 +447,9 @@ void AnaEff::Loop()
 	DISTRIB_METPRESEL_CHCH->Write();
 	DISTRIB_METSEL_CHCH->Write();
 
-	
+	DISTRIB_DELTARN_CHN->Write();
+	DISTRIB_DELTAR_ALL->Write();
+
 	DISTRIB_P1_P2_CHN->Write();
 	DISTRIB_P1_P2_CHCH->Write();
 	
@@ -472,6 +482,9 @@ void AnaEff::Loop()
 	DISTRIB_PT1_PT2_CHCH->Write();
 	DISTRIB_PT1_PT2_CHN->Write();
 	DISTRIB_PT1_PT2_NN->Write();
+	DISTRIB_DELTAR_CH_VS_N->Write();
+
+	DISTRIB_DELTARCH_CHN->Write();
 	//******************************************************************************
 	//******************************************************************************
 
@@ -648,6 +661,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
 		//cout << "Charged + Neutral " << endl;
+		
 		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
 
 		double p1 = pt1 * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
@@ -655,6 +669,14 @@ void AnaEff::AssoGenId(int indexcandidate){
 		
 		double finaldeltachn1 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]));
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
+
+		DISTRIB_DELTAR_ALL->Fill(finaldeltachn1);
+		DISTRIB_DELTAR_ALL->Fill(finaldeltachn2);
+		
+		DISTRIB_DELTARN_CHN->Fill(finaldeltachn2);
+		DISTRIB_DELTARCH_CHN->Fill(finaldeltachn1);
+		
+		DISTRIB_DELTAR_CH_VS_N->Fill(finaldeltachn1,finaldeltachn2);
 
 		if(finaldeltachn1 < 0.3 || finaldeltachn2 < 0.3){
 			alo=true;
@@ -710,6 +732,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		double finaldelta2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-2]], gen_phi[candidatesrh[candidatesrh.size()-2]]));			
 
+		
 		poverm1 = ((gen_pt[candidatesrh[candidatesrh.size()-1]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]))/TheorMass);
 		poverm2 = ((gen_pt[candidatesrh[candidatesrh.size()-2]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]))/TheorMass);
 
