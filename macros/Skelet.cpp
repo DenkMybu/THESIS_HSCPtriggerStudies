@@ -379,7 +379,7 @@ void AnaEff::Loop()
 
 				//TrackRhadron();	
 				cout << "before assogenID" << endl;
-				AssoGenId(indexcandidatesel, "DumpdeltaR.txt", jentry);
+				AssoGenId(indexcandidatesel, "DumpdeltaR.txt", int(jentry));
 				cout << "after assogenID" << endl;
 				//FillTEff(indexcandidatesel);
 				trig.clear();
@@ -679,7 +679,7 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
-		//cout << "Charged + Neutral " << endl;
+		cout << "Charged + Neutral " << endl;
 		vector<double> deltaRmuon;
 		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
 
@@ -691,8 +691,6 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
 		
 
-		//boucler sur nmuon, delta R : retomber sur le plus petit et renvoyer cette valeur la
-		//delta p / p
 		
 		for(int k=0; k< nmuons; k++){
 			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
@@ -756,7 +754,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	//*****************************************************
 
 	if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
-		//cout << "Charged + Charged " << endl;
+		cout << "Charged + Charged " << endl;
 		
 		double pt1chch = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2chch = gen_pt[candidatesrh[candidatesrh.size()-2]]; 
 
