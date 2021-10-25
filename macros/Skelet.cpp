@@ -38,7 +38,7 @@ void AnaEff::Loop()
 
 	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test";
 	
-	string teffFilename = test + DataType;	
+	string teffFilename = test + DataType + ExtRoot;
 
 	string StudyTxt = TransferTxt + DataType + Date;
 	string NameOfTxt = StudyTxt + SubNum + ExtTxt;
@@ -50,9 +50,6 @@ void AnaEff::Loop()
 	string NameCompleteList = "ListeInteretTriggers";
 	string NameListForType = NameCompleteList + DataType + ExtTxt;
 
-
-	ReadFromTxt(NameListForType);
-	trigEff_presel.LoadNoMap(triggerNames,1);
 
 
 	//************************************** DECLARATION OF THXD *******************************************************
@@ -320,14 +317,14 @@ void AnaEff::Loop()
 	DISTRIB_DELTAR_CH_VS_N->Sumw2();
 	
 	
-	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
+	ReadFromTxt(NameListForType);
+	trigEff_presel.LoadNoMap(triggerNames,1);
 	
 	int counter=0,counterasso=0,countertotasso=0,passedevent=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
 
 	string trigger1="",trigger2="";
 	trigEff_presel.InitTEff(teffFilename);
 	cout << "Working on " << DataType << endl;
-	cout << " Association of passTrigger and TriggerName" << endl;
 
 	posa.resize(triggerNames.size(), 0.0);
 
@@ -384,8 +381,7 @@ void AnaEff::Loop()
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 
 				//TrackRhadron();	
-				AssoGenId(indexcandidatesel);
-				//Fill the t efficiencies
+				AssoGenId(indexcandidatesel, "Dump_delta_r.txt", jentry);
 				//FillTEff(indexcandidatesel);
 				trig.clear();
 			}
@@ -594,7 +590,12 @@ int AnaEff::Selection(int indexcandidate){
 //*******************************************************************************
 
 
-void AnaEff::AssoGenId(int indexcandidate){
+void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
+	
+	
+	ofstream Dump;
+	Dump.open (Filename);
+	Dump << "--------------------------------------------------------------" << "\n";
 	
 	TLorentzVector cand1,cand2,homemet;
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
@@ -638,6 +639,8 @@ void AnaEff::AssoGenId(int indexcandidate){
 			}
 		}
 	}
+
+
 	if ((candidatesrh.size() + candidatesneutral.size() + candidatesdoublech.size()) != 2 ){
 		nbmissmatch +=1;
 	}
@@ -678,7 +681,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
 		//cout << "Charged + Neutral " << endl;
-		
+		vector<double> deltaRmuon;
 		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
 
 		double p1 = pt1 * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
@@ -687,10 +690,22 @@ void AnaEff::AssoGenId(int indexcandidate){
 		double finaldeltachn1 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]));
 
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
+		
 
-		double finaldeltachn1mu = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[candidatesrh[candidatesrh.size()-1]], muon_phi[candidatesrh[candidatesrh.size()-1]]));
+		//boucler sur nmuon, delta R : retomber sur le plus petit et renvoyer cette valeur la
+		//delta p / p
+		
+		for(int k=0; k< nmuons; k++){
+			deltaRmuon.push_back(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k]));
+		}
+		sort(deltaRmuon.begin(), deltaRmuon.end());
 
-		DISTRIB_DELTAR_MU_CAND->Fill(finaldeltachn1mu);
+		if(deltaRmuon[0] > 0.3 ){
+			Dump << "Event nb " << nbevent << " has a missmathing, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track " << "\n" ;
+		}
+
+		DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
+		deltaRmuon.clear();
 
 		DISTRIB_DELTAR_ALL->Fill(finaldeltachn1);
 		DISTRIB_DELTAR_ALL->Fill(finaldeltachn2);
@@ -796,6 +811,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	candidatesrh.clear();
 	candidatesneutral.clear();
 	candidatesdoublech.clear();
+	Dump.close();
 }
 
 void AnaEff::CountZones(double impulsion){
@@ -901,14 +917,15 @@ void AnaEff::TrackRhadron(){
 		
 	}
 	//cout << " Our two interesting events are labelled : " << tab[0] << " with gen : " << gen1 << " and " << tab[1] << " with gen : " << gen2 << endl;
+	//cout dans un fichier texte le dump 
+	
 	
 	for(int j=tab[0]; j<ngenpart; j++){
-		
 		if(gen_moth_pdg[j] == gen1){
 			gen1 = gen_pdg[j];
 			cout << "Found a tracking" << endl;
 			cout << j << " gen : " << gen_pdg[j] << " , gen_moth : " << gen_moth_pdg[j] << " , status : " << gen_status[j] << " , p = pt * cosh(eta) : " << gen_pt[j] * cosh(gen_eta[j]) << endl;
-
+			
 		}
 		
 	}
@@ -917,10 +934,12 @@ void AnaEff::TrackRhadron(){
 void AnaEff::ReadFromTxt(const string NameListForType){
 	ifstream ifile(NameListForType.c_str()); 
 	string tmp;
-	while(getline(ifile,tmp)){
-   		triggerNames.push_back(tmp);
+	if(ifile.is_open()){
+		while(getline(ifile,tmp)){
+   			triggerNames.push_back(tmp);
+		}
 	}
-	cout << triggerNames.size() << endl;
+	cout << triggerNames.size() << " triggers found in the entry list" << endl;
 	ifile.close();
 	//bool ReadFromTxt, return 1 if no problem
 }
