@@ -695,7 +695,7 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 		//delta p / p
 		
 		for(int k=0; k< nmuons; k++){
-			deltaRmuon.push_back(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k]));
+			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 		}
 		sort(deltaRmuon.begin(), deltaRmuon.end());
 
@@ -704,6 +704,7 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 		}*/
 
 		DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
+
 		deltaRmuon.clear();
 
 		DISTRIB_DELTAR_ALL->Fill(finaldeltachn1);
