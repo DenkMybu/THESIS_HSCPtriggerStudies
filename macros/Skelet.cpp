@@ -346,6 +346,7 @@ void AnaEff::Loop()
 		counter+=1;
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 		indexcandidate=Preselection();
+		cout << "After preselection" << endl;
 		if(indexcandidate!=64){
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
 			passedpresel+=1;

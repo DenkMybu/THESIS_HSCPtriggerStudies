@@ -127,7 +127,6 @@ void TrigEff::NameTEff(){
 
 void TrigEff::InitTEff(string teffFilename){
 	OutputHisto = new TFile(teffFilename.c_str(),"RECREATE");
-
 }		
 
 
