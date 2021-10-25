@@ -374,11 +374,13 @@ void AnaEff::Loop()
 					}
 
 				}*/
-		
+				cout << "before countzones" << endl;
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 
 				//TrackRhadron();	
+				cout << "before assogenID" << endl;
 				AssoGenId(indexcandidatesel, "Dump_delta_r.txt", jentry);
+				cout << "after assogenID" << endl;
 				//FillTEff(indexcandidatesel);
 				trig.clear();
 			}
@@ -592,7 +594,7 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 	
 	ofstream Dump;
 	Dump.open (Filename);
-	Dump << "--------------------------------------------------------------" << "\n";
+	Dump << "--------------------------------------------------------------" << "\n"<<endl;
 	
 	TLorentzVector cand1,cand2,homemet;
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
