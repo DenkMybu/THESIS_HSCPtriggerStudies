@@ -810,7 +810,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	candidatesrh.clear();
 	candidatesneutral.clear();
 	candidatesdoublech.clear();
-	Dump.close();
+	//Dump.close();
 }
 
 void AnaEff::CountZones(double impulsion){
