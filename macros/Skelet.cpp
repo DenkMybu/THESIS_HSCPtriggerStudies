@@ -346,9 +346,7 @@ void AnaEff::Loop()
 		counter+=1;
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 		indexcandidate=Preselection();
-		
 		if(indexcandidate!=64){
-			
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
@@ -374,13 +372,11 @@ void AnaEff::Loop()
 					}
 
 				}*/
-				cout << "before countzones" << endl;
+
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 
 				//TrackRhadron();	
-				cout << "before assogenID" << endl;
 				AssoGenId(indexcandidatesel, "DumpdeltaR.txt", int(jentry));
-				cout << "after assogenID" << endl;
 				//FillTEff(indexcandidatesel);
 				trig.clear();
 			}
@@ -679,7 +675,7 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
-		cout << "Charged + Neutral " << endl;
+		//cout << "Charged + Neutral " << endl;
 
 		vector<double> deltaRmuon;
 
@@ -692,19 +688,19 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
 		
-
-		cout << " There is " << nmuons << " muons in this event" << endl;
 		for(int k=0; k< nmuons; k++){
-			cout << " adding to vector : " << deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])) << endl;
 			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 		}
-		sort(deltaRmuon.begin(), deltaRmuon.end());
+
+		if(deltaRmuon.size()!=0){
+			sort(deltaRmuon.begin(), deltaRmuon.end());
 
 		/*if(deltaRmuon[0] > 0.3 ){
 			Dump << "Event nb " << nbevent << " has a missmathing, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track " << "\n" ;
 		}*/
-
-		DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
+		
+			DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
+		}
 
 		deltaRmuon.clear();
 
@@ -757,7 +753,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	//*****************************************************
 
 	if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
-		cout << "Charged + Charged " << endl;
+		//cout << "Charged + Charged " << endl;
 		
 		double pt1chch = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2chch = gen_pt[candidatesrh[candidatesrh.size()-2]]; 
 
