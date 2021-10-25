@@ -680,7 +680,9 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
 		cout << "Charged + Neutral " << endl;
+
 		vector<double> deltaRmuon;
+
 		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
 
 		double p1 = pt1 * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
@@ -691,8 +693,9 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
 		
 
-		
+		cout << " There is " << nmuons << " muons in this event" << endl;
 		for(int k=0; k< nmuons; k++){
+			cout << " adding to vector : " << deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])) << endl;
 			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 		}
 		sort(deltaRmuon.begin(), deltaRmuon.end());
