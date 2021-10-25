@@ -143,7 +143,10 @@ void AnaEff::Loop()
 	DISTRIB_DELTAR_ALL->GetXaxis()->SetTitle("#Delta R");
 	DISTRIB_DELTAR_ALL->GetYaxis()->SetTitle("# HSCP");
 
-	
+	DISTRIB_DELTAR_MU_CAND = new TH1D("DISTRIB_DELTAR_MU_CAND", "( #Delta R )", 100,0,2);
+	DISTRIB_DELTAR_MU_CAND->GetXaxis()->SetTitle("#Delta R muon-candidate");
+	DISTRIB_DELTAR_MU_CAND->GetYaxis()->SetTitle("# HSCP");
+
 
 
 
@@ -272,9 +275,12 @@ void AnaEff::Loop()
 	DISTRIB_METNOSEL_CHCH->Sumw2();
 	DISTRIB_METPRESEL_CHCH->Sumw2();
 	DISTRIB_METSEL_CHCH->Sumw2();
+
 	DISTRIB_DELTARN_CHN->Sumw2();
 	DISTRIB_DELTARCH_CHN->Sumw2();
 	DISTRIB_DELTAR_ALL->Sumw2();
+	DISTRIB_DELTAR_MU_CAND->Sumw2();
+
 	DISTRIB_DEDX_POVERM_CHN->Sumw2();
 	DISTRIB_DEDX_POVERM_CHCH->Sumw2();
 
@@ -315,7 +321,7 @@ void AnaEff::Loop()
 	
 	//trigEff_selection_obs.LoadNoMap(triggerNames,triggerNames,1,DataType,NameOfFile);  // call a function from other class .h
 	
-	int counter=0,passedevent=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
+	int counter=0,counterasso=0,countertotasso=0,passedevent=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
 
 	string trigger1="",trigger2="";
 	trigEff_presel.InitTEff();
@@ -352,6 +358,11 @@ void AnaEff::Loop()
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
+				countertotasso+=1;
+				if(muon_isTrackerMuon[hscp_track_idx[indexcandidatesel]]){
+					counterasso+=1;
+				}
+				
 				/*for(int i=0; i < posa.size(); i++){
 					for(int j=0; j < triggerNames.size(); j++){
 						if(triggerNames[j] == triggerName->at(posa[i])){
@@ -379,7 +390,7 @@ void AnaEff::Loop()
 		}
 
 	}
-	
+	cout << "Matching track-muon, there was " << (counterasso*1.0/countertotasso)*100 << " % " << " of matched track with muons" << endl;
 	trigEff_presel.Compute();
 	trigEff_presel.WritePlots("","");
 
@@ -449,6 +460,10 @@ void AnaEff::Loop()
 
 	DISTRIB_DELTARN_CHN->Write();
 	DISTRIB_DELTAR_ALL->Write();
+	DISTRIB_DELTAR_CH_VS_N->Write();
+	DISTRIB_DELTARCH_CHN->Write();
+	DISTRIB_DELTAR_MU_CAND->Write();
+
 
 	DISTRIB_P1_P2_CHN->Write();
 	DISTRIB_P1_P2_CHCH->Write();
@@ -482,9 +497,8 @@ void AnaEff::Loop()
 	DISTRIB_PT1_PT2_CHCH->Write();
 	DISTRIB_PT1_PT2_CHN->Write();
 	DISTRIB_PT1_PT2_NN->Write();
-	DISTRIB_DELTAR_CH_VS_N->Write();
 
-	DISTRIB_DELTARCH_CHN->Write();
+	
 	//******************************************************************************
 	//******************************************************************************
 
@@ -632,6 +646,7 @@ void AnaEff::AssoGenId(int indexcandidate){
 	if(candidatesdoublech.size() >= 1 ){
 		nbtch+=1;
 		double eta_track = track_eta[hscp_track_idx[indexcandidate]],phi_track = track_phi[hscp_track_idx[indexcandidate]],eta_gen = gen_eta[candidatesdoublech[candidatesdoublech.size()-1]], phi_gen = gen_phi[candidatesdoublech[candidatesdoublech.size()-1]];
+
 		double deltatranfrdch = deltaR2(eta_track, phi_track, eta_gen, phi_gen);
 		double finaldeltadch = deltaR(deltatranfrdch);
 
@@ -668,7 +683,12 @@ void AnaEff::AssoGenId(int indexcandidate){
 		double p2 = pt2 * cosh(gen_eta[candidatesneutral[candidatesneutral.size()-1]]);
 		
 		double finaldeltachn1 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]));
+
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
+
+		double finaldeltachn1mu = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[candidatesrh[candidatesrh.size()-1]], muon_phi[candidatesrh[candidatesrh.size()-1]]));
+
+		DISTRIB_DELTAR_MU_CAND->Fill(finaldeltachn1mu);
 
 		DISTRIB_DELTAR_ALL->Fill(finaldeltachn1);
 		DISTRIB_DELTAR_ALL->Fill(finaldeltachn2);
