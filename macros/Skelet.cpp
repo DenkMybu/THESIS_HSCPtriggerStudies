@@ -346,9 +346,9 @@ void AnaEff::Loop()
 		counter+=1;
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 		indexcandidate=Preselection();
-		cout << " presel " << endl;
+		
 		if(indexcandidate!=64){
-			cout << "sel " << endl;
+			
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
@@ -356,11 +356,6 @@ void AnaEff::Loop()
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
-				
-				countertotasso+=1;
-				if(muon_isTrackerMuon[hscp_track_idx[indexcandidatesel]]){
-					counterasso+=1;
-				}
 				
 				/* TEST TIME OPTIMIZER, uncomment line 333 and remove function FillTEff(indexcandidatesel) : same output (?) with 20% less time consumed
 				for(int i=0; i < posa.size(); i++){
@@ -390,7 +385,7 @@ void AnaEff::Loop()
 		}
 
 	}
-	cout << "Matching track-muon, there was " << (counterasso*1.0/countertotasso)*100 << " % " << " of matched track with muons" << endl;
+
 	trigEff_presel.Compute();
 	trigEff_presel.WritePlots("","");
 

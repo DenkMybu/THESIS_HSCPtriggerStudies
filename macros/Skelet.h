@@ -168,7 +168,7 @@ public :
    
 private :
 
-  TFile* distrib,dump;
+  TFile* distrib;
 
   Int_t nbchch=0,nbchn=0,nbnn=0,nbdch=0,nbtot=0,nbn=0,nbch=0, nbtch=0, nbnx=0,nbmissmatch=0;
   Int_t nbinfpom=0,nbsuppom=0,nbinpom=0;
