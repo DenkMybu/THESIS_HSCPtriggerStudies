@@ -827,8 +827,8 @@ void AnaEff::FillTEff(int indexcandidate){
 	for(int i = 0 ; i < triggerNames.size(); i++){
 		for (int j = 0 ; j < triggerName->size() ; j++){
 			if(triggerName->at(j) == triggerNames[i]){
-				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
-				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]),1.0,"POM");
+				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0], 1.0 ,"MET");
+				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]), 1.0 ,"POM");
 				//cout << " Filled " << triggerNames[i] << " with p over m = " << (track_p[hscp_track_idx[indexcandidate]]) << endl;
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 				break;
@@ -925,13 +925,8 @@ void AnaEff::TrackRhadron(){
 		}
 			
 	}
-		if(abs(gen_moth_pdg[i]) == gen){
-			gen = gen_moth_pdg[i];
-			cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
 
-		}
-
-	}
+}
 	
 	/*for(int j=tab[0]; j<ngenpart; j++){
 		if(gen_moth_pdg[j] == gen1){
