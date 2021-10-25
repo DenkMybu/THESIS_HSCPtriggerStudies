@@ -816,7 +816,7 @@ void AnaEff::FillTEff(int indexcandidate){
 			if(triggerName->at(j) == triggerNames[i]){
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]),1.0,"POM");
-				cout << " Filled " << triggerNames[i] << " with p over m = " << (track_p[hscp_track_idx[indexcandidate]]) << endl;
+				//cout << " Filled " << triggerNames[i] << " with p over m = " << (track_p[hscp_track_idx[indexcandidate]]) << endl;
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 				break;
 			}
