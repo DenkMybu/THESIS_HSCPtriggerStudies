@@ -36,9 +36,9 @@ void AnaEff::Loop()
 	nbi = fChain->GetEntry(initializing);   nbytes += nbi;
 	cout << "Number of triggers for this file  : " << ntrigger << " , number of events : " << nentries << endl;
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass));
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test";
 	
-	string NameCompleteList = "ListeInteretTriggers";
+	string teffFilename = test + DataType;	
 
 	string StudyTxt = TransferTxt + DataType + Date;
 	string NameOfTxt = StudyTxt + SubNum + ExtTxt;
@@ -46,7 +46,8 @@ void AnaEff::Loop()
 	string StudyDistribZ = TransferDistribZ + DataType + Date;
 	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
 	
-	
+
+	string NameCompleteList = "ListeInteretTriggers";
 	string NameListForType = NameCompleteList + DataType + ExtTxt;
 
 
@@ -324,7 +325,7 @@ void AnaEff::Loop()
 	int counter=0,counterasso=0,countertotasso=0,passedevent=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
 
 	string trigger1="",trigger2="";
-	trigEff_presel.InitTEff();
+	trigEff_presel.InitTEff(teffFilename);
 	cout << "Working on " << DataType << endl;
 	cout << " Association of passTrigger and TriggerName" << endl;
 
@@ -342,7 +343,6 @@ void AnaEff::Loop()
 	cout << "nb entrees : " << nentries << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { 
 		Long64_t ientry = LoadTree(jentry);
-		
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
@@ -363,7 +363,8 @@ void AnaEff::Loop()
 					counterasso+=1;
 				}
 				
-				/*for(int i=0; i < posa.size(); i++){
+				/* TEST TIME OPTIMIZER, uncomment line 333 and remove function FillTEff(indexcandidatesel) : same output (?) with 20% less time consumed
+				for(int i=0; i < posa.size(); i++){
 					for(int j=0; j < triggerNames.size(); j++){
 						if(triggerNames[j] == triggerName->at(posa[i])){
 							trigEff_presel.FillNoMap(triggerNames[j], passTrigger[posa[i]], pfmet_pt[0]);
@@ -384,7 +385,8 @@ void AnaEff::Loop()
 
 				//TrackRhadron();	
 				AssoGenId(indexcandidatesel);
-				//FillEff(indexcandidatesel);
+				//Fill the t efficiencies
+				//FillTEff(indexcandidatesel);
 				trig.clear();
 			}
 		}
@@ -730,8 +732,8 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		DISTRIB_ANGLE_RAD->Fill(a);
 		DISTRIB_METSEL_CHN->Fill(pfmet_pt[0]);
 
-		//FillEff();
-		//trigEff_presel.func(trig);
+		FillTEff(indexcandidate);
+		trigEff_presel.FillTrigEff(trig);
 	}
 
 
@@ -772,8 +774,9 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 			}
 		}
 
-		FillEff(indexcandidate);
-		trigEff_presel.func(trig);
+
+		//FillTEff(indexcandidate);
+		//trigEff_presel.FillTrigEff(trig);
 
 		DISTRIB_DEDX_POVERM_CHCH->Fill((track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass),track_ih_ampl[hscp_track_idx[indexcandidate]]);
 		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
@@ -807,24 +810,19 @@ void AnaEff::CountZones(double impulsion){
 	}
 }
 
-void AnaEff::FillEff(int indexcandidate){
-
+void AnaEff::FillTEff(int indexcandidate){
 	for(int i = 0 ; i < triggerNames.size(); i++){
 		for (int j = 0 ; j < triggerName->size() ; j++){
 			if(triggerName->at(j) == triggerNames[i]){
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0],1.0,"MET");
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]),1.0,"POM");
-				//cout << "called fillnomap with : " << triggerNames[i] << " , " << passTrigger[j] << " , " << pfmet_pt[0] << endl;
-				//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
+				cout << " Filled " << triggerNames[i] << " with p over m = " << (track_p[hscp_track_idx[indexcandidate]]) << endl;
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 				break;
 			}
 
 		}
 	}
-
-
-
 }
 
 

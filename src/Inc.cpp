@@ -32,9 +32,6 @@ TrigEff::TrigEff(){
 
 
 TrigEff::~TrigEff(){ 
-
-	EffvsObs.clear();
-	EffvsObsNo.clear();
 	EffvsObsAll.clear();
 	EffvsPom.clear();
 	NamesPos.clear();
@@ -47,9 +44,7 @@ TrigEff::~TrigEff(){
 	DenomEfficiency.clear();
 	
 	EffErr.clear();
-	//if(!EffvsObsMet){
-		//delete EffvsObsMet;
-	//}
+
 	if(!OutputHisto){
 		delete OutputHisto;
 	}
@@ -81,11 +76,14 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	this->TriggerNames = triggerNames;
 	string pom = "POM";
 	for(int i =0; i < triggerNames.size(); i++){
+		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
+
 		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",100,0,2000); 
 		EffvsObsAll[i]->SetName(triggerNames[i].c_str());
+
 		EffvsPom[i] = new TEfficiency("Eff","Efficiency;#beta #gamma;#epsilon",100,0,5);
-		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
 		EffvsPom[i]->SetName(namepom.c_str());
+
 		NamesPos[i] = make_pair(triggerNames[i],i);
 	}
 	
@@ -104,66 +102,36 @@ void TrigEff::FillNoMap(string TriggerName, bool trig, float Obs, double weight,
 	if(mode == "MET"){	
 		for(int i = 0; i < NamesPos.size(); i++){
 			if(NamesPos[i].first == TriggerName){
-				//cout << " bool " << i << " = " << trig << endl;
 				EffvsObsAll[NamesPos[i].second]->Fill(trig,Obs);
-				//cout << "Filled with MET = " << Obs << endl;
 			}
 		}
 	}
+
 	else if(mode == "POM"){
 		for(int i = 0; i < NamesPos.size(); i++){
 			if(NamesPos[i].first == TriggerName){
-				//cout << " bool " << i << " = " << trig << endl;
 				EffvsPom[NamesPos[i].second]->Fill(trig,Obs);
-				//cout << "Filled with P/M = " << Obs << endl;
 			}
 		}
-
 	}
 }
 
 
 void TrigEff::StudyRecoMet(bool trig,double Obs){
-	
-	EffvsObsMet->Fill(trig,Obs);
-	
+		
 }
 
 void TrigEff::NameTEff(){
-	EffvsObs[0]->SetName("Charged+Charged Mu");
-	EffvsObs[1]->SetName("Charged+Neutral Mu");
-	EffvsObsNo[0]->SetName("Charged+Charged NoMu");
-	EffvsObsNo[1]->SetName("Charged+Neutral NoMu");
 
-	
 }
 
-void TrigEff::InitTEff(){
-	EffvsObs.resize(2); // nb of trigger we study
-	EffvsObsNo.resize(2);
-	TString outputfilename="TestStop.root";//FileName.c_str();
-	
-	OutputHisto = new TFile(outputfilename,"RECREATE");
+void TrigEff::InitTEff(string teffFilename){
+	OutputHisto = new TFile(teffFilename.c_str(),"RECREATE");
 
-	EffvsObsMet = new TEfficiency("Eff of PFMET120_PFMHT120", "Efficiency of PFMET120_PFMHT120;Reco pf_MET [GeV];#epsilon",50,0,2000);
-
-	for(int j=0; j < EffvsObs.size(); j++){	
-		EffvsObs[j] = new TEfficiency("Eff Mu","Efficiency;Reco pf_MET [GeV];#epsilon",50,0,2000);
-		EffvsObsNo[j] = new TEfficiency("Eff NoMu","Efficiency;Reco pf_MET [GeV];#epsilon",50,0,2000);
-	}
-	NameTEff();
 }		
 
-void TrigEff::FindTurnOn(int which,bool trig1, bool trig2, float Obs,bool munomu){
-	if(munomu==1){
-		EffvsObs[which]->TEfficiency::Fill(trig1,Obs);
-	}
-	else{
-		EffvsObsNo[which]->TEfficiency::Fill(trig2,Obs);
-	}
-}
 
-void TrigEff::func(vector< pair<string, bool > > Trig){
+void TrigEff::FillTrigEff(vector< pair<string, bool > > Trig){
 
 	for(int j=0; j<Trig.size(); j++){
 		DenomEfficiency[j] +=1;
@@ -277,17 +245,10 @@ void TrigEff::ComputeError(){
 void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 	OutputHisto->cd();
 	
-	for(int i=0;i < EffvsObs.size();i++){
-		EffvsObs[i]->Write();
-		EffvsObsNo[i]->Write();
-	}
-
 	for(int j=0; j < EffvsObsAll.size() ; j++){
 		EffvsObsAll[j]->Write();
 		EffvsPom[j]->Write();
 	}
-	
-	EffvsObsMet->Write();
 	OutputHisto->Close();
 }
 

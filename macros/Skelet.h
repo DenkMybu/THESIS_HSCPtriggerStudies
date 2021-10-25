@@ -163,7 +163,7 @@ public :
    virtual void	    AssoGenId(int indexcandidate);
    virtual void     ReadFromTxt(const string NameListForType);
    virtual void     CountZones(double impulsion);
-   virtual void     FillEff(int indexcandidate);
+   virtual void     FillTEff(int indexcandidate);
    virtual void     TrackRhadron();
    
 private :

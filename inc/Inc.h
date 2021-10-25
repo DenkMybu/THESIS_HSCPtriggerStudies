@@ -36,9 +36,7 @@ public:
 
    void LoadNoMap(const vector<string> &triggerNames,int ErrorType=1, string NameVar="a",string FileName="testnewdata.root");
 
-
    void FillNoMap(string TriggerName, bool trig,float Obs = 0.0, double weight = 1,string mode = "");
-
 
    void Compute(string NameOutputFile="", string NameListEff="", string ListAllTriggers="", string EffTriggers="", string ErrorEffTriggers="",string EffOrAllTriggers="");
    
@@ -48,17 +46,15 @@ public:
 
    void FillMass(double INVMASS,int choice= 1);
 
-   void FindTurnOn(int which, bool trig1, bool trig2, float Obs, bool munomu);
-
    void StudyRecoMet(bool trig,double Obs);
 
    void NameTEff();
 
-   void InitTEff();
+   void InitTEff(string teffFilename);
  
    void ReadFromTxt(const string NameListForType);
   
-   void func(vector< pair<string, bool > > Trig);
+   void FillTrigEff(vector< pair<string, bool > > Trig);
 
  private :
 	
@@ -119,17 +115,11 @@ public:
 // ******************************MEMBERS**************************
    TFile* OutputHisto;
 
-   vector <TEfficiency*> EffvsObs;
-   vector <TEfficiency*> EffvsObsNo;
    vector <TEfficiency*> EffvsObsAll;
    vector <TEfficiency*> EffvsPom;
 
    vector< pair<string, int > > NamesPos; 
    vector<string> TriggerNames;
-
-   
-   TEfficiency* EffvsObsMet;
-
 
    vector<double> Efficiency;
 
