@@ -346,7 +346,9 @@ void AnaEff::Loop()
 		counter+=1;
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 		indexcandidate=Preselection();
+		cout << " presel " << endl;
 		if(indexcandidate!=64){
+			cout << "sel " << endl;
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
@@ -594,7 +596,7 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 	
 	
 	ofstream Dump;
-	Dump.open (Filename.c_str());
+	Dump.open (Filename);
 	Dump << "--------------------------------------------------------------" << "\n";
 	
 	TLorentzVector cand1,cand2,homemet;
