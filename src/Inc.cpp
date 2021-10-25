@@ -106,10 +106,11 @@ void TrigEff::FillNoMap(string TriggerName, bool trig, float Obs, double weight,
 			}
 		}
 	}
-
-	else if(mode == "POM"){
+	
+	if(mode == "POM"){
 		for(int i = 0; i < NamesPos.size(); i++){
 			if(NamesPos[i].first == TriggerName){
+				cout << "Filling with POM as obs = " << Obs << " and trigger val : " << trig << endl;
 				EffvsPom[NamesPos[i].second]->Fill(trig,Obs);
 			}
 		}

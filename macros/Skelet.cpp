@@ -374,8 +374,8 @@ void AnaEff::Loop()
 				}*/
 
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
+				TrackRhadron();
 
-				//TrackRhadron();	
 				AssoGenId(indexcandidatesel, "DumpdeltaR.txt", int(jentry));
 				//FillTEff(indexcandidatesel);
 				trig.clear();
@@ -854,8 +854,8 @@ double AnaEff::deltaR(const double &delta) {
 
 void AnaEff::TrackRhadron(){
 	int tab[2];
-	bool vtab[2] = {false}, flag = false;
-	int gen1,gen2;
+	bool vtab[2] = {false}, flag = false,genflag=false;
+	int gen,gen1,gen2;
 	cout << "New event with " << ngenpart << " particles " << endl;
 	for(int i=0; i < ngenpart ; i++){
 		if(gen_status[i] == 1){
@@ -867,11 +867,8 @@ void AnaEff::TrackRhadron(){
 		
 		}
 
-		
 		//***************** CHARGED RHADRONS *****************
-		//****************************************************
-
-		
+		//****************************************************		
 		for(int k = 0; k < indexpdgch.size() ; k++){
 			if(abs(gen_pdg[i]) == indexpdgch[k]){
 				if(gen_status[i] == 1){
@@ -915,9 +912,28 @@ void AnaEff::TrackRhadron(){
 	}
 	//cout << " Our two interesting events are labelled : " << tab[0] << " with gen : " << gen1 << " and " << tab[1] << " with gen : " << gen2 << endl;
 	//cout dans un fichier texte le dump 
+
+	for(int i=0; i< ngenpart;i++){
+		if(genflag==false){
+			for(int l=0;l<indexpdgch.size();l++){
+				if(abs(gen_pdg[i]) == indexpdgch[l]){
+					genflag = true;
+					gen = abs(gen_pdg[i]);
+					break;
+				}
+			}
+		}
+			
+	}
+		if(abs(gen_moth_pdg[i]) == gen){
+			gen = gen_moth_pdg[i];
+			cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+
+		}
+
+	}
 	
-	
-	for(int j=tab[0]; j<ngenpart; j++){
+	/*for(int j=tab[0]; j<ngenpart; j++){
 		if(gen_moth_pdg[j] == gen1){
 			gen1 = gen_pdg[j];
 			cout << "Found a tracking" << endl;
@@ -925,7 +941,7 @@ void AnaEff::TrackRhadron(){
 			
 		}
 		
-	}
+	}*/
 }
 
 void AnaEff::ReadFromTxt(const string NameListForType){
