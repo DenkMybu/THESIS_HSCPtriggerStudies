@@ -923,9 +923,12 @@ void AnaEff::TrackRhadron(){
 				}
 			}
 		}
-			
+		if(gen_moth_pdg[i] == gen){
+			gen = gen_moth_pdg[i];
+			cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+		}	
 	}
-
+	
 
 	
 	/*for(int j=tab[0]; j<ngenpart; j++){
