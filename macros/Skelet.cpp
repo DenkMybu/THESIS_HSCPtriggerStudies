@@ -856,7 +856,7 @@ void AnaEff::TrackRhadron(){
 	int tab[2];
 	bool vtab[2] = {false}, flag = false,genflag=false;
 	int gen,gen1,gen2;
-	cout << "New event with " << ngenpart << " particles " << endl;
+	//cout << "New event with " << ngenpart << " particles " << endl;
 	for(int i=0; i < ngenpart ; i++){
 		if(gen_status[i] == 1){
 			flag=true;
