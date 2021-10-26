@@ -373,7 +373,7 @@ void AnaEff::Loop()
 
 	}
 
-	Dump.close();
+	
 	trigEff_presel.Compute();
 	trigEff_presel.WritePlots("","");
 
@@ -403,16 +403,18 @@ void AnaEff::Loop()
 	InfosData << " 0.1 < p/m < 0.9 " <<  (nbinpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100  << endl;
 	InfosData << " p/m > 0.9 " << (nbsuppom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << endl;
 
+	InfosData.close();
 	//******************************************************************************
 
 
 	Dump << "There was " << nmissmuons << " CH-N events without any muons = " << (nmissmuons*1.0/nbchn)*100 << " % " << endl;
 	Dump << "There was " << nmuonmatching << " muons with smallest #Delta R (track-muon) > 0.3 : " << (nmuonmatching*1.0/nmatchingtot)*100 << endl;
 
+	Dump.close();
 	//******************************************************************************
 
 
-	InfosData.close();
+	
 
 	distrib = new TFile(distribvarZ.c_str(),"RECREATE");
 	
