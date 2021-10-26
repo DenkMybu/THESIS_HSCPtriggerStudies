@@ -36,22 +36,6 @@ void AnaEff::Loop()
 	nbi = fChain->GetEntry(initializing);   nbytes += nbi;
 	cout << "Number of triggers for this file  : " << ntrigger << " , number of events : " << nentries << endl;
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test", dumpfile = "dump_deltar.txt";
-	
-	string teffFilename = test + DataType + ExtRoot;
-
-	string StudyTxt = TransferTxt + DataType + Date;
-	string NameOfTxt = StudyTxt + SubNum + ExtTxt;
-
-	string StudyDistribZ = TransferDistribZ + DataType + Date;
-	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
-	
-
-	string NameCompleteList = "ListeInteretTriggers";
-	string NameListForType = NameCompleteList + DataType + ExtTxt;
-
-
-
 	//************************************** DECLARATION OF THXD *******************************************************
 	//******************************************************************************************************************
 
@@ -74,7 +58,6 @@ void AnaEff::Loop()
 	DISTRIB_IASDCH = new TH1D("DISTRIB_IASDCH", "( IAS )DCH",80,0,1.2);
 	DISTRIB_IASDCH->GetXaxis()->SetTitle("Ias");
 	DISTRIB_IASDCH->GetYaxis()->SetTitle("# HSCP");
-
 
 	DISTRIB_IH = new TH1D ("DISTRIB_IH", " IH ", 100, 0 , 15);
 	DISTRIB_IH->GetXaxis()->SetTitle("Ih");
@@ -116,7 +99,6 @@ void AnaEff::Loop()
 	DISTRIB_METSEL_CHN->GetXaxis()->SetTitle("MET [GeV]");
 	DISTRIB_METSEL_CHN->GetYaxis()->SetTitle("# HSCP");
 
-
 	DISTRIB_METNOSEL_CHCH = new TH1D("DISTRIB_METNOSEL_CHCH", "( MET )", 100,0,4000);
 	DISTRIB_METNOSEL_CHCH->GetXaxis()->SetTitle("MET [GeV]");
 	DISTRIB_METNOSEL_CHCH->GetYaxis()->SetTitle("# HSCP");
@@ -144,10 +126,6 @@ void AnaEff::Loop()
 	DISTRIB_DELTAR_MU_CAND = new TH1D("DISTRIB_DELTAR_MU_CAND", "( #Delta R )", 100,0,2);
 	DISTRIB_DELTAR_MU_CAND->GetXaxis()->SetTitle("#Delta R muon-candidate");
 	DISTRIB_DELTAR_MU_CAND->GetYaxis()->SetTitle("# HSCP");
-
-
-
-
 
 	DISTRIB_ETA_DCH = new TH1D("DISTRIB_ETA_DCH", "( ETA dch )", 100, -3, 3);
 	DISTRIB_ETA_DCH->GetXaxis()->SetTitle(" #Eta ");
@@ -185,7 +163,6 @@ void AnaEff::Loop()
 	DISTRIB_POVERMCH_CHN->GetXaxis()->SetTitle("p/m = #beta #gamma");
 	DISTRIB_POVERMCH_CHN->GetYaxis()->SetTitle("# Charged R-hadrons");
 
-	//Good MET choice
 	DISTRIB_MET_pt = new TH2D("DISTRIB_MET_pt", "Met vs pt overall", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_MET_pt->GetXaxis()->SetTitle("Reco MET [GeV]");
 	DISTRIB_MET_pt->GetYaxis()->SetTitle("Pt [GeV]");
@@ -242,10 +219,7 @@ void AnaEff::Loop()
 	DISTRIB_DELTAR_CH_VS_N = new TH2D("DISTRIB_DELTAR_CH_VS_N", "TLV_MET_Com", 100 , 0 , 2 , 100, 0 , 2 );
 	DISTRIB_DELTAR_CH_VS_N->GetXaxis()->SetTitle("#Delta R of charged particle vs track");
 	DISTRIB_DELTAR_CH_VS_N->GetYaxis()->SetTitle("#Delta R of neutral particle vs track");
-
-	
-
-	//******************************************************************************************************************
+	//*********************************************SUMW2****************************************************************
 	//******************************************************************************************************************
 
 	DISTRIB_NB_RHADRONS->Sumw2();
@@ -284,10 +258,8 @@ void AnaEff::Loop()
 
 	DISTRIB_ETA_DCH->Sumw2();
 
-
 	DISTRIB_MET_NN->Sumw2();
 
-	
 	DISTRIB_MET_pt->Sumw2();
 	
 	DISTRIB_MET_pt_CHN->Sumw2();
@@ -299,13 +271,11 @@ void AnaEff::Loop()
 	DISTRIB_PT1MPT2CHCH->Sumw2();
 	DISTRIB_PT1MPT2CHN->Sumw2();
 
-
 	DISTRIB_ANGLE_RAD->Sumw2();
 
 	DISTRIB_POVERMN_CHN->Sumw2();
 	DISTRIB_POVERMCH_CHN->Sumw2();
 
-	
 	DISTRIB_PT1_PT2->Sumw2();
 	DISTRIB_PT1_PT2_CHCH->Sumw2();
 	DISTRIB_PT1_PT2_CHN->Sumw2();
@@ -316,7 +286,25 @@ void AnaEff::Loop()
 	DISTRIB_TLV_MET->Sumw2();
 	DISTRIB_DELTAR_CH_VS_N->Sumw2();
 	
+	//******************************************************************************************************************
+	//******************************************************************************************************************
+
+
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test", dumpfile = "dump_deltar.txt";
 	
+	string teffFilename = test + DataType + ExtRoot;
+
+	string StudyTxt = TransferTxt + DataType + Date;
+	string NameOfTxt = StudyTxt + SubNum + ExtTxt;
+
+	string StudyDistribZ = TransferDistribZ + DataType + Date;
+	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
+	
+
+	string NameCompleteList = "ListeInteretTriggers";
+	string NameListForType = NameCompleteList + DataType + ExtTxt;
+
+
 	ReadFromTxt(NameListForType);
 	trigEff_presel.LoadNoMap(triggerNames,1);
 	
@@ -338,6 +326,7 @@ void AnaEff::Loop()
 
 	}*/
 	Dump.open (dumpfile);
+	Dump << "SLT" << endl;
 	cout << "nb entrees : " << nentries << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { 
 		Long64_t ientry = LoadTree(jentry);
@@ -356,7 +345,7 @@ void AnaEff::Loop()
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
-				/* TEST TIME OPTIMIZER, uncomment line 333 and remove function FillTEff(indexcandidatesel) : same output (?) with 20% less time consumed
+				/* TEST TIME OPTIMIZER, uncomment line 319 and remove function FillTEff(indexcandidatesel) : same output (?) with 20% less time consumed
 				for(int i=0; i < posa.size(); i++){
 					for(int j=0; j < triggerNames.size(); j++){
 						if(triggerNames[j] == triggerName->at(posa[i])){
