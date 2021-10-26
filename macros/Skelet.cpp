@@ -326,7 +326,6 @@ void AnaEff::Loop()
 
 	}*/
 	Dump.open (dumpfile);
-	Dump << "SLT" << endl;
 	cout << "nb entrees : " << nentries << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { 
 		Long64_t ientry = LoadTree(jentry);
@@ -580,7 +579,7 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 	TLorentzVector cand1,cand2,homemet;
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
 	int nbmothgen=0;
-
+	Dump << "IN ASSOGENID" << endl;
 	for(int i=0; i < ngenpart ; i++){
 		if(gen_moth_pdg[i] == 1000021){
 			nbmothgen+=1;
