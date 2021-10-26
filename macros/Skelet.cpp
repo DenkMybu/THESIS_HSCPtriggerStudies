@@ -123,7 +123,7 @@ void AnaEff::Loop()
 	DISTRIB_DELTAR_ALL->GetXaxis()->SetTitle("#Delta R");
 	DISTRIB_DELTAR_ALL->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_DELTAR_MU_CAND = new TH1D("DISTRIB_DELTAR_MU_CAND", "( #Delta R )", 100,0,2);
+	DISTRIB_DELTAR_MU_CAND = new TH1D("DISTRIB_DELTAR_MU_CAND", "( #Delta R )", 1000,0,1); //bin problem ?
 	DISTRIB_DELTAR_MU_CAND->GetXaxis()->SetTitle("#Delta R muon-candidate");
 	DISTRIB_DELTAR_MU_CAND->GetYaxis()->SetTitle("# HSCP");
 
@@ -408,7 +408,9 @@ void AnaEff::Loop()
 
 
 	Dump << "There was " << nmissmuons << " CH-N events without any muons = " << (nmissmuons*1.0/nbchn)*100 << " % " << endl;
-	Dump << "There was " << nmuonmatching << " muons with smallest #Delta R (track-muon) > 0.3 : " << (nmuonmatching*1.0/nmatchingtot)*100 << endl;
+	Dump << "There was " << nmuonmatching << " muons with smallest #Delta R (track-muon) > 0.3 : " << (nmuonmatching*1.0/nmatchingtot)*100 << "\n\n" << endl;
+	Dump << "------------------------------------------Chain of r-hadrons ----------------------------------------------- \n\n" << endl;
+	Dump << "In total, there was " << nbchain << " events where a r-hadron chain was followed, and " << nbchainmiss << " where there was no obvious chain. We identified " << (nbchain*1.0/(nbchainmiss+nbchain))*100 << " % " << endl;
 
 	Dump.close();
 	//******************************************************************************
@@ -906,6 +908,7 @@ void AnaEff::TrackRhadron(){
 		}
 		
 	}
+	bool yoi=false;
 	//cout << " Our two interesting events are labelled : " << tab[0] << " with gen : " << gen1 << " and " << tab[1] << " with gen : " << gen2 << endl;
 	for(int i=0; i< ngenpart;i++){
 		if(genflag==false){
@@ -917,10 +920,22 @@ void AnaEff::TrackRhadron(){
 				}
 			}
 		}
+		
 		if(abs(gen_moth_pdg[i]) == gen){
 			gen = abs(gen_pdg[i]);
+			yoi=true;
+			//+ compteur si je trouve pas de descendant au r-hadron
+			// Ici faire la dénomination
 			cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
 		}	
+	}
+	
+	if(!yoi){
+		nbchainmiss+=1;
+	}
+
+	if(yoi){
+		nbchain+=1;
 	}
 	
 }
