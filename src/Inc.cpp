@@ -97,7 +97,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 //***************************************************************************************************************************
 
 
-void TrigEff::FillNoMap(string TriggerName, bool trig, float Obs, double weight,string mode){  //const vector<bool> 
+void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,const double &weight,string mode){  //const vector<bool> 
 	//cout << "NamesPos.size() = " << NamesPos.size() << endl;
 	if(mode == "MET"){	
 		for(int i = 0; i < NamesPos.size(); i++){
