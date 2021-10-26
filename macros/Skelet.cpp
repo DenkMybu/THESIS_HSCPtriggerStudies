@@ -687,8 +687,9 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 		for(int k=0; k< nmuons; k++){
 			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 		}
-		if(deltaRmuon.size() == 0){
-			Dump << "Event nb " << nbevent << " has 0 muon, in charged-neutral scenario" << "\n" ;
+		if(nmuons == 0){
+			cout << "0 muons ! " << endl;
+			Dump << "Event nb " << nbevent << " has 0 muon, in a charged-neutral scenario" << "\n" ;
 
 		}
 
