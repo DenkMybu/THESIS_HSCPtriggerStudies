@@ -36,7 +36,7 @@ void AnaEff::Loop()
 	nbi = fChain->GetEntry(initializing);   nbytes += nbi;
 	cout << "Number of triggers for this file  : " << ntrigger << " , number of events : " << nentries << endl;
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test";
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test", dumpfile = "dump_deltar.txt";
 	
 	string teffFilename = test + DataType + ExtRoot;
 
@@ -337,6 +337,7 @@ void AnaEff::Loop()
 			}
 
 	}*/
+	Dump.open (dumpfile);
 	cout << "nb entrees : " << nentries << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { 
 		Long64_t ientry = LoadTree(jentry);
@@ -376,7 +377,7 @@ void AnaEff::Loop()
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 				TrackRhadron();
 
-				AssoGenId(indexcandidatesel, "DumpdeltaR.txt", int(jentry));
+				AssoGenId(indexcandidatesel, int(jentry));
 				//FillTEff(indexcandidatesel);
 				trig.clear();
 			}
@@ -384,6 +385,7 @@ void AnaEff::Loop()
 
 	}
 
+	Dump.close();
 	trigEff_presel.Compute();
 	trigEff_presel.WritePlots("","");
 
@@ -572,7 +574,7 @@ int AnaEff::Preselection(){
 //*******************************************************************************
 
 
-int AnaEff::Selection(int indexcandidate){
+int AnaEff::Selection(const int &indexcandidate){
 	if(track_ias_ampl[hscp_track_idx[indexcandidate]] > 0.2){ 
 		return indexcandidate;
 	}
@@ -585,13 +587,7 @@ int AnaEff::Selection(int indexcandidate){
 //*******************************************************************************
 
 
-void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
-	
-	
-	/*ofstream Dump;
-	Dump.open (Filename);
-	Dump << "--------------------------------------------------------------" << "\n"<<endl;*/
-	
+void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 	TLorentzVector cand1,cand2,homemet;
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
 	int nbmothgen=0;
@@ -695,9 +691,9 @@ void AnaEff::AssoGenId(int indexcandidate,string Filename,int nbevent){
 		if(deltaRmuon.size()!=0){
 			sort(deltaRmuon.begin(), deltaRmuon.end());
 
-		/*if(deltaRmuon[0] > 0.3 ){
+		if(deltaRmuon[0] > 0.3 ){
 			Dump << "Event nb " << nbevent << " has a missmathing, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track " << "\n" ;
-		}*/
+		}
 		
 			DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
 		}
@@ -808,10 +804,10 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	candidatesrh.clear();
 	candidatesneutral.clear();
 	candidatesdoublech.clear();
-	//Dump.close();
+	
 }
 
-void AnaEff::CountZones(double impulsion){
+void AnaEff::CountZones(const double &impulsion){
 	if(impulsion*1.0/TheorMass < 0.1){
 		nbinfpom+=1;
 	}
@@ -823,7 +819,7 @@ void AnaEff::CountZones(double impulsion){
 	}
 }
 
-void AnaEff::FillTEff(int indexcandidate){
+void AnaEff::FillTEff(const int &indexcandidate){
 	for(int i = 0 ; i < triggerNames.size(); i++){
 		for (int j = 0 ; j < triggerName->size() ; j++){
 			if(triggerName->at(j) == triggerNames[i]){
@@ -942,7 +938,7 @@ void AnaEff::TrackRhadron(){
 	}*/
 }
 
-void AnaEff::ReadFromTxt(const string NameListForType){
+void AnaEff::ReadFromTxt(const string &NameListForType){
 	ifstream ifile(NameListForType.c_str()); 
 	string tmp;
 	if(ifile.is_open()){

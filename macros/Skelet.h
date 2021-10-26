@@ -157,18 +157,20 @@ public :
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
    virtual int      Preselection();
-   virtual int      Selection(int indexcandidate);
+   virtual int      Selection(const int &indexcandidate);
    virtual double   deltaR2(const float &track_eta,const float &track_phi,const float &muon_eta,const float &muon_phi);
    virtual double   deltaR(const double &delta);
-   virtual void	    AssoGenId(int indexcandidate,string Filename, int nbevent);
-   virtual void     ReadFromTxt(const string NameListForType);
-   virtual void     CountZones(double impulsion);
-   virtual void     FillTEff(int indexcandidate);
+   virtual void	    AssoGenId(const int &indexcandidate,const int &nbevent);
+   virtual void     ReadFromTxt(const string &NameListForType);
+   virtual void     CountZones(const double &impulsion);
+   virtual void     FillTEff(const int &indexcandidate);
    virtual void     TrackRhadron();
    
 private :
 
   TFile* distrib;
+
+  ofstream Dump;
 
   Int_t nbchch=0,nbchn=0,nbnn=0,nbdch=0,nbtot=0,nbn=0,nbch=0, nbtch=0, nbnx=0,nbmissmatch=0;
   Int_t nbinfpom=0,nbsuppom=0,nbinpom=0;
