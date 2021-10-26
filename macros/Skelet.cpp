@@ -687,18 +687,28 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 		for(int k=0; k< nmuons; k++){
 			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 		}
+		if(deltaRmuon.size == 0){
+			Dump << "Event nb " << nbevent << " has 0 muon, in charged-neutral scenario" << "\n" ;
+
+		}
 
 		if(deltaRmuon.size()!=0){
 			sort(deltaRmuon.begin(), deltaRmuon.end());
-
-		if(deltaRmuon[0] > 0.3 ){
-			Dump << "Event nb " << nbevent << " has a missmathing, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track " << "\n" ;
-		}
-		
 			DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
+			if(deltaRmuon[0] > 0.3){
+				Dump << "Event nb " << nbevent << " has a missmathing, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track " << "\n" ;
+			}
 		}
 
 		deltaRmuon.clear();
+
+		
+		
+		
+			
+		
+
+		
 
 		DISTRIB_DELTAR_ALL->Fill(finaldeltachn1);
 		DISTRIB_DELTAR_ALL->Fill(finaldeltachn2);
@@ -907,8 +917,6 @@ void AnaEff::TrackRhadron(){
 		
 	}
 	//cout << " Our two interesting events are labelled : " << tab[0] << " with gen : " << gen1 << " and " << tab[1] << " with gen : " << gen2 << endl;
-	//cout dans un fichier texte le dump 
-
 	for(int i=0; i< ngenpart;i++){
 		if(genflag==false){
 			for(int l=0;l<indexpdgch.size();l++){
@@ -925,17 +933,6 @@ void AnaEff::TrackRhadron(){
 		}	
 	}
 	
-
-	
-	/*for(int j=tab[0]; j<ngenpart; j++){
-		if(gen_moth_pdg[j] == gen1){
-			gen1 = gen_pdg[j];
-			cout << "Found a tracking" << endl;
-			cout << j << " gen : " << gen_pdg[j] << " , gen_moth : " << gen_moth_pdg[j] << " , status : " << gen_status[j] << " , p = pt * cosh(eta) : " << gen_pt[j] * cosh(gen_eta[j]) << endl;
-			
-		}
-		
-	}*/
 }
 
 void AnaEff::ReadFromTxt(const string &NameListForType){
