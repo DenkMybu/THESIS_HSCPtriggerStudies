@@ -404,6 +404,11 @@ void AnaEff::Loop()
 	InfosData << " p/m > 0.9 " << (nbsuppom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << endl;
 
 	//******************************************************************************
+
+
+	Dump << "There was " << nmissmuons << " CH-N events without any muons = " << (nmissmuons*1.0/nbchn)*100 << " % " << endl;
+	Dump << "There was " << nmuonmatching << " muons with smallest #Delta R (track-muon) > 0.3 : " << (nmuonmatching*1.0/nmatchingtot)*100 << endl;
+
 	//******************************************************************************
 
 
@@ -672,37 +677,32 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
 		
 		for(int k=0; k< nmuons; k++){
-			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
+			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));	
 		}
-		if(nmuons == 0){
-			Dump << nbevent << "Event has 0 muon, in a charged-neutral scenario" << "\n" ;
 
+		if(nmuons == 0){
+			//Dump << nbevent << "Event has 0 muon, in a charged-neutral scenario" << "\n" ;
+			nmissmuons+=1;
 		}
 
 		if(deltaRmuon.size()!=0){
 			sort(deltaRmuon.begin(), deltaRmuon.end());
 			DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
 			if(deltaRmuon[0] > 0.3){
-				Dump << nbevent << "Event has a missmatching, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track, and there is " << nmuons << " muons in this event" << "\n" ;
+				//Dump << nbevent << "Event has a missmatching, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track, and there is " << nmuons << " muon(s) in this event" << "\n" ;
+				nmuonmatching+=1;
+			}
+			else{
+				 nmatchingtot+=1;
 			}
 		}
 
 		deltaRmuon.clear();
 
-		
-		
-		
-			
-		
-
-		
-
 		DISTRIB_DELTAR_ALL->Fill(finaldeltachn1);
 		DISTRIB_DELTAR_ALL->Fill(finaldeltachn2);
-		
 		DISTRIB_DELTARN_CHN->Fill(finaldeltachn2);
 		DISTRIB_DELTARCH_CHN->Fill(finaldeltachn1);
-		
 		DISTRIB_DELTAR_CH_VS_N->Fill(finaldeltachn1,finaldeltachn2);
 
 		if(finaldeltachn1 < 0.3 || finaldeltachn2 < 0.3){
@@ -851,12 +851,13 @@ void AnaEff::TrackRhadron(){
 	int gen,gen1,gen2;
 	//cout << "New event with " << ngenpart << " particles " << endl;
 	for(int i=0; i < ngenpart ; i++){
+		double pc = gen_pt[i] * cosh(gen_eta[i]);
 		if(gen_status[i] == 1){
 			flag=true;
 		}
 
 		/*if(flag){
-			cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+			cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << pc << endl;
 		
 		}*/
 
