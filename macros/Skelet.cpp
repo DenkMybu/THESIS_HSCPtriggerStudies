@@ -23,7 +23,7 @@ const double uncertaintyMu = 0.0000000024;
 const double massW = 80.379;
 const double uncertaintyW = 0.012;
 
-const double TheorMass = 1800;
+const double TheorMass = 2400;
 
  
 void AnaEff::Loop()
@@ -290,7 +290,7 @@ void AnaEff::Loop()
 	//******************************************************************************************************************
 
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test", dumpfile = "dump_deltar.txt";
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass)), test = "Test", dumpfile = "dump_deltar.txt";
 	
 	string teffFilename = test + DataType + ExtRoot;
 
@@ -408,7 +408,7 @@ void AnaEff::Loop()
 
 
 	Dump << "There was " << nmissmuons << " CH-N events without any muons = " << (nmissmuons*1.0/nbchn)*100 << " % " << endl;
-	Dump << "There was " << nmuonmatching << " muons with smallest #Delta R (track-muon) > 0.3 : " << (nmuonmatching*1.0/nmatchingtot)*100 << "\n\n" << endl;
+	Dump << "There was " << nmuonmatching << " muons with smallest #Delta R (track-muon) > 0.3 : " << (nmuonmatching*1.0/(nmatchingtot+nmuonmatching))*100 << " % " << "\n\n" << endl;
 	Dump << "------------------------------------------Chain of r-hadrons ----------------------------------------------- \n\n" << endl;
 	Dump << "In total, there was " << nbchain << " events where a r-hadron chain was followed, and " << nbchainmiss << " where there was no obvious chain. We identified " << (nbchain*1.0/(nbchainmiss+nbchain))*100 << " % " << endl;
 
@@ -697,7 +697,7 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 				nmuonmatching+=1;
 			}
 			else{
-				 nmatchingtot+=1;
+				nmatchingtot+=1;
 			}
 		}
 
@@ -859,7 +859,8 @@ void AnaEff::TrackRhadron(){
 		if(gen_status[i] == 1){
 			flag=true;
 		}
-		//cout << i << " gen : " << gen_pdg[i] << " , mother  : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+		cout << i << " gen : " << gen_pdg[i] << " , mother  : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
+
 		/*if(flag){
 			cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << pc << endl;
 		
@@ -924,8 +925,6 @@ void AnaEff::TrackRhadron(){
 		if(abs(gen_moth_pdg[i]) == gen){
 			gen = abs(gen_pdg[i]);
 			yoi=true;
-			//+ compteur si je trouve pas de descendant au r-hadron
-			// Ici faire la dénomination
 			cout << i << " gen : " << gen_pdg[i] << " , gen_moth : " << gen_moth_pdg[i] << " , status : " << gen_status[i] << " , p = pt * cosh(eta) : " << gen_pt[i] * cosh(gen_eta[i]) << endl;
 		}	
 	}
@@ -933,11 +932,9 @@ void AnaEff::TrackRhadron(){
 	if(!yoi){
 		nbchainmiss+=1;
 	}
-
 	if(yoi){
 		nbchain+=1;
-	}
-	
+	}	
 }
 
 void AnaEff::ReadFromTxt(const string &NameListForType){
