@@ -579,7 +579,6 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 	TLorentzVector cand1,cand2,homemet;
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
 	int nbmothgen=0;
-	Dump << "IN ASSOGENID" << endl;
 	for(int i=0; i < ngenpart ; i++){
 		if(gen_moth_pdg[i] == 1000021){
 			nbmothgen+=1;
@@ -676,8 +675,7 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 		}
 		if(nmuons == 0){
-			cout << "0 muons ! " << endl;
-			Dump << "Event nb " << nbevent << " has 0 muon, in a charged-neutral scenario" << "\n" ;
+			Dump << nbevent << "Event has 0 muon, in a charged-neutral scenario" << "\n" ;
 
 		}
 
@@ -685,7 +683,7 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 			sort(deltaRmuon.begin(), deltaRmuon.end());
 			DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
 			if(deltaRmuon[0] > 0.3){
-				Dump << "Event nb " << nbevent << " has a missmathing, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track " << "\n" ;
+				Dump << nbevent << "Event has a missmatching, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track, and there is " << nmuons << " muons in this event" << "\n" ;
 			}
 		}
 
