@@ -161,7 +161,7 @@ public :
    virtual int      Selection(const int &indexcandidate);
    virtual double   deltaR2(const float &track_eta,const float &track_phi,const float &muon_eta,const float &muon_phi);
    virtual double   deltaR(const double &delta);
-   virtual void	    AssoGenId(const int &indexcandidate,const int &nbevent);
+   virtual void	    AssoGenId(const int &indexcandidate,const int &nbevent, const string &mode);
    virtual void     ReadFromTxt(const string &NameListForType);
    virtual void     CountZones(const double &impulsion);
    virtual void     FillTEff(const int &indexcandidate);

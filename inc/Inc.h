@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <TH2.h>
 #include <TH1.h>
@@ -38,7 +39,7 @@ public:
 
    void FillNoMap(const string &TriggerName, bool trig,const float &Obs = 0.0, const double &weight = 1,string mode = "");
 
-   void Compute(string NameOutputFile="", string NameListEff="", string ListAllTriggers="", string EffTriggers="", string ErrorEffTriggers="",string EffOrAllTriggers="");
+   void Compute(string Effscenarios,string NameOutputFile="", string NameListEff="", string ListAllTriggers="", string EffTriggers="", string ErrorEffTriggers="",string EffOrAllTriggers="");
    
    //void CreateHisto(string NameVar="random", const vector<string> &SelectedTriggerNames);
 
@@ -91,7 +92,7 @@ public:
 
    void PrintNumEff(); // Show the numerator (# candidates that passed the trigger)
 
-   void PrintDenomEff(); // Show the denominator (# candidates)
+   void PrintDenomEff(string Effscenarios); // Show the denominator (# candidates)
 	
    void ComputeError(); // computes the error on the efficiencies
 
@@ -114,6 +115,8 @@ public:
 
 // ******************************MEMBERS**************************
    TFile* OutputHisto;
+
+   ofstream EffScenario;
 
    vector <TEfficiency*> EffvsObsAll;
    vector <TEfficiency*> EffvsPom;

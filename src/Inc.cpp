@@ -217,10 +217,14 @@ void TrigEff::PrintNumEff(){
 }
 
 
-void TrigEff::PrintDenomEff(){
+void TrigEff::PrintDenomEff(string Effscenarios){
+
+	EffScenario.open (Effscenarios);
 	for ( int i = 0; i < DenomEfficiency.size(); i++ ){
-      		cout << i << NamesPos[i].first << " -> " << NumEfficiency[i] << " /" << DenomEfficiency[i] << " = " << Efficiency[i]*100.0 << " +/- " << EffErr[i]*100.0 << endl ;
+      		cout << i << NamesPos[i].first << " -> " << NumEfficiency[i] << " /" << DenomEfficiency[i] << " = " << Efficiency[i]*100.0 << " +/- " << EffErr[i]*100.0 << endl;
+		EffScenario << i << NamesPos[i].first << " -> " << NumEfficiency[i] << " /" << DenomEfficiency[i] << " = " << Efficiency[i]*100.0 << " +/- " << EffErr[i]*100.0 << endl;
 	}
+	EffScenario.close();
 }
 
 
@@ -243,8 +247,8 @@ void TrigEff::ComputeError(){
 }
 
 void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
-	OutputHisto->cd();
 	
+	OutputHisto->cd();
 	for(int j=0; j < EffvsObsAll.size() ; j++){
 		EffvsObsAll[j]->Write();
 		EffvsPom[j]->Write();
@@ -256,13 +260,13 @@ void TrigEff::FillMass(double INVMASS,int choice){
 		
 }
 
-void TrigEff::Compute(string NameOutputFile,string NameListEff, string ListAllTriggers, string EffTriggers, string ErrorEffTriggers,string EffOrAllTriggers){
+void TrigEff::Compute(string Effscenarios,string NameOutputFile,string NameListEff, string ListAllTriggers, string EffTriggers, string ErrorEffTriggers,string EffOrAllTriggers){
 	
 	ComputeEff();
 	ComputeError();
 	
 	//PrintNumEff();
-	PrintDenomEff();
+	PrintDenomEff(Effscenarios);
 	//PrintEff();
 	//ComputeCorAll();
 	//SaveIntTrigs(NameOutputFile,NameListEff,ListAllTriggers,EffTriggers, ErrorEffTriggers,EffOrAllTriggers);

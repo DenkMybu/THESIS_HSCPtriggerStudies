@@ -290,8 +290,13 @@ void AnaEff::Loop()
 	//******************************************************************************************************************
 
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass)), test = "Test", dump = "dump_deltar" ;
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass)), test = "Test", dump = "dump_deltar", scenario = "Mode";
 	
+
+	string mode = "CHCH";
+	
+	string EffScenario = TransferEff + scenario + mode + DataType + ExtRoot;
+
 	string dumpfile = dump + DataType + ExtTxt;
 	string teffFilename = test + DataType + ExtRoot;
 
@@ -309,11 +314,11 @@ void AnaEff::Loop()
 	ReadFromTxt(NameListForType);
 	trigEff_presel.LoadNoMap(triggerNames,1);
 	
-	int counter=0,counterasso=0,countertotasso=0,passedevent=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
+	int counter=0,counterasso=0,countertotasso=0,passedevent=0,passednosel=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
 
 	string trigger1="",trigger2="";
 	trigEff_presel.InitTEff(teffFilename);
-	cout << "Working on " << DataType << endl;
+	cout << "Working on " << DataType << " , study will be on scenario " << mode << endl;
 
 	posa.resize(triggerNames.size(), 0.0);
 
@@ -339,7 +344,9 @@ void AnaEff::Loop()
 		indexcandidatenosel=NoSelection();
 		if(indexcandidatenosel != 64){
 			TrackRhadron();
-			AssoGenId(indexcandidatenosel, int(jentry));
+			AssoGenId(indexcandidatenosel, int(jentry), mode);
+			passednosel+=1;
+			
 		}
 
 		indexcandidate=Preselection();
@@ -385,7 +392,7 @@ void AnaEff::Loop()
 	}
 
 	
-	trigEff_presel.Compute();
+	trigEff_presel.Compute(EffScenario);
 	trigEff_presel.WritePlots("","");
 
 	ofstream InfosData;
@@ -616,7 +623,9 @@ int AnaEff::Selection(const int &indexcandidate){
 //*******************************************************************************
 
 
-void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
+//Following the chain of decay -> not possible for now 
+
+void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const string &mode){
 	TLorentzVector cand1,cand2,homemet;
 	vector<int> candidatesrh,candidatesneutral,candidatesdoublech;
 	int nbmothgen=0;
@@ -763,9 +772,11 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		DISTRIB_ANGLE_RAD->Fill(a);
 		DISTRIB_METSEL_CHN->Fill(pfmet_pt[0]);
 
-		FillTEff(indexcandidate);
-		trigEff_presel.FillTrigEff(trig);
-		trig.clear();
+		if(mode == "CHN"){
+			FillTEff(indexcandidate);
+			trigEff_presel.FillTrigEff(trig);
+			trig.clear();
+		}
 	}
 
 
@@ -813,10 +824,12 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		DISTRIB_PT1_PT2_CHCH->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesrh[candidatesrh.size()-2]]);
 		DISTRIB_P1_P2_CHCH->Fill(p1chch,p2chch);
 		DISTRIB_METSEL_CHCH->Fill(pfmet_pt[0]);
-		//FillTEff(indexcandidate);
-		//trigEff_presel.FillTrigEff(trig);
-		//trig.clear();
-		
+
+		if(mode == "CHCH"){		
+			FillTEff(indexcandidate);
+			trigEff_presel.FillTrigEff(trig);
+			trig.clear();
+		}
 	}
 	
 	if(alo==false && alo2 == false){
