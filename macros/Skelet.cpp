@@ -290,8 +290,9 @@ void AnaEff::Loop()
 	//******************************************************************************************************************
 
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass)), test = "Test", dumpfile = "dump_deltar.txt";
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass)), test = "Test", dump = "dump_deltar" ;
 	
+	string dumpfile = dump + DataType + ExtTxt;
 	string teffFilename = test + DataType + ExtRoot;
 
 	string StudyTxt = TransferTxt + DataType + Date;
@@ -334,8 +335,16 @@ void AnaEff::Loop()
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 		counter+=1;
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
+		
+		indexcandidatenosel=NoSelection();
+		if(indexcandidatenosel != 64){
+			TrackRhadron();
+			AssoGenId(indexcandidatenosel, int(jentry));
+		}
+
 		indexcandidate=Preselection();
 		if(indexcandidate!=64){
+
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
@@ -362,12 +371,14 @@ void AnaEff::Loop()
 
 				}*/
 
-				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
-				TrackRhadron();
+				
+				//CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
+				//TrackRhadron();
 
-				AssoGenId(indexcandidatesel, int(jentry));
-				//FillTEff(indexcandidatesel);
-				trig.clear();
+				//AssoGenId(indexcandidatesel, int(jentry));
+				
+				//trig.clear();
+			
 			}
 		}
 
@@ -379,7 +390,8 @@ void AnaEff::Loop()
 
 	ofstream InfosData;
 	InfosData.open (NameOfTxt);
-
+	
+	//*******************************TERMINAL OUTPUT*********************************
 	
 	cout << "--------------------- RHADRONS ---------------- "  << endl;
 	cout << " There was " << nbtot << " events, " << nbchn << " charged + neutral and" << nbchch << " charged + charged" << endl;
@@ -388,9 +400,10 @@ void AnaEff::Loop()
 	cout << " Neutral-X : " << nbnn << " / " << nbtot << " = "  <<  nbnn*1.0/nbtot << endl;
 	cout << "Double charged R-hadrons :  " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << endl;
 
-	//*********************************TXT OUTPUT***********************************
-	//******************************************************************************
 	
+
+	//*********************************TXT OUTPUT***********************************
+
 	InfosData << "# events : " << nentries << " , # passing preselection : " << passedpresel << "# selection IAS > 0.2" << passedevent << ", should equal nbtot = " << nbtot << " ¦¦ nb missmatched : " << nbmissmatch << endl;
 	InfosData << "*******************************SCENARIOS*******************************" << "\n\n" << endl;
 	InfosData << " # Charged-Charged : " << nbchch << " / " << nbtot << " = " << nbchch*1.0/nbtot << endl;
@@ -405,7 +418,7 @@ void AnaEff::Loop()
 
 	InfosData.close();
 	//******************************************************************************
-
+	//******************************************************************************
 
 	Dump << "There was " << nmissmuons << " CH-N events without any muons = " << (nmissmuons*1.0/nbchn)*100 << " % " << endl;
 	Dump << "There was " << nmuonmatching << " muons with smallest #Delta R (track-muon) > 0.3 : " << (nmuonmatching*1.0/(nmatchingtot+nmuonmatching))*100 << " % " << "\n\n" << endl;
@@ -423,7 +436,7 @@ void AnaEff::Loop()
 	distrib->cd();
 
 	//********************************WRITING THXD**********************************
-	//******************************************************************************
+
 	DISTRIB_NB_RHADRONS->Write();
 
 	DISTRIB_IAS->Write();
@@ -456,12 +469,10 @@ void AnaEff::Loop()
 	DISTRIB_DELTARCH_CHN->Write();
 	DISTRIB_DELTAR_MU_CAND->Write();
 
-
 	DISTRIB_P1_P2_CHN->Write();
 	DISTRIB_P1_P2_CHCH->Write();
 	
 	DISTRIB_ETA_DCH->Write();
-
 
 	DISTRIB_MET_NN->Write();
 	
@@ -492,7 +503,7 @@ void AnaEff::Loop()
 
 	
 	//******************************************************************************
-	//******************************************************************************
+
 
 	distrib->Close();
 	cout << "Program terminated without any logic call out of bound" << endl;
@@ -501,8 +512,29 @@ void AnaEff::Loop()
 //*********************************PRESELECTION*********************************
 //******************************************************************************
 
+int AnaEff::NoSelection(){
+	vector<int> positionsnosel;
+	vector< pair<float, int > > Muonptnosel,HSCPptnosel,HSCPponmnosel;
+	for(int ihs=0; ihs<nhscp;ihs++){
+		positionsnosel.push_back(ihs); 
+		HSCPptnosel.push_back(make_pair(track_pt[hscp_track_idx[ihs]],ihs));
+		Muonptnosel.push_back(make_pair(muon_pt[ihs],ihs));
+	}
+
+	if(positionsnosel.size() != 0){
+		sort(Muonptnosel.begin(),Muonptnosel.end());
+		sort(HSCPptnosel.begin(),HSCPptnosel.end());
+		return HSCPptnosel[HSCPptnosel.size()-1].second;
+	}
+	else{
+		return 64;
+	}
+
+}
+
+
+
 int AnaEff::Preselection(){
-	int index=64,count2=0;
 	vector<int> positions;
 	vector< pair<float, int > > Muonpt,HSCPpt,HSCPponm;
 	
@@ -593,7 +625,6 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 			nbmothgen+=1;
 		}
 		//***************** CHARGED RHADRONS *****************
-		//****************************************************
 		for(int k = 0; k < indexpdgch.size() ; k++){
 			if(abs(gen_pdg[i]) == indexpdgch[k]){
 				if(gen_status[i] == 1){
@@ -603,10 +634,9 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 			}
 		}
 		//*****************************************************
-		//*****************************************************
+
 
 		//***************** NEUTRAL RHADRONS *****************
-		//****************************************************
 		for(int j=0; j < indexpdgn.size(); j++){
 			if(abs(gen_pdg[i]) == indexpdgn[j]){
 				if(gen_status[i] == 1){
@@ -616,7 +646,7 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 			}
 		}
 		//****************************************************
-		//****************************************************
+
 		for(int j=0; j < indexpdgch2.size(); j++){
 			if(abs(gen_pdg[i]) == indexpdgch2[j]){
 				if(gen_status[i] == 1){
@@ -649,7 +679,7 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 		}
 	}
 	//***************** NEUTRAL + NEUTRAL *****************
-	//*****************************************************
+
 
 	if(candidatesrh.size() == 0 && candidatesneutral.size() == 2){
 		DISTRIB_MET_NN->Fill(pfmet_pt[0]);
@@ -657,58 +687,44 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 		DISTRIB_PT1_PT2_NN->Fill(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_pt[candidatesneutral[candidatesneutral.size()-2]]);
 	}
 	//***************** NEUTRAL + XXXXXXX *****************
-	//*****************************************************
+
 	if( candidatesrh.size() == 0 && candidatesneutral.size() == 1 ){
 		nbnx+=1;
 	}
 
 	//***************** CHARGED + NEUTRAL *****************
-	//*****************************************************
 
 	if( candidatesrh.size() == 1 && candidatesneutral.size() == 1 ){
 		nbchn+=1;
 		//cout << "Charged + Neutral " << endl;
-
 		vector<double> deltaRmuon;
 
 		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
-
 		double p1 = pt1 * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
 		double p2 = pt2 * cosh(gen_eta[candidatesneutral[candidatesneutral.size()-1]]);
 		
 		double finaldeltachn1 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]));
-
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
 		
 		for(int k=0; k< nmuons; k++){
 			deltaRmuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));	
 		}
-
 		if(nmuons == 0){
-			//Dump << nbevent << "Event has 0 muon, in a charged-neutral scenario" << "\n" ;
 			nmissmuons+=1;
 		}
 
 		if(deltaRmuon.size()!=0){
 			sort(deltaRmuon.begin(), deltaRmuon.end());
+
 			DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
 			if(deltaRmuon[0] > 0.3){
-				//Dump << nbevent << "Event has a missmatching, smallest #DeltaR = " << deltaRmuon[0] << " between muon and track, and there is " << nmuons << " muon(s) in this event" << "\n" ;
 				nmuonmatching+=1;
 			}
 			else{
 				nmatchingtot+=1;
 			}
 		}
-
 		deltaRmuon.clear();
-
-		DISTRIB_DELTAR_ALL->Fill(finaldeltachn1);
-		DISTRIB_DELTAR_ALL->Fill(finaldeltachn2);
-		DISTRIB_DELTARN_CHN->Fill(finaldeltachn2);
-		DISTRIB_DELTARCH_CHN->Fill(finaldeltachn1);
-		DISTRIB_DELTAR_CH_VS_N->Fill(finaldeltachn1,finaldeltachn2);
-
 		if(finaldeltachn1 < 0.3 || finaldeltachn2 < 0.3){
 			alo=true;
 			if(finaldeltachn1 < finaldeltachn2 ){
@@ -723,6 +739,12 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent){
 				DISTRIB_MET_pt->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
 			}
 		}
+
+		DISTRIB_DELTAR_ALL->Fill(finaldeltachn1);
+		DISTRIB_DELTAR_ALL->Fill(finaldeltachn2);
+		DISTRIB_DELTARN_CHN->Fill(finaldeltachn2);
+		DISTRIB_DELTARCH_CHN->Fill(finaldeltachn1);
+		DISTRIB_DELTAR_CH_VS_N->Fill(finaldeltachn1,finaldeltachn2);
 		DISTRIB_P1MP2CHN->Fill((2*(p1-p2))/(p1+p2));
 		DISTRIB_PT1MPT2CHN->Fill((2*(pt1-pt2))/(pt1+pt2));
 		DISTRIB_MET_ptN_CHN->Fill(pfmet_pt[0], gen_pt[candidatesneutral[candidatesneutral.size()-1]]);
@@ -743,11 +765,11 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		FillTEff(indexcandidate);
 		trigEff_presel.FillTrigEff(trig);
+		trig.clear();
 	}
 
 
 	//***************** CHARGED + CHARGED *****************
-	//*****************************************************
 
 	if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
 		//cout << "Charged + Charged " << endl;
@@ -784,16 +806,16 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		}
 
 
-		//FillTEff(indexcandidate);
-		//trigEff_presel.FillTrigEff(trig);
 
 		DISTRIB_DEDX_POVERM_CHCH->Fill((track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass),track_ih_ampl[hscp_track_idx[indexcandidate]]);
 		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
 		DISTRIB_PT1MPT2CHCH->Fill((2*(pt1chch-pt2chch))/(pt1chch+pt2chch));
-
 		DISTRIB_PT1_PT2_CHCH->Fill(gen_pt[candidatesrh[candidatesrh.size()-1]],gen_pt[candidatesrh[candidatesrh.size()-2]]);
 		DISTRIB_P1_P2_CHCH->Fill(p1chch,p2chch);
 		DISTRIB_METSEL_CHCH->Fill(pfmet_pt[0]);
+		//FillTEff(indexcandidate);
+		//trigEff_presel.FillTrigEff(trig);
+		//trig.clear();
 		
 	}
 	
@@ -826,7 +848,6 @@ void AnaEff::FillTEff(const int &indexcandidate){
 			if(triggerName->at(j) == triggerNames[i]){
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0], 1.0 ,"MET");
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]/TheorMass), 1.0 ,"POM");
-				//cout << " Filled " << triggerNames[i] << " with p over m = " << (track_p[hscp_track_idx[indexcandidate]]) << endl;
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 				break;
 			}

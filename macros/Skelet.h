@@ -156,6 +156,7 @@ public :
    virtual void     Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
+   virtual int      NoSelection();
    virtual int      Preselection();
    virtual int      Selection(const int &indexcandidate);
    virtual double   deltaR2(const float &track_eta,const float &track_phi,const float &muon_eta,const float &muon_phi);
