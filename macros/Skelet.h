@@ -174,7 +174,7 @@ private :
   ofstream Dump;
 
   Int_t nbchch=0,nbchn=0,nbnn=0,nbdch=0,nbtot=0,nbn=0,nbch=0, nbtch=0, nbnx=0,nbmissmatch=0;
-  Int_t nbinfpom=0,nbsuppom=0,nbinpom=0;
+  Int_t nbinfpom=0,nbsuppom=0,nbinpom=0,nbdeltarnull=0;
   Int_t nmuonstot=0,nmatchingtot=0,nmissmuons=0,nmuonmatching=0,nbchainmiss=0,nbchain=0;
   Double_t p1=0,p2=0,eta1=0,eta2=0,pt1=0,pt2=0,poverm1=0,poverm2=0;
 
@@ -233,6 +233,8 @@ private :
   TH1D* DISTRIB_ANGLE_RAD;
   TH1D* DISTRIB_POVERMN_CHN;
   TH1D* DISTRIB_POVERMCH_CHN;
+  TH1D* DISTRIB_NMU_CHCH;
+  TH1D* DISTRIB_DELTAR_TRACKERMU;
   //*************************************************************************************************************************
 
 
@@ -300,11 +302,13 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 
 	DISTRIB_ETA_DCH=0;
 
-	
 	DISTRIB_MET_NN=0;
 
 	DISTRIB_DEDX_POVERM_CHCH=0;
 	DISTRIB_DEDX_POVERM_CHN=0;
+
+	DISTRIB_NMU_CHCH=0;
+	DISTRIB_DELTAR_TRACKERMU=0;
 
 	DISTRIB_TLV_MET=0;
 
@@ -318,6 +322,8 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 
 	DISTRIB_POVERMN_CHN=0;
 	DISTRIB_POVERMCH_CHN=0;
+
+	
 
 	DISTRIB_P1_P2_CHN=0;
 	DISTRIB_P1_P2_CHCH=0;
@@ -478,6 +484,14 @@ AnaEff::~AnaEff() //deconstruct
   }
   if(!DISTRIB_POVERMCH_CHN){
    	delete DISTRIB_POVERMCH_CHN;
+  }
+  if(!DISTRIB_NMU_CHCH){
+   	delete DISTRIB_NMU_CHCH;
+  }
+
+
+  if(!DISTRIB_DELTAR_TRACKERMU){
+   	delete DISTRIB_DELTAR_TRACKERMU;
   }
 
   if(!DISTRIB_ANGLE_RAD){

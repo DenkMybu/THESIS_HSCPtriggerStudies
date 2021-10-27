@@ -25,6 +25,7 @@ const double uncertaintyW = 0.012;
 
 const double TheorMass = 2400;
 
+const double EPSILON = 1.0e-15;
  
 void AnaEff::Loop()
 {
@@ -163,6 +164,15 @@ void AnaEff::Loop()
 	DISTRIB_POVERMCH_CHN->GetXaxis()->SetTitle("p/m = #beta #gamma");
 	DISTRIB_POVERMCH_CHN->GetYaxis()->SetTitle("# Charged R-hadrons");
 
+	DISTRIB_NMU_CHCH = new TH1D ("DISTRIB_NMU_CHCH", "Number of muons per event in CH-CH", 20 , 0 , 10);
+	DISTRIB_NMU_CHCH->GetXaxis()->SetTitle("# muons per event");
+	DISTRIB_NMU_CHCH->GetYaxis()->SetTitle("# events");
+
+
+	DISTRIB_DELTAR_TRACKERMU = new TH1D ("DISTRIB_DELTAR_TRACKERMU", "Delta R (muon-track) is_trackermuon in CH-CH", 100 , 0 , 2);
+	DISTRIB_DELTAR_TRACKERMU->GetXaxis()->SetTitle("#Delta R between muon and track");
+	DISTRIB_DELTAR_TRACKERMU->GetYaxis()->SetTitle("# events");
+
 	DISTRIB_MET_pt = new TH2D("DISTRIB_MET_pt", "Met vs pt overall", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_MET_pt->GetXaxis()->SetTitle("Reco MET [GeV]");
 	DISTRIB_MET_pt->GetYaxis()->SetTitle("Pt [GeV]");
@@ -275,6 +285,8 @@ void AnaEff::Loop()
 
 	DISTRIB_POVERMN_CHN->Sumw2();
 	DISTRIB_POVERMCH_CHN->Sumw2();
+	DISTRIB_NMU_CHCH->Sumw2();
+	DISTRIB_DELTAR_TRACKERMU->Sumw2();
 
 	DISTRIB_PT1_PT2->Sumw2();
 	DISTRIB_PT1_PT2_CHCH->Sumw2();
@@ -295,7 +307,7 @@ void AnaEff::Loop()
 
 	string mode = "CHCH";
 	
-	string EffScenario = TransferEff + scenario + mode + DataType + ExtRoot;
+	string EffScenario = TransferEff + scenario + mode + DataType + ExtTxt;
 
 	string dumpfile = dump + DataType + ExtTxt;
 	string teffFilename = test + DataType + ExtRoot;
@@ -334,21 +346,13 @@ void AnaEff::Loop()
 	Dump.open (dumpfile);
 	cout << "nb entrees : " << nentries << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++) { 
+		cout << EPSILON << endl;
 		Long64_t ientry = LoadTree(jentry);
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 		counter+=1;
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
-		
-		indexcandidatenosel=NoSelection();
-		if(indexcandidatenosel != 64){
-			TrackRhadron();
-			AssoGenId(indexcandidatenosel, int(jentry), mode);
-			passednosel+=1;
-			
-		}
-
 		indexcandidate=Preselection();
 		if(indexcandidate!=64){
 
@@ -379,12 +383,10 @@ void AnaEff::Loop()
 				}*/
 
 				
-				//CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
-				//TrackRhadron();
-
-				//AssoGenId(indexcandidatesel, int(jentry));
-				
-				//trig.clear();
+				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
+				TrackRhadron();
+				AssoGenId(indexcandidatesel, int(jentry), mode);
+				trig.clear();
 			
 			}
 		}
@@ -410,7 +412,7 @@ void AnaEff::Loop()
 	
 
 	//*********************************TXT OUTPUT***********************************
-
+	InfosData << "Working on " << DataType << " in " << mode << " scenario \n\n" << endl;
 	InfosData << "# events : " << nentries << " , # passing preselection : " << passedpresel << "# selection IAS > 0.2" << passedevent << ", should equal nbtot = " << nbtot << " ¦¦ nb missmatched : " << nbmissmatch << endl;
 	InfosData << "*******************************SCENARIOS*******************************" << "\n\n" << endl;
 	InfosData << " # Charged-Charged : " << nbchch << " / " << nbtot << " = " << nbchch*1.0/nbtot << endl;
@@ -491,6 +493,9 @@ void AnaEff::Loop()
 	DISTRIB_POVERMN_CHN->Write();
 	DISTRIB_POVERMCH_CHN->Write();
 
+	DISTRIB_NMU_CHCH->Write();
+	DISTRIB_DELTAR_TRACKERMU->Write();
+
 	DISTRIB_MET_pt->Write();
 	DISTRIB_MET_pt_CHCH->Write();
 	DISTRIB_MET_pt_CHN->Write();
@@ -514,10 +519,10 @@ void AnaEff::Loop()
 
 	distrib->Close();
 	cout << "Program terminated without any logic call out of bound" << endl;
-
 }
-//*********************************PRESELECTION*********************************
-//******************************************************************************
+
+
+//*********************************NO SELECTION*********************************
 
 int AnaEff::NoSelection(){
 	vector<int> positionsnosel;
@@ -539,7 +544,7 @@ int AnaEff::NoSelection(){
 
 }
 
-
+//*********************************PRESELECTION*********************************
 
 int AnaEff::Preselection(){
 	vector<int> positions;
@@ -724,8 +729,11 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const strin
 
 		if(deltaRmuon.size()!=0){
 			sort(deltaRmuon.begin(), deltaRmuon.end());
-
 			DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
+			if(deltaRmuon[0] < 1.0e-15){
+				nbdeltarnull+=1;
+
+			}
 			if(deltaRmuon[0] > 0.3){
 				nmuonmatching+=1;
 			}
@@ -740,7 +748,7 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const strin
 				DISTRIB_IHCHN->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 				DISTRIB_IASCHN->Fill(track_ias_ampl[hscp_track_idx[indexcandidate]]);
 				DISTRIB_P1_P2_CHN->Fill(p1,p2);
-				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);// PT of charged candidate
+				DISTRIB_MET_pt_CHN->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);//PT of charged candidate
 				DISTRIB_MET_pt->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-1]]);
 			}
 			else{
@@ -784,7 +792,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 	if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
 		//cout << "Charged + Charged " << endl;
-		
+		vector<double> deltaRmuonchch,deltaRtrackermuon;
 		double pt1chch = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2chch = gen_pt[candidatesrh[candidatesrh.size()-2]]; 
 
 		double p1chch = (pt1chch * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]));
@@ -799,6 +807,17 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		
 		poverm1 = ((gen_pt[candidatesrh[candidatesrh.size()-1]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]))/TheorMass);
 		poverm2 = ((gen_pt[candidatesrh[candidatesrh.size()-2]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]))/TheorMass);
+		DISTRIB_NMU_CHCH->Fill(nmuons);
+	
+		for(int k=0; k< nmuons; k++){
+			deltaRmuonchch.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
+			if(muon_isTrackerMuon[k]){
+				deltaRtrackermuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
+				DISTRIB_DELTAR_TRACKERMU->Fill(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
+			}	
+		}
+		deltaRmuonchch.clear();
+		deltaRtrackermuon.clear();
 
 		if(finaldelta1 < 0.3 || finaldelta2 < 0.3){
 			alo=true;
