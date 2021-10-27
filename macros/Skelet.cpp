@@ -27,9 +27,7 @@ const double TheorMass = 2400;
 
 const double EPSILON = 1.0e-15;
  
-void AnaEff::Loop()
-{
-	
+void AnaEff::Loop(){
 	Long64_t nentries = fChain->GetEntriesFast();
 	Long64_t nbytes = 0, nb = 0, nbi = 0;
 	Long64_t initializing = LoadTree(0);
@@ -345,8 +343,7 @@ void AnaEff::Loop()
 	}*/
 	Dump.open (dumpfile);
 	cout << "nb entrees : " << nentries << endl;
-	for (Long64_t jentry=0; jentry<nentries;jentry++) { 
-		cout << EPSILON << endl;
+	for (Long64_t jentry=0; jentry<nentries;jentry++){
 		Long64_t ientry = LoadTree(jentry);
 		if(jentry!=0 && jentry%1000==0) cout << "+1k" << " => " << jentry << " , "<<(jentry*1.0/nentries)*100 << " %" << endl;
 		if (ientry < 0) break;
@@ -730,10 +727,10 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const strin
 		if(deltaRmuon.size()!=0){
 			sort(deltaRmuon.begin(), deltaRmuon.end());
 			DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
-			if(deltaRmuon[0] < 1.0e-15){
+			if(deltaRmuon[0] < EPSILON){
 				nbdeltarnull+=1;
-
 			}
+	
 			if(deltaRmuon[0] > 0.3){
 				nmuonmatching+=1;
 			}
