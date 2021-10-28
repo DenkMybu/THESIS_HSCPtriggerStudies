@@ -57,6 +57,7 @@ public :
    vector<string>* triggerName;
    
    Bool_t       muon_isMediumMuon[32];
+   Bool_t       muon_isGlobalMuon[32];
 
    Float_t	track_pt[33]; //[ntracks] augmenter la taille pour pas de overflow, it was 33
    Float_t      track_p[33];   
@@ -125,6 +126,7 @@ public :
    TBranch        *b_track_qual;
    TBranch        *b_hscp_iso2_tk;
    TBranch        *b_muon_isTrackerMuon;
+   TBranch        *b_muon_isGlobalMuon;   //!
    TBranch        *b_muon_comb_inversebeta;
    TBranch        *b_track_p;
    TBranch        *b_track_ih_ampl;
@@ -191,72 +193,56 @@ private :
 
   //*************************************** TH1D compiled by main class *****************************************************
   TH1D* DISTRIB_NB_RHADRONS;
-
   TH1D* DISTRIB_IAS;
-
   TH1D* DISTRIB_IASCHN;
   TH1D* DISTRIB_IASCHCH;
   TH1D* DISTRIB_IASDCH;
-
   TH1D* DISTRIB_IH;
-
   TH1D* DISTRIB_IHCHN;
   TH1D* DISTRIB_IHCHCH;
   TH1D* DISTRIB_IHDCH;
-
   TH1D* DISTRIB_METNOSEL;
   TH1D* DISTRIB_METPRESEL;
   TH1D* DISTRIB_METSEL;
-
   TH1D* DISTRIB_METNOSEL_CHN;
   TH1D* DISTRIB_METPRESEL_CHN;
   TH1D* DISTRIB_METSEL_CHN;
-
   TH1D* DISTRIB_METNOSEL_CHCH;
   TH1D* DISTRIB_METPRESEL_CHCH;
   TH1D* DISTRIB_METSEL_CHCH;
-
   TH1D* DISTRIB_DELTARN_CHN;
   TH1D* DISTRIB_DELTARCH_CHN;
   TH1D* DISTRIB_DELTAR_ALL;
   TH1D* DISTRIB_DELTAR_MU_CAND;
-
   TH1D* DISTRIB_ETA_DCH;
-
   TH1D* DISTRIB_MET_NN;
-
   TH1D* DISTRIB_P1MP2CHCH;
   TH1D* DISTRIB_P1MP2CHN;
   TH1D* DISTRIB_PT1MPT2CHCH;
   TH1D* DISTRIB_PT1MPT2CHN;
-
   TH1D* DISTRIB_ANGLE_RAD;
   TH1D* DISTRIB_POVERMN_CHN;
   TH1D* DISTRIB_POVERMCH_CHN;
   TH1D* DISTRIB_NMU_CHCH;
   TH1D* DISTRIB_DELTAR_TRACKERMU;
+  TH1D* DISTRIB_DELTAR_GLOBALMU;
   //*************************************************************************************************************************
 
 
   //*************************************** TH2D compiled by main class *****************************************************
   TH2D* DISTRIB_P1_P2_CHN;
   TH2D* DISTRIB_P1_P2_CHCH;
-
   TH2D* DISTRIB_PT1_PT2;
   TH2D* DISTRIB_PT1_PT2_CHCH;
   TH2D* DISTRIB_PT1_PT2_CHN;
   TH2D* DISTRIB_PT1_PT2_NN;
-	
   TH2D* DISTRIB_TLV_MET;
-
   TH2D* DISTRIB_DEDX_POVERM_CHCH;
   TH2D* DISTRIB_DEDX_POVERM_CHN;
-
   TH2D* DISTRIB_MET_pt_CHCH;
   TH2D* DISTRIB_MET_pt_CHN;
   TH2D* DISTRIB_MET_ptN_CHN;
   TH2D* DISTRIB_MET_pt;
-  
   TH2D* DISTRIB_DELTAR_CH_VS_N;
   //*************************************************************************************************************************
 };
@@ -276,63 +262,44 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_IASCHN=0;
 	DISTRIB_IASCHCH=0;
 	DISTRIB_IASDCH=0;
-
-	
 	DISTRIB_IH=0;
 	DISTRIB_IHCHN=0;
 	DISTRIB_IHCHCH=0;
 	DISTRIB_IHDCH=0;
-
 	DISTRIB_METSEL=0;
 	DISTRIB_METPRESEL=0;
 	DISTRIB_METNOSEL=0;
-
 	DISTRIB_METSEL_CHN=0;
 	DISTRIB_METPRESEL_CHN=0;
 	DISTRIB_METNOSEL_CHN=0;
-
 	DISTRIB_METSEL_CHCH=0;
 	DISTRIB_METPRESEL_CHCH=0;
 	DISTRIB_METNOSEL_CHCH=0;
-	
 	DISTRIB_DELTARN_CHN=0;
 	DISTRIB_DELTARCH_CHN=0;
 	DISTRIB_DELTAR_ALL=0;
 	DISTRIB_DELTAR_MU_CAND=0;
-
 	DISTRIB_ETA_DCH=0;
-
 	DISTRIB_MET_NN=0;
-
 	DISTRIB_DEDX_POVERM_CHCH=0;
 	DISTRIB_DEDX_POVERM_CHN=0;
-
 	DISTRIB_NMU_CHCH=0;
 	DISTRIB_DELTAR_TRACKERMU=0;
-
+	DISTRIB_DELTAR_GLOBALMU=0;
 	DISTRIB_TLV_MET=0;
-
 	DISTRIB_P1MP2CHCH=0;
 	DISTRIB_P1MP2CHN=0;
 	DISTRIB_PT1MPT2CHCH=0;
 	DISTRIB_PT1MPT2CHN=0;
-
-
 	DISTRIB_ANGLE_RAD=0;
-
 	DISTRIB_POVERMN_CHN=0;
 	DISTRIB_POVERMCH_CHN=0;
-
-	
-
 	DISTRIB_P1_P2_CHN=0;
 	DISTRIB_P1_P2_CHCH=0;
-
 	DISTRIB_PT1_PT2=0;
 	DISTRIB_PT1_PT2_CHCH=0;
 	DISTRIB_PT1_PT2_CHN=0;
 	DISTRIB_PT1_PT2_NN=0;
-
 	DISTRIB_MET_pt=0;
 	DISTRIB_MET_pt_CHCH=0;
 	DISTRIB_MET_pt_CHN=0;
@@ -377,7 +344,6 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_NB_RHADRONS){
    	delete DISTRIB_NB_RHADRONS;
   }
-
   if(!DISTRIB_IAS){
    	delete DISTRIB_IAS;
   }
@@ -390,8 +356,6 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_IASDCH){
    	delete DISTRIB_IASDCH;
   }
-
-
   if(!DISTRIB_IH){
    	delete DISTRIB_IH;
   }
@@ -414,7 +378,6 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_METPRESEL){
    	delete DISTRIB_METPRESEL;
   }
-
   if(!DISTRIB_DEDX_POVERM_CHCH){
    	delete DISTRIB_DEDX_POVERM_CHCH;
   }
@@ -430,7 +393,6 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_METPRESEL_CHN){
    	delete DISTRIB_METPRESEL_CHN;
   }
-
   if(!DISTRIB_METSEL_CHCH){
    	delete DISTRIB_METSEL_CHCH;
   }
@@ -453,15 +415,12 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_DELTAR_MU_CAND){
    	delete DISTRIB_DELTAR_MU_CAND;
   }
-
   if(!DISTRIB_ETA_DCH){
   	delete DISTRIB_ETA_DCH;
   }
-
   if(!DISTRIB_MET_NN){
   	delete DISTRIB_MET_NN;
   }
-
   if(!DISTRIB_DELTAR_CH_VS_N){
   	delete DISTRIB_DELTAR_CH_VS_N;
   }
@@ -477,8 +436,6 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_PT1MPT2CHN){
   	delete DISTRIB_PT1MPT2CHN;
   }
-
-
   if(!DISTRIB_POVERMN_CHN){
    	delete DISTRIB_POVERMN_CHN;
   }
@@ -488,16 +445,15 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_NMU_CHCH){
    	delete DISTRIB_NMU_CHCH;
   }
-
-
   if(!DISTRIB_DELTAR_TRACKERMU){
    	delete DISTRIB_DELTAR_TRACKERMU;
   }
-
+  if(!DISTRIB_DELTAR_GLOBALMU){
+   	delete DISTRIB_DELTAR_GLOBALMU;
+  }
   if(!DISTRIB_ANGLE_RAD){
    	delete DISTRIB_ANGLE_RAD;
   }
-
   if(!DISTRIB_TLV_MET){
    	delete DISTRIB_TLV_MET;
   }
@@ -522,7 +478,6 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_MET_pt){
    	delete DISTRIB_MET_pt;
   }
-
   if(!DISTRIB_MET_pt_CHCH){
    	delete DISTRIB_MET_pt_CHCH;
   }
@@ -604,6 +559,7 @@ void AnaEff::Init(TTree *tree)
    fChain->SetBranchAddress("track_dz", track_dz, &b_track_dz);
    fChain->SetBranchAddress("hscp_iso2_tk", hscp_iso2_tk, &b_hscp_iso2_tk);
    fChain->SetBranchAddress("muon_isTrackerMuon", muon_isTrackerMuon, &b_muon_isTrackerMuon);
+   fChain->SetBranchAddress("muon_isGlobalMuon", muon_isGlobalMuon, &b_muon_isGlobalMuon);
    fChain->SetBranchAddress("muon_comb_inversebeta", muon_comb_inversebeta, &b_muon_comb_inversebeta);
    fChain->SetBranchAddress("track_p", track_p, &b_track_p);
    fChain->SetBranchAddress("track_ih_ampl", track_ih_ampl, &b_track_ih_ampl);

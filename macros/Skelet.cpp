@@ -168,8 +168,12 @@ void AnaEff::Loop(){
 
 
 	DISTRIB_DELTAR_TRACKERMU = new TH1D ("DISTRIB_DELTAR_TRACKERMU", "Delta R (muon-track) is_trackermuon in CH-CH", 100 , 0 , 2);
-	DISTRIB_DELTAR_TRACKERMU->GetXaxis()->SetTitle("#Delta R between muon and track");
+	DISTRIB_DELTAR_TRACKERMU->GetXaxis()->SetTitle("#Delta R between tracker muon and track");
 	DISTRIB_DELTAR_TRACKERMU->GetYaxis()->SetTitle("# events");
+
+	DISTRIB_DELTAR_GLOBALMU = new TH1D ("DISTRIB_DELTAR_GLOBALMU", "Delta R (muon-track) is_globalmuon in CH-CH", 100 , 0 , 2);
+	DISTRIB_DELTAR_GLOBALMU->GetXaxis()->SetTitle("#Delta R between global muon and track");
+	DISTRIB_DELTAR_GLOBALMU->GetYaxis()->SetTitle("# events");
 
 	DISTRIB_MET_pt = new TH2D("DISTRIB_MET_pt", "Met vs pt overall", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_MET_pt->GetXaxis()->SetTitle("Reco MET [GeV]");
@@ -285,6 +289,7 @@ void AnaEff::Loop(){
 	DISTRIB_POVERMCH_CHN->Sumw2();
 	DISTRIB_NMU_CHCH->Sumw2();
 	DISTRIB_DELTAR_TRACKERMU->Sumw2();
+	DISTRIB_DELTAR_GLOBALMU->Sumw2();
 
 	DISTRIB_PT1_PT2->Sumw2();
 	DISTRIB_PT1_PT2_CHCH->Sumw2();
@@ -492,6 +497,7 @@ void AnaEff::Loop(){
 
 	DISTRIB_NMU_CHCH->Write();
 	DISTRIB_DELTAR_TRACKERMU->Write();
+	DISTRIB_DELTAR_GLOBALMU->Write();
 
 	DISTRIB_MET_pt->Write();
 	DISTRIB_MET_pt_CHCH->Write();
@@ -808,11 +814,14 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	
 		for(int k=0; k< nmuons; k++){
 			deltaRmuonchch.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
-			cout << " is tracker muon ? " << muon_isTrackerMuon[k] << " , delta R : " << deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])) << endl;
+			//cout << " is tracker muon ? " << muon_isTrackerMuon[k] << " , delta R : " << deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])) << endl;
 			if(muon_isTrackerMuon[k]){
 				deltaRtrackermuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 				DISTRIB_DELTAR_TRACKERMU->Fill(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
-			}	
+			}
+			if(muon_isGlobalMuon[k]){
+				DISTRIB_DELTAR_GLOBALMU->Fill(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
+			}
 		}
 		deltaRmuonchch.clear();
 		deltaRtrackermuon.clear();
