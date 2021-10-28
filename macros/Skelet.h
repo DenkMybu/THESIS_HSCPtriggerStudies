@@ -226,6 +226,7 @@ private :
   TH1D* DISTRIB_NMU_CHCH;
   TH1D* DISTRIB_DELTAR_TRACKERMU;
   TH1D* DISTRIB_DELTAR_GLOBALMU;
+  TH1D* DISTRIB_NHSCP_ALL;
   //*************************************************************************************************************************
 
 
@@ -286,6 +287,7 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_NMU_CHCH=0;
 	DISTRIB_DELTAR_TRACKERMU=0;
 	DISTRIB_DELTAR_GLOBALMU=0;
+	DISTRIB_NHSCP_ALL=0;
 	DISTRIB_TLV_MET=0;
 	DISTRIB_P1MP2CHCH=0;
 	DISTRIB_P1MP2CHN=0;
@@ -450,6 +452,9 @@ AnaEff::~AnaEff() //deconstruct
   }
   if(!DISTRIB_DELTAR_GLOBALMU){
    	delete DISTRIB_DELTAR_GLOBALMU;
+  }
+  if(!DISTRIB_NHSCP_ALL){
+   	delete DISTRIB_NHSCP_ALL;
   }
   if(!DISTRIB_ANGLE_RAD){
    	delete DISTRIB_ANGLE_RAD;

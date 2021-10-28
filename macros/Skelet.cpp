@@ -166,6 +166,9 @@ void AnaEff::Loop(){
 	DISTRIB_NMU_CHCH->GetXaxis()->SetTitle("# muons per event");
 	DISTRIB_NMU_CHCH->GetYaxis()->SetTitle("# events");
 
+	DISTRIB_NHSCP_ALL = new TH1D ("DISTRIB_NHSCP_ALL", "Number of HSCP per event",10,0,5);
+	DISTRIB_NHSCP_ALL->GetXaxis()->SetTitle("# HSCP per event");
+	DISTRIB_NHSCP_ALL->GetYaxis()->SetTitle("# events");
 
 	DISTRIB_DELTAR_TRACKERMU = new TH1D ("DISTRIB_DELTAR_TRACKERMU", "Delta R (muon-track) is_trackermuon in CH-CH", 100 , 0 , 2);
 	DISTRIB_DELTAR_TRACKERMU->GetXaxis()->SetTitle("#Delta R between tracker muon and track");
@@ -235,69 +238,52 @@ void AnaEff::Loop(){
 	//******************************************************************************************************************
 
 	DISTRIB_NB_RHADRONS->Sumw2();
-
 	DISTRIB_IAS->Sumw2();
-
 	DISTRIB_IASCHN->Sumw2();
 	DISTRIB_IASCHCH->Sumw2();
 	DISTRIB_IASDCH->Sumw2();
-
 	DISTRIB_IH->Sumw2();
-
 	DISTRIB_IHCHN->Sumw2();
 	DISTRIB_IHCHCH->Sumw2();
 	DISTRIB_IHDCH->Sumw2();
-	
 	DISTRIB_METNOSEL->Sumw2();
 	DISTRIB_METPRESEL->Sumw2();
 	DISTRIB_METSEL->Sumw2();
-
 	DISTRIB_METNOSEL_CHN->Sumw2();
 	DISTRIB_METPRESEL_CHN->Sumw2();
 	DISTRIB_METSEL_CHN->Sumw2();
-
 	DISTRIB_METNOSEL_CHCH->Sumw2();
 	DISTRIB_METPRESEL_CHCH->Sumw2();
 	DISTRIB_METSEL_CHCH->Sumw2();
-
 	DISTRIB_DELTARN_CHN->Sumw2();
 	DISTRIB_DELTARCH_CHN->Sumw2();
 	DISTRIB_DELTAR_ALL->Sumw2();
 	DISTRIB_DELTAR_MU_CAND->Sumw2();
-
 	DISTRIB_DEDX_POVERM_CHN->Sumw2();
 	DISTRIB_DEDX_POVERM_CHCH->Sumw2();
-
 	DISTRIB_ETA_DCH->Sumw2();
-
 	DISTRIB_MET_NN->Sumw2();
-
 	DISTRIB_MET_pt->Sumw2();
-	
 	DISTRIB_MET_pt_CHN->Sumw2();
 	DISTRIB_MET_pt_CHCH->Sumw2();
 	DISTRIB_MET_ptN_CHN->Sumw2();
-
 	DISTRIB_P1MP2CHCH->Sumw2();
 	DISTRIB_P1MP2CHN->Sumw2();
 	DISTRIB_PT1MPT2CHCH->Sumw2();
 	DISTRIB_PT1MPT2CHN->Sumw2();
-
 	DISTRIB_ANGLE_RAD->Sumw2();
-
 	DISTRIB_POVERMN_CHN->Sumw2();
 	DISTRIB_POVERMCH_CHN->Sumw2();
 	DISTRIB_NMU_CHCH->Sumw2();
 	DISTRIB_DELTAR_TRACKERMU->Sumw2();
 	DISTRIB_DELTAR_GLOBALMU->Sumw2();
-
+	DISTRIB_NHSCP_ALL->Sumw2();
 	DISTRIB_PT1_PT2->Sumw2();
 	DISTRIB_PT1_PT2_CHCH->Sumw2();
 	DISTRIB_PT1_PT2_CHN->Sumw2();
 	DISTRIB_PT1_PT2_NN->Sumw2();
 	DISTRIB_P1_P2_CHN->Sumw2();
 	DISTRIB_P1_P2_CHCH->Sumw2();
-
 	DISTRIB_TLV_MET->Sumw2();
 	DISTRIB_DELTAR_CH_VS_N->Sumw2();
 	
@@ -334,9 +320,7 @@ void AnaEff::Loop(){
 	string trigger1="",trigger2="";
 	trigEff_presel.InitTEff(teffFilename);
 	cout << "Working on " << DataType << " , study will be on scenario " << mode << endl;
-
 	posa.resize(triggerNames.size(), 0.0);
-
 	/*for(int l = 0; l < triggerName->size(); l++){
 			for(int i = 0; i<triggerNames.size();i++){
 				if(triggerName->at(l) == triggerNames[i]){
@@ -344,7 +328,6 @@ void AnaEff::Loop(){
 					break;
 				}
 			}
-
 	}*/
 	Dump.open (dumpfile);
 	cout << "nb entrees : " << nentries << endl;
@@ -355,6 +338,7 @@ void AnaEff::Loop(){
         	nb = fChain->GetEntry(jentry);   nbytes += nb;	
 		counter+=1;
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
+		DISTRIB_NHSCP_ALL->Fill(nhscp);
 		indexcandidate=Preselection();
 		if(indexcandidate!=64){
 
@@ -424,8 +408,8 @@ void AnaEff::Loop(){
 	InfosData << " # Double charged - X " << nbtch << " / " << nbtot << " = " << (nbtch*1.0/nbtot)*100 << " % " << "\n\n" << endl;
 	InfosData << "*******************************# candidates in each zone in p/m*******************************" << "\n" << endl;
 	InfosData << " p/m < 0.1 : " << (nbinfpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << " % " << endl;
-	InfosData << " 0.1 < p/m < 0.9 " <<  (nbinpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << " % " << endl;
-	InfosData << " p/m > 0.9 " << (nbsuppom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << " % " << "\n\n" << endl;
+	InfosData << " 0.1 < p/m < 0.9 : " <<  (nbinpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << " % " << endl;
+	InfosData << " p/m > 0.9 : " << (nbsuppom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << " % " << "\n\n" << endl;
 	InfosData << "***********************# candidates with Delta R (muon-track)************************" << "\n\n" << endl;
 	InfosData << "----------- CHARGED - CHARGED -----------" << "\n" << endl;
 	if(nmatchingibchch == 0){
@@ -433,9 +417,7 @@ void AnaEff::Loop(){
 	}
 	else{
 		InfosData << " There was " << nbdeltarnullchch << " events where Delta R (muon-track) < e-15 ( = 0) : " << (nbdeltarnullchch*1.0/(nbdeltarnullchch+nmuonmatchingchch+nmatchingibchch))*100 << " % " << endl;
-
-		InfosData << " There was " << nmuonmatchingchch << " events where smallest Delta R > 0.3 and " << (nmuonmatchingchch*1.0/(nbdeltarnullchch+nmuonmatchingchch+nmatchingibchch))*100 << " % " << endl;
-
+		InfosData << " There was " << nmuonmatchingchch << " events where smallest Delta R > 0.3 : " << (nmuonmatchingchch*1.0/(nbdeltarnullchch+nmuonmatchingchch+nmatchingibchch))*100 << " % " << endl;
 		InfosData << " There was " << nmatchingibchch << " events where e-15 < Delta R < 0.3 : " << (nmatchingibchch*1.0/(nbdeltarnullchch+nmuonmatchingchch+nmatchingibchch))*100 << " % " << "\n" << endl;
 
 	}
@@ -447,7 +429,6 @@ void AnaEff::Loop(){
 	else{
 		InfosData << " There was " << nbdeltarnullchn << " events where Delta R (muon-track) < e-15 ( = 0) : "<< (nbdeltarnullchn*1.0/(nbdeltarnullchn+nmuonmatchingchn+nmatchingibchn))*100 << " % "<< endl;
 		InfosData << " There was " << nmuonmatchingchn << " events where smallest Delta R > 0.3 : " << (nmuonmatchingchn*1.0/(nbdeltarnullchn+nmuonmatchingchn+nmatchingibchn))*100 << " % "<< endl;
-
 		InfosData << " There was " << nmatchingibchn << " events where e-15 < Delta R < 0.3 : " << (nmatchingibchn*1.0/(nbdeltarnullchn+nmuonmatchingchn+nmatchingibchn))*100 << " % "<< endl;
 	}
 	
@@ -471,68 +452,50 @@ void AnaEff::Loop(){
 	//********************************WRITING THXD**********************************
 
 	DISTRIB_NB_RHADRONS->Write();
-
 	DISTRIB_IAS->Write();
-
 	DISTRIB_IASCHN->Write();
 	DISTRIB_IASCHCH->Write();
 	DISTRIB_IASDCH->Write();
-
 	DISTRIB_IH->Write();
-
 	DISTRIB_IHCHN->Write();
 	DISTRIB_IHCHCH->Write();
 	DISTRIB_IHDCH->Write();
-
 	DISTRIB_METNOSEL->Write();
 	DISTRIB_METPRESEL->Write();
 	DISTRIB_METSEL->Write();
-
 	DISTRIB_METNOSEL_CHN->Write();
 	DISTRIB_METPRESEL_CHN->Write();
 	DISTRIB_METSEL_CHN->Write();
-
 	DISTRIB_METNOSEL_CHCH->Write();
 	DISTRIB_METPRESEL_CHCH->Write();
 	DISTRIB_METSEL_CHCH->Write();
-
 	DISTRIB_DELTARN_CHN->Write();
 	DISTRIB_DELTAR_ALL->Write();
 	DISTRIB_DELTAR_CH_VS_N->Write();
 	DISTRIB_DELTARCH_CHN->Write();
 	DISTRIB_DELTAR_MU_CAND->Write();
-
 	DISTRIB_P1_P2_CHN->Write();
 	DISTRIB_P1_P2_CHCH->Write();
-	
 	DISTRIB_ETA_DCH->Write();
-
 	DISTRIB_MET_NN->Write();
-	
 	DISTRIB_TLV_MET->Write();
-
 	DISTRIB_DEDX_POVERM_CHN->Write();
 	DISTRIB_DEDX_POVERM_CHCH->Write();
-
 	DISTRIB_POVERMN_CHN->Write();
 	DISTRIB_POVERMCH_CHN->Write();
-
 	DISTRIB_NMU_CHCH->Write();
 	DISTRIB_DELTAR_TRACKERMU->Write();
 	DISTRIB_DELTAR_GLOBALMU->Write();
-
+	DISTRIB_NHSCP_ALL->Write();
 	DISTRIB_MET_pt->Write();
 	DISTRIB_MET_pt_CHCH->Write();
 	DISTRIB_MET_pt_CHN->Write();
 	DISTRIB_MET_ptN_CHN->Write();
-
 	DISTRIB_P1MP2CHCH->Write();
 	DISTRIB_P1MP2CHN->Write();
 	DISTRIB_PT1MPT2CHCH->Write();
 	DISTRIB_PT1MPT2CHN->Write();
-
 	DISTRIB_ANGLE_RAD->Write();
-
 	DISTRIB_PT1_PT2->Write();
 	DISTRIB_PT1_PT2_CHCH->Write();
 	DISTRIB_PT1_PT2_CHN->Write();
