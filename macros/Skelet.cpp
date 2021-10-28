@@ -414,28 +414,50 @@ void AnaEff::Loop(){
 	
 
 	//*********************************TXT OUTPUT***********************************
-	InfosData << "Working on " << DataType << " in " << mode << " scenario \n\n" << endl;
-	InfosData << "# events : " << nentries << " , # passing preselection : " << passedpresel << "# selection IAS > 0.2" << passedevent << ", should equal nbtot = " << nbtot << " ¦¦ nb missmatched : " << nbmissmatch << endl;
-	InfosData << "*******************************SCENARIOS*******************************" << "\n\n" << endl;
-	InfosData << " # Charged-Charged : " << nbchch << " / " << nbtot << " = " << nbchch*1.0/nbtot << endl;
-	InfosData << " # Charged-Neutral : " << nbchn << " / " << nbtot << " = " << nbchn*1.0/nbtot << endl;
-	InfosData << " # Neutral-Neutral : " << nbnn << " / " << nbtot << " = " << nbnn*1.0/nbtot << endl;
-	InfosData << " # Neutral-X : " << nbnx << " / " << nbtot << " = " << nbnx*1.0/nbtot << endl;
-	InfosData << " # Double charged - X " << nbtch << " / " << nbtot << " = " << nbtch*1.0/nbtot << "\n\n" << endl;
-	InfosData << " Zones in p/m : " << "\n\n" << endl;
-	InfosData << " p/m < 0.1 : " << (nbinfpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << endl;
-	InfosData << " 0.1 < p/m < 0.9 " <<  (nbinpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100  << endl;
-	InfosData << " p/m > 0.9 " << (nbsuppom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << endl;
+	InfosData << "Working on " << DataType << " in " << mode << " scenario \n" << endl;
+	InfosData << "# events : " << nentries << " , # passing preselection : " << passedpresel << " ,# passing selection IAS > 0.2 ," << passedevent << ", should equal nbtot = " << nbtot << " ¦¦ nb missmatched : " << nbmissmatch << endl;
+	InfosData << "*******************************SCENARIOS*******************************" << "\n" << endl;
+	InfosData << " # Charged-Charged : " << nbchch << " / " << nbtot << " = " << (nbchch*1.0/nbtot)*100 << " % " << endl;
+	InfosData << " # Charged-Neutral : " << nbchn << " / " << nbtot << " = " << (nbchn*1.0/nbtot)*100 << " % " << endl;
+	InfosData << " # Neutral-Neutral : " << nbnn << " / " << nbtot << " = " << (nbnn*1.0/nbtot)*100 << " % " << endl;
+	InfosData << " # Neutral-X : " << nbnx << " / " << nbtot << " = " << (nbnx*1.0/nbtot)*100 << " % " << endl;
+	InfosData << " # Double charged - X " << nbtch << " / " << nbtot << " = " << (nbtch*1.0/nbtot)*100 << " % " << "\n\n" << endl;
+	InfosData << "*******************************# candidates in each zone in p/m*******************************" << "\n" << endl;
+	InfosData << " p/m < 0.1 : " << (nbinfpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << " % " << endl;
+	InfosData << " 0.1 < p/m < 0.9 " <<  (nbinpom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << " % " << endl;
+	InfosData << " p/m > 0.9 " << (nbsuppom*1.0/(nbinfpom+nbinpom+nbsuppom)*1.0)*100 << " % " << "\n\n" << endl;
+	InfosData << "***********************# candidates with Delta R (muon-track)************************" << "\n\n" << endl;
+	InfosData << "----------- CHARGED - CHARGED -----------" << "\n" << endl;
+	if(nmatchingibchch == 0){
+		InfosData << " Scenario charged-charged not computed \n" << endl;
+	}
+	else{
+		InfosData << " There was " << nbdeltarnullchch << " events where Delta R (muon-track) < e-15 ( = 0) : " << (nbdeltarnullchch*1.0/(nbdeltarnullchch+nmuonmatchingchch+nmatchingibchch))*100 << " % " << endl;
 
+		InfosData << " There was " << nmuonmatchingchch << " events where smallest Delta R > 0.3 and " << (nmuonmatchingchch*1.0/(nbdeltarnullchch+nmuonmatchingchch+nmatchingibchch))*100 << " % " << endl;
+
+		InfosData << " There was " << nmatchingibchch << " events where e-15 < Delta R < 0.3 : " << (nmatchingibchch*1.0/(nbdeltarnullchch+nmuonmatchingchch+nmatchingibchch))*100 << " % " << "\n" << endl;
+
+	}
+	InfosData << "----------- CHARGED - NEUTRAL -----------" << "\n" << endl;
+
+	if(nmatchingibchn == 0){
+		InfosData << " Scenario charged-neutral not computed \n" << endl;
+	}
+	else{
+		InfosData << " There was " << nbdeltarnullchn << " events where Delta R (muon-track) < e-15 ( = 0) : "<< (nbdeltarnullchn*1.0/(nbdeltarnullchn+nmuonmatchingchn+nmatchingibchn))*100 << " % "<< endl;
+		InfosData << " There was " << nmuonmatchingchn << " events where smallest Delta R > 0.3 : " << (nmuonmatchingchn*1.0/(nbdeltarnullchn+nmuonmatchingchn+nmatchingibchn))*100 << " % "<< endl;
+
+		InfosData << " There was " << nmatchingibchn << " events where e-15 < Delta R < 0.3 : " << (nmatchingibchn*1.0/(nbdeltarnullchn+nmuonmatchingchn+nmatchingibchn))*100 << " % "<< endl;
+	}
+	
 	InfosData.close();
 	//******************************************************************************
 	//******************************************************************************
 
 	Dump << "There was " << nmissmuons << " CH-N events without any muons = " << (nmissmuons*1.0/nbchn)*100 << " % " << endl;
-	Dump << "There was " << nmuonmatching << " muons with smallest #Delta R (track-muon) > 0.3 : " << (nmuonmatching*1.0/(nmatchingtot+nmuonmatching))*100 << " % " << "\n\n" << endl;
 	Dump << "------------------------------------------Chain of r-hadrons ----------------------------------------------- \n\n" << endl;
 	Dump << "In total, there was " << nbchain << " events where a r-hadron chain was followed, and " << nbchainmiss << " where there was no obvious chain. We identified " << (nbchain*1.0/(nbchainmiss+nbchain))*100 << " % " << endl;
-
 	Dump.close();
 	//******************************************************************************
 
@@ -734,16 +756,17 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const strin
 			sort(deltaRmuon.begin(), deltaRmuon.end());
 			DISTRIB_DELTAR_MU_CAND->Fill(deltaRmuon[0]);
 			if(deltaRmuon[0] < EPSILON){
-				nbdeltarnull+=1;
+				nbdeltarnullchn+=1;
 			}
 	
 			if(deltaRmuon[0] > 0.3){
-				nmuonmatching+=1;
+				nmuonmatchingchn+=1;
 			}
-			else{
-				nmatchingtot+=1;
+			if(deltaRmuon[0]>EPSILON && deltaRmuon[0] < 0.3 ){
+				nmatchingibchn+=1;
 			}
 		}
+
 		deltaRmuon.clear();
 		if(finaldeltachn1 < 0.3 || finaldeltachn2 < 0.3){
 			alo=true;
@@ -812,9 +835,10 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		poverm2 = ((gen_pt[candidatesrh[candidatesrh.size()-2]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]))/TheorMass);
 		DISTRIB_NMU_CHCH->Fill(nmuons);
 	
+
+	
 		for(int k=0; k< nmuons; k++){
 			deltaRmuonchch.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
-			//cout << " is tracker muon ? " << muon_isTrackerMuon[k] << " , delta R : " << deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])) << endl;
 			if(muon_isTrackerMuon[k]){
 				deltaRtrackermuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 				DISTRIB_DELTAR_TRACKERMU->Fill(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
@@ -823,6 +847,20 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 				DISTRIB_DELTAR_GLOBALMU->Fill(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 			}
 		}
+
+		if(deltaRmuonchch.size()!=0){
+			sort(deltaRmuonchch.begin(), deltaRmuonchch.end());
+			if(deltaRmuonchch[0] < EPSILON){
+				nbdeltarnullchch+=1;
+			}
+			if(deltaRmuonchch[0] > 0.3){
+				nmuonmatchingchch+=1;
+			}
+			if(deltaRmuonchch[0]>EPSILON && deltaRmuonchch[0] < 0.3 ){
+				nmatchingibchch+=1;
+			}
+		}
+
 		deltaRmuonchch.clear();
 		deltaRtrackermuon.clear();
 
