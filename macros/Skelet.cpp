@@ -808,6 +808,7 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	
 		for(int k=0; k< nmuons; k++){
 			deltaRmuonchch.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
+			cout << " is tracker muon ? " << muon_isTrackerMuon[k] << " , delta R : " << deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])) << endl;
 			if(muon_isTrackerMuon[k]){
 				deltaRtrackermuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
 				DISTRIB_DELTAR_TRACKERMU->Fill(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
