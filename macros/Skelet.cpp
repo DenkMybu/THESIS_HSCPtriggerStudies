@@ -782,6 +782,8 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 	if(candidatesrh.size() == 2 && candidatesneutral.size() == 0){
 		//cout << "Charged + Charged " << endl;
 		vector<double> deltaRmuonchch,deltaRtrackermuon;
+
+		vector< pair<double,int> > deltaRmuonchchtest;
 		double pt1chch = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2chch = gen_pt[candidatesrh[candidatesrh.size()-2]]; 
 
 		double p1chch = (pt1chch * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]));
@@ -798,19 +800,24 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		poverm2 = ((gen_pt[candidatesrh[candidatesrh.size()-2]] * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]))/TheorMass);
 		DISTRIB_NMU_CHCH->Fill(nmuons);
 	
-
-	
-		for(int k=0; k< nmuons; k++){
-			deltaRmuonchch.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
-			if(muon_isTrackerMuon[k]){
-				deltaRtrackermuon.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
-				DISTRIB_DELTAR_TRACKERMU->Fill(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
-			}
-			if(muon_isGlobalMuon[k]){
-				DISTRIB_DELTAR_GLOBALMU->Fill(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[k], muon_phi[k])));
-			}
+		
+		for(int i=0; i< nmuons; i++){
+			deltaRmuonchch.push_back(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[i], muon_phi[i])));
+			deltaRmuonchchtest.push_back(make_pair(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]],muon_eta[i], muon_phi[i])),i));
+		}
+		if(deltaRmuonchchtest.size() != 0){
+			sort(deltaRmuonchchtest.begin(), deltaRmuonchchtest.end());
 		}
 
+		double deltaRmin = deltaRmuonchchtest[0].first;
+
+		if(muon_isTrackerMuon[deltaRmuonchchtest[0].second]){
+			DISTRIB_DELTAR_TRACKERMU->Fill(deltaRmin);
+		}
+		if(muon_isGlobalMuon[deltaRmuonchchtest[0].second]){
+			DISTRIB_DELTAR_GLOBALMU->Fill(deltaRmuonchchtest[0].first);
+		}
+	
 		if(deltaRmuonchch.size()!=0){
 			sort(deltaRmuonchch.begin(), deltaRmuonchch.end());
 			if(deltaRmuonchch[0] < EPSILON){
