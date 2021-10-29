@@ -571,6 +571,9 @@ int AnaEff::Preselection(){
 		if( track_qual[hscp_track_idx[ihs]] < 2 ){//?
 			yon=false;
 		}
+
+		//deltaR requirement between track and hscp
+		
 		/*if(track_ias_ampl[hscp_track_idx[ihs]] < 0.8){ 
 			yon = false;
 		}*/
@@ -807,17 +810,17 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 		}
 		if(deltaRmuonchchtest.size() != 0){
 			sort(deltaRmuonchchtest.begin(), deltaRmuonchchtest.end());
+			double deltaRmin = deltaRmuonchchtest[0].first;
+
+			if(muon_isTrackerMuon[deltaRmuonchchtest[0].second]){
+				DISTRIB_DELTAR_TRACKERMU->Fill(deltaRmin);
+			}
+			if(muon_isGlobalMuon[deltaRmuonchchtest[0].second]){
+				DISTRIB_DELTAR_GLOBALMU->Fill(deltaRmuonchchtest[0].first);
+			}
 		}
 
-		double deltaRmin = deltaRmuonchchtest[0].first;
-
-		if(muon_isTrackerMuon[deltaRmuonchchtest[0].second]){
-			DISTRIB_DELTAR_TRACKERMU->Fill(deltaRmin);
-		}
-		if(muon_isGlobalMuon[deltaRmuonchchtest[0].second]){
-			DISTRIB_DELTAR_GLOBALMU->Fill(deltaRmuonchchtest[0].first);
-		}
-	
+		deltaRmuonchchtest.clear();
 		if(deltaRmuonchch.size()!=0){
 			sort(deltaRmuonchch.begin(), deltaRmuonchch.end());
 			if(deltaRmuonchch[0] < EPSILON){
@@ -849,8 +852,6 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 				DISTRIB_MET_pt->Fill(pfmet_pt[0], gen_pt[candidatesrh[candidatesrh.size()-2]]);
 			}
 		}
-
-
 
 		DISTRIB_DEDX_POVERM_CHCH->Fill((track_p[hscp_track_idx[indexcandidate]]*1.0/TheorMass),track_ih_ampl[hscp_track_idx[indexcandidate]]);
 		DISTRIB_P1MP2CHCH->Fill((2*(p1chch-p2chch))/(p1chch+p2chch));
