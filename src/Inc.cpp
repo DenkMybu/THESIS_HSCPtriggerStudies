@@ -14,7 +14,7 @@
 #include <iostream>
 #include <TPad.h>
 #include <TCanvas.h>
-#include <TROOT.h> 
+#include <TROOT.h>
 #include <TTree.h>
 #include <TFile.h>
 #include <TEntryList.h>
