@@ -162,6 +162,10 @@ void AnaEff::Loop(){
 	DISTRIB_POVERMCH_CHN->GetXaxis()->SetTitle("p/m = #beta #gamma");
 	DISTRIB_POVERMCH_CHN->GetYaxis()->SetTitle("# Charged R-hadrons");
 
+	DISTRIB_POVERM_ALL = new TH1D ("DISTRIB_POVERM_ALL", "P/m of all candidates", 600 , 0 , 3);
+	DISTRIB_POVERM_ALL->GetXaxis()->SetTitle("p/m = #beta #gamma");
+	DISTRIB_POVERM_ALL->GetYaxis()->SetTitle("# HSCP");
+
 	DISTRIB_NMU_CHCH = new TH1D ("DISTRIB_NMU_CHCH", "Number of muons per event in CH-CH", 20 , 0 , 10);
 	DISTRIB_NMU_CHCH->GetXaxis()->SetTitle("# muons per event");
 	DISTRIB_NMU_CHCH->GetYaxis()->SetTitle("# events");
@@ -274,6 +278,7 @@ void AnaEff::Loop(){
 	DISTRIB_ANGLE_RAD->Sumw2();
 	DISTRIB_POVERMN_CHN->Sumw2();
 	DISTRIB_POVERMCH_CHN->Sumw2();
+	DISTRIB_POVERM_ALL->Sumw2();
 	DISTRIB_NMU_CHCH->Sumw2();
 	DISTRIB_DELTAR_TRACKERMU->Sumw2();
 	DISTRIB_DELTAR_GLOBALMU->Sumw2();
@@ -346,6 +351,7 @@ void AnaEff::Loop(){
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
 			if(indexcandidatesel != 64){
+				DISTRIB_POVERM_ALL->Fill(track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass);
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
@@ -483,6 +489,7 @@ void AnaEff::Loop(){
 	DISTRIB_DEDX_POVERM_CHCH->Write();
 	DISTRIB_POVERMN_CHN->Write();
 	DISTRIB_POVERMCH_CHN->Write();
+	DISTRIB_POVERM_ALL->Write();
 	DISTRIB_NMU_CHCH->Write();
 	DISTRIB_DELTAR_TRACKERMU->Write();
 	DISTRIB_DELTAR_GLOBALMU->Write();
