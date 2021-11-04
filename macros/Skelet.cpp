@@ -166,6 +166,10 @@ void AnaEff::Loop(){
 	DISTRIB_POVERM_ALL->GetXaxis()->SetTitle("p/m = #beta #gamma");
 	DISTRIB_POVERM_ALL->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_POVERM_ALL_STRAIGHT = new TH1D ("DISTRIB_POVERM_ALL_STRAIGHT", "P/m of all candidates in -0.1 < eta < 0.1", 600 , 0 , 3);
+	DISTRIB_POVERM_ALL_STRAIGHT->GetXaxis()->SetTitle("p/m = #beta #gamma");
+	DISTRIB_POVERM_ALL_STRAIGHT->GetYaxis()->SetTitle("# HSCP");
+
 	DISTRIB_NMU_CHCH = new TH1D ("DISTRIB_NMU_CHCH", "Number of muons per event in CH-CH", 20 , 0 , 10);
 	DISTRIB_NMU_CHCH->GetXaxis()->SetTitle("# muons per event");
 	DISTRIB_NMU_CHCH->GetYaxis()->SetTitle("# events");
@@ -279,6 +283,7 @@ void AnaEff::Loop(){
 	DISTRIB_POVERMN_CHN->Sumw2();
 	DISTRIB_POVERMCH_CHN->Sumw2();
 	DISTRIB_POVERM_ALL->Sumw2();
+	DISTRIB_POVERM_ALL_STRAIGHT->Sumw2();
 	DISTRIB_NMU_CHCH->Sumw2();
 	DISTRIB_DELTAR_TRACKERMU->Sumw2();
 	DISTRIB_DELTAR_GLOBALMU->Sumw2();
@@ -352,6 +357,9 @@ void AnaEff::Loop(){
 			indexcandidatesel = Selection(indexcandidate);
 			if(indexcandidatesel != 64){
 				DISTRIB_POVERM_ALL->Fill(track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass);
+				if(track_eta[hscp_track_idx[indexcandidatesel]] <= 0.1 && track_eta[hscp_track_idx[indexcandidatesel]] >= -0.1){
+					DISTRIB_POVERM_ALL_STRAIGHT->Fill(track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass);
+				}
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
@@ -490,6 +498,7 @@ void AnaEff::Loop(){
 	DISTRIB_POVERMN_CHN->Write();
 	DISTRIB_POVERMCH_CHN->Write();
 	DISTRIB_POVERM_ALL->Write();
+	DISTRIB_POVERM_ALL_STRAIGHT->Write();
 	DISTRIB_NMU_CHCH->Write();
 	DISTRIB_DELTAR_TRACKERMU->Write();
 	DISTRIB_DELTAR_GLOBALMU->Write();
