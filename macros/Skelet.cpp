@@ -58,6 +58,10 @@ void AnaEff::Loop(){
 	DISTRIB_IASDCH->GetXaxis()->SetTitle("Ias");
 	DISTRIB_IASDCH->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_IH = new TH1D ("DISTRIB_IH", " IH ", 200, 0 , 20);
+	DISTRIB_IH->GetXaxis()->SetTitle("Ih");
+	DISTRIB_IH->GetYaxis()->SetTitle("# HSCP");
+	
 	DISTRIB_IH_NOPRESEL = new TH1D ("DISTRIB_IH_NOPRESEL", " IH_nopresel ", 200, 0 , 20);
 	DISTRIB_IH_NOPRESEL->GetXaxis()->SetTitle("Ih");
 	DISTRIB_IH_NOPRESEL->GetYaxis()->SetTitle("# HSCP");
@@ -263,9 +267,7 @@ void AnaEff::Loop(){
 	DISTRIB_IASCHN->Sumw2();
 	DISTRIB_IASCHCH->Sumw2();
 	DISTRIB_IASDCH->Sumw2();
-	cout << "before DISTRIB_IH" << endl;
 	DISTRIB_IH->Sumw2();
-	cout << "problem" << endl;
 	DISTRIB_IHCHN->Sumw2();
 	DISTRIB_IHCHCH->Sumw2();
 	DISTRIB_IHDCH->Sumw2();
@@ -318,7 +320,6 @@ void AnaEff::Loop(){
 	
 	//******************************************************************************************************************
 	//******************************************************************************************************************
-	cout << "After sumw2" << endl;
 
 	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test", dump = "dump_deltar", scenario = "Mode";
 
