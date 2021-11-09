@@ -370,7 +370,6 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_IH){
    	delete DISTRIB_IH;
   }
-
   if(!DISTRIB_IH_NOPRESEL){
    	delete DISTRIB_IH_NOPRESEL;
   }
@@ -383,7 +382,6 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_P_PRESEL){
    	delete DISTRIB_P_PRESEL;
   }
-
   if(!DISTRIB_IHCHN){
    	delete DISTRIB_IHCHN;
   }
