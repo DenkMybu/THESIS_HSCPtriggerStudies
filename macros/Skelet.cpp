@@ -23,7 +23,7 @@ const double uncertaintyMu = 0.0000000024;
 const double massW = 80.379;
 const double uncertaintyW = 0.012;
 
-const double TheorMass = 2400;
+const double TheorMass = 2000;
 
 const double EPSILON = 1.0e-15;
  
@@ -58,9 +58,21 @@ void AnaEff::Loop(){
 	DISTRIB_IASDCH->GetXaxis()->SetTitle("Ias");
 	DISTRIB_IASDCH->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_IH = new TH1D ("DISTRIB_IH", " IH ", 100, 0 , 15);
-	DISTRIB_IH->GetXaxis()->SetTitle("Ih");
-	DISTRIB_IH->GetYaxis()->SetTitle("# HSCP");
+	DISTRIB_IH_NOPRESEL = new TH1D ("DISTRIB_IH_NOPRESEL", " IH ", 200, 0 , 20);
+	DISTRIB_IH_NOPRESEL->GetXaxis()->SetTitle("Ih");
+	DISTRIB_IH_NOPRESEL->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_IH_PRESEL = new TH1D ("DISTRIB_IH_PRESEL", " IH ", 200, 0 ,20);
+	DISTRIB_IH_PRESEL->GetXaxis()->SetTitle("Ih");
+	DISTRIB_IH_PRESEL->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_P_NOPRESEL = new TH1D ("DISTRIB_P_NOPRESEL", " P ", 400, 0 , 8000);
+	DISTRIB_P_NOPRESEL->GetXaxis()->SetTitle("p [GeV]");
+	DISTRIB_P_NOPRESEL->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_P_PRESEL = new TH1D ("DISTRIB_P_PRESEL", " P ", 400, 0 , 8000);
+	DISTRIB_P_PRESEL->GetXaxis()->SetTitle("p [GeV]");
+	DISTRIB_P_PRESEL->GetYaxis()->SetTitle("# HSCP");
 
 	DISTRIB_IHCHN = new TH1D ("DISTRIB_IHCHN", " IH CHN ", 100, 0 , 15);
 	DISTRIB_IHCHN->GetXaxis()->SetTitle("Ih");
@@ -251,6 +263,10 @@ void AnaEff::Loop(){
 	DISTRIB_IASCHCH->Sumw2();
 	DISTRIB_IASDCH->Sumw2();
 	DISTRIB_IH->Sumw2();
+	DISTRIB_P_NOPRESEL->Sumw2();
+	DISTRIB_P_PRESEL->Sumw2();
+	DISTRIB_IH_NOPRESEL->Sumw2();
+	DISTRIB_IH_PRESEL->Sumw2();
 	DISTRIB_IHCHN->Sumw2();
 	DISTRIB_IHCHCH->Sumw2();
 	DISTRIB_IHDCH->Sumw2();
@@ -301,7 +317,7 @@ void AnaEff::Loop(){
 	//******************************************************************************************************************
 
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass)), test = "Test", dump = "dump_deltar", scenario = "Mode";
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test", dump = "dump_deltar", scenario = "Mode";
 	
 
 	string mode = "CHCH";
@@ -350,8 +366,14 @@ void AnaEff::Loop(){
 		DISTRIB_METNOSEL->Fill(pfmet_pt[0]);
 		DISTRIB_NHSCP_ALL->Fill(nhscp);
 		indexcandidate=Preselection();
+		for(int ihs=0; ihs<nhscp;ihs++){
+			DISTRIB_P_NOPRESEL->Fill(track_p[hscp_track_idx[ihs]]);
+			DISTRIB_IH_NOPRESEL->Fill(track_ih_ampl[hscp_track_idx[ihs]]);
+		}
+		
 		if(indexcandidate!=64){
-
+			DISTRIB_P_PRESEL->Fill(track_p[hscp_track_idx[indexcandidate]]);
+			DISTRIB_IH_PRESEL->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
@@ -382,7 +404,6 @@ void AnaEff::Loop(){
 
 				}*/
 
-				
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 				TrackRhadron();
 				AssoGenId(indexcandidatesel, int(jentry), mode);
@@ -471,6 +492,10 @@ void AnaEff::Loop(){
 	DISTRIB_IASCHCH->Write();
 	DISTRIB_IASDCH->Write();
 	DISTRIB_IH->Write();
+	DISTRIB_P_NOPRESEL->Write();
+	DISTRIB_P_PRESEL->Write();
+	DISTRIB_IH_NOPRESEL->Write();
+	DISTRIB_IH_PRESEL->Write();
 	DISTRIB_IHCHN->Write();
 	DISTRIB_IHCHCH->Write();
 	DISTRIB_IHDCH->Write();
