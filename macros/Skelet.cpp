@@ -58,19 +58,19 @@ void AnaEff::Loop(){
 	DISTRIB_IASDCH->GetXaxis()->SetTitle("Ias");
 	DISTRIB_IASDCH->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_IH_NOPRESEL = new TH1D ("DISTRIB_IH_NOPRESEL", " IH ", 200, 0 , 20);
+	DISTRIB_IH_NOPRESEL = new TH1D ("DISTRIB_IH_NOPRESEL", " IH_nopresel ", 200, 0 , 20);
 	DISTRIB_IH_NOPRESEL->GetXaxis()->SetTitle("Ih");
 	DISTRIB_IH_NOPRESEL->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_IH_PRESEL = new TH1D ("DISTRIB_IH_PRESEL", " IH ", 200, 0 ,20);
+	DISTRIB_IH_PRESEL = new TH1D ("DISTRIB_IH_PRESEL", " IH_presel ", 200, 0 ,20);
 	DISTRIB_IH_PRESEL->GetXaxis()->SetTitle("Ih");
 	DISTRIB_IH_PRESEL->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_P_NOPRESEL = new TH1D ("DISTRIB_P_NOPRESEL", " P ", 400, 0 , 8000);
+	DISTRIB_P_NOPRESEL = new TH1D ("DISTRIB_P_NOPRESEL", " P_nopresel", 400, 0 , 8000);
 	DISTRIB_P_NOPRESEL->GetXaxis()->SetTitle("p [GeV]");
 	DISTRIB_P_NOPRESEL->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_P_PRESEL = new TH1D ("DISTRIB_P_PRESEL", " P ", 400, 0 , 8000);
+	DISTRIB_P_PRESEL = new TH1D ("DISTRIB_P_PRESEL", " P_presel ", 400, 0 , 8000);
 	DISTRIB_P_PRESEL->GetXaxis()->SetTitle("p [GeV]");
 	DISTRIB_P_PRESEL->GetYaxis()->SetTitle("# HSCP");
 
