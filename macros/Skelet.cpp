@@ -263,10 +263,10 @@ void AnaEff::Loop(){
 	DISTRIB_IASCHN->Sumw2();
 	DISTRIB_IASCHCH->Sumw2();
 	DISTRIB_IASDCH->Sumw2();
-	//
+	cout << "before DISTRIB_IH" << endl;
 	DISTRIB_IH->Sumw2();
-	DISTRIB_IHCHN->Sumw2();
 	cout << "problem" << endl;
+	DISTRIB_IHCHN->Sumw2();
 	DISTRIB_IHCHCH->Sumw2();
 	DISTRIB_IHDCH->Sumw2();
 	DISTRIB_METNOSEL->Sumw2();
@@ -280,7 +280,6 @@ void AnaEff::Loop(){
 	DISTRIB_METSEL_CHCH->Sumw2();
 	DISTRIB_DELTARN_CHN->Sumw2();
 	DISTRIB_DELTARCH_CHN->Sumw2();
-	cout << "problem" << endl;
 	DISTRIB_DELTAR_ALL->Sumw2();
 	DISTRIB_DELTAR_MU_CAND->Sumw2();
 	DISTRIB_DEDX_POVERM_CHN->Sumw2();
@@ -312,10 +311,10 @@ void AnaEff::Loop(){
 	DISTRIB_P1_P2_CHCH->Sumw2();
 	DISTRIB_TLV_MET->Sumw2();
 	DISTRIB_DELTAR_CH_VS_N->Sumw2();
-	/*DISTRIB_P_NOPRESEL->Sumw2();
+	DISTRIB_P_NOPRESEL->Sumw2();
 	DISTRIB_P_PRESEL->Sumw2();
 	DISTRIB_IH_NOPRESEL->Sumw2();
-	DISTRIB_IH_PRESEL->Sumw2();*/
+	DISTRIB_IH_PRESEL->Sumw2();
 	
 	//******************************************************************************************************************
 	//******************************************************************************************************************
