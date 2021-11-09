@@ -256,7 +256,7 @@ void AnaEff::Loop(){
 	DISTRIB_DELTAR_CH_VS_N->GetYaxis()->SetTitle("#Delta R of neutral particle vs track");
 	//*********************************************SUMW2****************************************************************
 	//******************************************************************************************************************
-
+	cout << "before sumw2" << endl;
 	DISTRIB_NB_RHADRONS->Sumw2();
 	DISTRIB_IAS->Sumw2();
 	DISTRIB_IASCHN->Sumw2();
