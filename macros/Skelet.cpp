@@ -277,6 +277,7 @@ void AnaEff::Loop(){
 	DISTRIB_METSEL_CHCH->Sumw2();
 	DISTRIB_DELTARN_CHN->Sumw2();
 	DISTRIB_DELTARCH_CHN->Sumw2();
+	cout << "problem" << endl;
 	DISTRIB_DELTAR_ALL->Sumw2();
 	DISTRIB_DELTAR_MU_CAND->Sumw2();
 	DISTRIB_DEDX_POVERM_CHN->Sumw2();
