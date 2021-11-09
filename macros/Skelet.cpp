@@ -263,11 +263,12 @@ void AnaEff::Loop(){
 	DISTRIB_IASCHN->Sumw2();
 	DISTRIB_IASCHCH->Sumw2();
 	DISTRIB_IASDCH->Sumw2();
-	cout << "problem" << endl;
+	//
 	DISTRIB_IH->Sumw2();
 	DISTRIB_IHCHN->Sumw2();
 	DISTRIB_IHCHCH->Sumw2();
 	DISTRIB_IHDCH->Sumw2();
+	cout << "problem" << endl;
 	DISTRIB_METNOSEL->Sumw2();
 	DISTRIB_METPRESEL->Sumw2();
 	DISTRIB_METSEL->Sumw2();
