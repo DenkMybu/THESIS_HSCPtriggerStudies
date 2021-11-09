@@ -258,6 +258,7 @@ void AnaEff::Loop(){
 	//******************************************************************************************************************
 	cout << "problem" << endl;
 	DISTRIB_NB_RHADRONS->Sumw2();
+	cout << "problem" << endl;
 	DISTRIB_IAS->Sumw2();
 	DISTRIB_IASCHN->Sumw2();
 	DISTRIB_IASCHCH->Sumw2();
