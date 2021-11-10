@@ -390,25 +390,31 @@ void AnaEff::Loop(){
 			DISTRIB_P_NOPRESEL->Fill(track_p[hscp_track_idx[ihs]]);
 			DISTRIB_IH_NOPRESEL->Fill(track_ih_ampl[hscp_track_idx[ihs]]);
 		}
-		for(int i =0; i < triggerName->size(); i++){
-			if(triggerName->at(i) == "HLT_PFMET120_PFMHT120_IDTight_v16"){
-				if(passTrigger[i] == 1){
-					DISTRIB_METNOSEL_TRIGGER->Fill(pfmet_pt[0]);
-				}
+
+		
+		auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
+		auto index = distance(triggerName->begin(), it);
+		if(it != triggerName->end()){
+			if(passTrigger[it] == 1){
+				DISTRIB_METNOSEL_TRIGGER->Fill(pfmet_pt[0]);
 			}
 		}
+		
+		
 
 		if(indexcandidate!=64){
 			DISTRIB_P_PRESEL->Fill(track_p[hscp_track_idx[indexcandidate]]);
 			DISTRIB_IH_PRESEL->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
-			for(int i =0; i < triggerName->size(); i++){
-				if(triggerName->at(i) == "HLT_PFMET120_PFMHT120_IDTight_v16"){
-					if(passTrigger[i] == 1){
-						DISTRIB_METPRESEL_TRIGGER->Fill(pfmet_pt[0]);
-					}
+
+			auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
+			auto index = distance(triggerName->begin(), it);
+			if(it != triggerName->end()){
+				if(passTrigger[it] == 1){
+					DISTRIB_METPRESEL_TRIGGER->Fill(pfmet_pt[0]);
 				}
 			}
+
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
 			if(indexcandidatesel != 64){
@@ -417,13 +423,14 @@ void AnaEff::Loop(){
 					DISTRIB_POVERM_ALL_STRAIGHT->Fill(track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass);
 				}
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
-				for(int i =0; i < triggerName->size(); i++){
-					if(triggerName->at(i) == "HLT_PFMET120_PFMHT120_IDTight_v16"){
-						if(passTrigger[i] == 1){
-							DISTRIB_METSEL_TRIGGER->Fill(pfmet_pt[0]);
-						}
+				auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
+				auto index = distance(triggerName->begin(), it);
+				if(it != triggerName->end()){
+					if(passTrigger[it] == 1){
+						DISTRIB_METSEL_TRIGGER->Fill(pfmet_pt[0]);
 					}
 				}
+
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
