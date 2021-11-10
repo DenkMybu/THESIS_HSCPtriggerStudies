@@ -23,7 +23,7 @@ const double uncertaintyMu = 0.0000000024;
 const double massW = 80.379;
 const double uncertaintyW = 0.012;
 
-const double TheorMass = 2000;
+const double TheorMass = 2600;
 
 const double EPSILON = 1.0e-15;
  
