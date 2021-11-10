@@ -340,7 +340,7 @@ void AnaEff::Loop(){
 
 	cout << "after all strings" << endl;
 
-	string mode = "CHCH";
+	string mode = "Both";
 	
 	string EffScenario = TransferEff + scenario + mode + DataType + ExtTxt;
 
@@ -390,8 +390,6 @@ void AnaEff::Loop(){
 			DISTRIB_P_NOPRESEL->Fill(track_p[hscp_track_idx[ihs]]);
 			DISTRIB_IH_NOPRESEL->Fill(track_ih_ampl[hscp_track_idx[ihs]]);
 		}
-
-		
 		auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
 		auto index = distance(triggerName->begin(), it);
 		if(it != triggerName->end()){
@@ -399,9 +397,6 @@ void AnaEff::Loop(){
 				DISTRIB_METNOSEL_TRIGGER->Fill(pfmet_pt[0]);
 			}
 		}
-		
-		
-
 		if(indexcandidate!=64){
 			DISTRIB_P_PRESEL->Fill(track_p[hscp_track_idx[indexcandidate]]);
 			DISTRIB_IH_PRESEL->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
