@@ -395,7 +395,7 @@ void AnaEff::Loop(){
 		auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
 		auto index = distance(triggerName->begin(), it);
 		if(it != triggerName->end()){
-			if(passTrigger[it] == 1){
+			if(passTrigger[index] == 1){
 				DISTRIB_METNOSEL_TRIGGER->Fill(pfmet_pt[0]);
 			}
 		}
@@ -410,7 +410,7 @@ void AnaEff::Loop(){
 			auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
 			auto index = distance(triggerName->begin(), it);
 			if(it != triggerName->end()){
-				if(passTrigger[it] == 1){
+				if(passTrigger[index] == 1){
 					DISTRIB_METPRESEL_TRIGGER->Fill(pfmet_pt[0]);
 				}
 			}
@@ -426,7 +426,7 @@ void AnaEff::Loop(){
 				auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
 				auto index = distance(triggerName->begin(), it);
 				if(it != triggerName->end()){
-					if(passTrigger[it] == 1){
+					if(passTrigger[index] == 1){
 						DISTRIB_METSEL_TRIGGER->Fill(pfmet_pt[0]);
 					}
 				}
