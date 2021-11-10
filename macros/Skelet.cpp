@@ -454,7 +454,7 @@ void AnaEff::Loop(){
 
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 				TrackRhadron();
-				if(mode == "CHN"){
+				if(mode == "Both"){
 					FillTEff(indexcandidatesel);
 					trigEff_presel.FillTrigEff(trig);
 					trig.clear();
