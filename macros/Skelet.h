@@ -206,6 +206,9 @@ private :
   TH1D* DISTRIB_METNOSEL;
   TH1D* DISTRIB_METPRESEL;
   TH1D* DISTRIB_METSEL;
+  TH1D* DISTRIB_METSEL_TRIGGER;
+  TH1D* DISTRIB_METPRESEL_TRIGGER;
+  TH1D* DISTRIB_METNOSEL_TRIGGER;
   TH1D* DISTRIB_METNOSEL_CHN;
   TH1D* DISTRIB_METPRESEL_CHN;
   TH1D* DISTRIB_METSEL_CHN;
@@ -275,6 +278,9 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_IHCHCH=0;
 	DISTRIB_IHDCH=0;
 	DISTRIB_METSEL=0;
+	DISTRIB_METSEL_TRIGGER=0;
+	DISTRIB_METPRESEL_TRIGGER=0;
+	DISTRIB_METNOSEL_TRIGGER=0;
 	DISTRIB_METPRESEL=0;
 	DISTRIB_METNOSEL=0;
 	DISTRIB_METSEL_CHN=0;
@@ -321,14 +327,14 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 	if (tree == 0) {
-		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_gluino2600.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
+		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2600.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
 
 		if (!f || !f->IsOpen()) {
-			f = new TFile("/opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_gluino2600.root");
+			f = new TFile("/opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2600.root");
 		}
 		
 	
-		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_gluino2600.root:/stage"); 
+		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2600.root:/stage"); 
 		dir->GetObject("ttree",tree);
 		
 // /opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2400.root
@@ -394,6 +400,16 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_METSEL){
    	delete DISTRIB_METSEL;
   }
+  if(!DISTRIB_METNOSEL_TRIGGER){
+   	delete DISTRIB_METNOSEL_TRIGGER;
+  }
+  if(!DISTRIB_METPRESEL_TRIGGER){
+   	delete DISTRIB_METPRESEL_TRIGGER;
+  }
+  if(!DISTRIB_METSEL_TRIGGER){
+   	delete DISTRIB_METSEL_TRIGGER;
+  }
+
   if(!DISTRIB_METNOSEL){
    	delete DISTRIB_METNOSEL;
   }

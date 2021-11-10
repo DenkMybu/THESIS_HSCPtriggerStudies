@@ -94,13 +94,25 @@ void AnaEff::Loop(){
 	DISTRIB_METNOSEL->GetXaxis()->SetTitle("MET [GeV]");
 	DISTRIB_METNOSEL->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_METNOSEL_TRIGGER = new TH1D("DISTRIB_METNOSEL_TRIGGER", "( MET )", 100,0,4000);
+	DISTRIB_METNOSEL_TRIGGER->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METNOSEL_TRIGGER->GetYaxis()->SetTitle("# HSCP");
+
 	DISTRIB_METPRESEL = new TH1D("DISTRIB_METPRESEL", "( MET )", 100,0,4000);
 	DISTRIB_METPRESEL->GetXaxis()->SetTitle("MET [GeV]");
 	DISTRIB_METPRESEL->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_METPRESEL_TRIGGER = new TH1D("DISTRIB_METPRESEL_TRIGGER", "( MET )", 100,0,4000);
+	DISTRIB_METPRESEL_TRIGGER->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METPRESEL_TRIGGER->GetYaxis()->SetTitle("# HSCP");
+
 	DISTRIB_METSEL = new TH1D("DISTRIB_METSEL", "( MET )", 100,0,4000);
 	DISTRIB_METSEL->GetXaxis()->SetTitle("MET [GeV]");
 	DISTRIB_METSEL->GetYaxis()->SetTitle("# HSCP");
+
+	DISTRIB_METSEL_TRIGGER = new TH1D("DISTRIB_METSEL_TRIGGER", "( MET )", 100,0,4000);
+	DISTRIB_METSEL_TRIGGER->GetXaxis()->SetTitle("MET [GeV]");
+	DISTRIB_METSEL_TRIGGER->GetYaxis()->SetTitle("# HSCP");
 
 	DISTRIB_METNOSEL_CHN = new TH1D("DISTRIB_METNOSEL_CHN", "( MET )", 100,0,4000);
 	DISTRIB_METNOSEL_CHN->GetXaxis()->SetTitle("MET [GeV]");
@@ -272,6 +284,9 @@ void AnaEff::Loop(){
 	DISTRIB_IHCHCH->Sumw2();
 	DISTRIB_IHDCH->Sumw2();
 	DISTRIB_METNOSEL->Sumw2();
+	DISTRIB_METNOSEL_TRIGGER->Sumw2();
+	DISTRIB_METSEL_TRIGGER->Sumw2();
+	DISTRIB_METPRESEL_TRIGGER->Sumw2();
 	DISTRIB_METPRESEL->Sumw2();
 	DISTRIB_METSEL->Sumw2();
 	DISTRIB_METNOSEL_CHN->Sumw2();
@@ -321,7 +336,7 @@ void AnaEff::Loop(){
 	//******************************************************************************************************************
 	//******************************************************************************************************************
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test", dump = "dump_deltar", scenario = "Mode";
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Stop", DataType = Data + to_string(int(TheorMass)), test = "Test", dump = "dump_deltar", scenario = "Mode";
 
 	cout << "after all strings" << endl;
 
@@ -375,11 +390,25 @@ void AnaEff::Loop(){
 			DISTRIB_P_NOPRESEL->Fill(track_p[hscp_track_idx[ihs]]);
 			DISTRIB_IH_NOPRESEL->Fill(track_ih_ampl[hscp_track_idx[ihs]]);
 		}
-		
+		for(int i =0; i < triggerName->size(); i++){
+			if(triggerName->at(i) == "HLT_PFMET120_PFMHT120_IDTight_v16"){
+				if(passTrigger[i] == 1){
+					DISTRIB_METNOSEL_TRIGGER->Fill(pfmet_pt[0]);
+				}
+			}
+		}
+
 		if(indexcandidate!=64){
 			DISTRIB_P_PRESEL->Fill(track_p[hscp_track_idx[indexcandidate]]);
 			DISTRIB_IH_PRESEL->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
+			for(int i =0; i < triggerName->size(); i++){
+				if(triggerName->at(i) == "HLT_PFMET120_PFMHT120_IDTight_v16"){
+					if(passTrigger[i] == 1){
+						DISTRIB_METPRESEL_TRIGGER->Fill(pfmet_pt[0]);
+					}
+				}
+			}
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
 			if(indexcandidatesel != 64){
@@ -388,6 +417,13 @@ void AnaEff::Loop(){
 					DISTRIB_POVERM_ALL_STRAIGHT->Fill(track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass);
 				}
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
+				for(int i =0; i < triggerName->size(); i++){
+					if(triggerName->at(i) == "HLT_PFMET120_PFMHT120_IDTight_v16"){
+						if(passTrigger[i] == 1){
+							DISTRIB_METSEL_TRIGGER->Fill(pfmet_pt[0]);
+						}
+					}
+				}
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
@@ -411,6 +447,11 @@ void AnaEff::Loop(){
 
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 				TrackRhadron();
+				if(mode == "CHN"){
+					FillTEff(indexcandidatesel);
+					trigEff_presel.FillTrigEff(trig);
+					trig.clear();
+				}
 				AssoGenId(indexcandidatesel, int(jentry), mode);
 				trig.clear();
 			
@@ -505,6 +546,9 @@ void AnaEff::Loop(){
 	DISTRIB_IHCHCH->Write();
 	DISTRIB_IHDCH->Write();
 	DISTRIB_METNOSEL->Write();
+	DISTRIB_METNOSEL_TRIGGER->Write();
+	DISTRIB_METSEL_TRIGGER->Write();
+	DISTRIB_METPRESEL_TRIGGER->Write();
 	DISTRIB_METPRESEL->Write();
 	DISTRIB_METSEL->Write();
 	DISTRIB_METNOSEL_CHN->Write();
