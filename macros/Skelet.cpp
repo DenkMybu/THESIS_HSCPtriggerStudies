@@ -194,6 +194,10 @@ void AnaEff::Loop(){
 	DISTRIB_POVERM_ALL->GetXaxis()->SetTitle("p/m = #beta #gamma");
 	DISTRIB_POVERM_ALL->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_POVERM_ALL_GEN = new TH1D ("DISTRIB_POVERM_ALL_GEN", "P/m of all candidates, gen p", 600 , 0 , 3);
+	DISTRIB_POVERM_ALL_GEN->GetXaxis()->SetTitle("p/m = #beta #gamma");
+	DISTRIB_POVERM_ALL_GEN->GetYaxis()->SetTitle("# HSCP");
+
 	DISTRIB_POVERM_ALL_STRAIGHT = new TH1D ("DISTRIB_POVERM_ALL_STRAIGHT", "P/m of all candidates in -0.1 < eta < 0.1", 600 , 0 , 3);
 	DISTRIB_POVERM_ALL_STRAIGHT->GetXaxis()->SetTitle("p/m = #beta #gamma");
 	DISTRIB_POVERM_ALL_STRAIGHT->GetYaxis()->SetTitle("# HSCP");
@@ -315,6 +319,7 @@ void AnaEff::Loop(){
 	DISTRIB_POVERMN_CHN->Sumw2();
 	DISTRIB_POVERMCH_CHN->Sumw2();
 	DISTRIB_POVERM_ALL->Sumw2();
+	DISTRIB_POVERM_ALL_GEN->Sumw2();
 	DISTRIB_POVERM_ALL_STRAIGHT->Sumw2();
 	DISTRIB_NMU_CHCH->Sumw2();
 	DISTRIB_DELTAR_TRACKERMU->Sumw2();
@@ -572,6 +577,7 @@ void AnaEff::Loop(){
 	DISTRIB_POVERMN_CHN->Write();
 	DISTRIB_POVERMCH_CHN->Write();
 	DISTRIB_POVERM_ALL->Write();
+	DISTRIB_POVERM_ALL_GEN->Write();
 	DISTRIB_POVERM_ALL_STRAIGHT->Write();
 	DISTRIB_NMU_CHCH->Write();
 	DISTRIB_DELTAR_TRACKERMU->Write();
@@ -797,7 +803,7 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const strin
 		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
 		double p1 = pt1 * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
 		double p2 = pt2 * cosh(gen_eta[candidatesneutral[candidatesneutral.size()-1]]);
-		
+		DISTRIB_POVERM_ALL_GEN->Fill(p1*1.0/TheorMass)
 		double finaldeltachn1 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]));
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
 		
@@ -883,7 +889,8 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		double p2chch = (pt2chch * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]));
 		nbchch+=1;
-
+		DISTRIB_POVERM_ALL_GEN->Fill(p1chch*1.0/TheorMass)
+		DISTRIB_POVERM_ALL_GEN->Fill(p2chch*1.0/TheorMass)
 		double finaldelta1 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]));
 
 		double finaldelta2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-2]], gen_phi[candidatesrh[candidatesrh.size()-2]]));			
