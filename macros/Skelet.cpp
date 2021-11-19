@@ -803,7 +803,7 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const strin
 		double pt1 = gen_pt[candidatesrh[candidatesrh.size()-1]], pt2 = gen_pt[candidatesneutral[candidatesneutral.size()-1]];
 		double p1 = pt1 * cosh(gen_eta[candidatesrh[candidatesrh.size()-1]]);
 		double p2 = pt2 * cosh(gen_eta[candidatesneutral[candidatesneutral.size()-1]]);
-		DISTRIB_POVERM_ALL_GEN->Fill(p1*1.0/TheorMass)
+		DISTRIB_POVERM_ALL_GEN->Fill(p1*1.0/TheorMass);
 		double finaldeltachn1 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]));
 		double finaldeltachn2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesneutral[candidatesneutral.size()-1]], gen_phi[candidatesneutral[candidatesneutral.size()-1]]));
 		
@@ -889,8 +889,8 @@ cand2.SetPtEtaPhiM(gen_pt[candidatesneutral[candidatesneutral.size()-1]],gen_eta
 
 		double p2chch = (pt2chch * cosh(gen_eta[candidatesrh[candidatesrh.size()-2]]));
 		nbchch+=1;
-		DISTRIB_POVERM_ALL_GEN->Fill(p1chch*1.0/TheorMass)
-		DISTRIB_POVERM_ALL_GEN->Fill(p2chch*1.0/TheorMass)
+		DISTRIB_POVERM_ALL_GEN->Fill(p1chch*1.0/TheorMass);
+		DISTRIB_POVERM_ALL_GEN->Fill(p2chch*1.0/TheorMass);
 		double finaldelta1 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-1]], gen_phi[candidatesrh[candidatesrh.size()-1]]));
 
 		double finaldelta2 = deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]], track_phi[hscp_track_idx[indexcandidate]], gen_eta[candidatesrh[candidatesrh.size()-2]], gen_phi[candidatesrh[candidatesrh.size()-2]]));			
