@@ -23,7 +23,7 @@ const double uncertaintyMu = 0.0000000024;
 const double massW = 80.379;
 const double uncertaintyW = 0.012;
 
-const double TheorMass = 2600;
+const double TheorMass = 2000;
 
 const double EPSILON = 1.0e-15;
  
@@ -78,6 +78,10 @@ void AnaEff::Loop(){
 	DISTRIB_P_PRESEL->GetXaxis()->SetTitle("p [GeV]");
 	DISTRIB_P_PRESEL->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_PT_PRESEL = new TH1D ("DISTRIB_PT_PRESEL", " P_presel ", 400, 0 , 8000);
+	DISTRIB_PT_PRESEL->GetXaxis()->SetTitle("p_T [GeV]");
+	DISTRIB_PT_PRESEL->GetYaxis()->SetTitle("# HSCP");
+	
 	DISTRIB_IHCHN = new TH1D ("DISTRIB_IHCHN", " IH CHN ", 100, 0 , 15);
 	DISTRIB_IHCHN->GetXaxis()->SetTitle("Ih");
 	DISTRIB_IHCHN->GetYaxis()->SetTitle("# HSCP");
@@ -335,14 +339,15 @@ void AnaEff::Loop(){
 	DISTRIB_DELTAR_CH_VS_N->Sumw2();
 	DISTRIB_P_NOPRESEL->Sumw2();
 	DISTRIB_P_PRESEL->Sumw2();
+	DISTRIB_PT_PRESEL->Sumw2();
 	DISTRIB_IH_NOPRESEL->Sumw2();
 	DISTRIB_IH_PRESEL->Sumw2();
 	
 	//******************************************************************************************************************
 	//******************************************************************************************************************
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak", Data = "Gluino", DataType = Data + to_string(int(TheorMass)), test = "Test", dump = "dump_deltar", scenario = "Mode";
-
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak",  test = "Test", dump = "dump_deltar", scenario = "Mode";
+	string Data = "Gluino", DataType = Data + to_string(int(TheorMass));
 	string mode = "Both"; // To pick if you want to compute efficiencies for Both scenarios, CHCH (charged-charged) or CHN (charged-neutral)
 	
 	string EffScenario = TransferEff + scenario + mode + DataType + ExtTxt;
@@ -402,6 +407,7 @@ void AnaEff::Loop(){
 		}
 		if(indexcandidate!=64){
 			DISTRIB_P_PRESEL->Fill(track_p[hscp_track_idx[indexcandidate]]);
+			DISTRIB_PT_PRESEL->Fill(track_pt[hscp_track_idx[indexcandidate]]);
 			DISTRIB_IH_PRESEL->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
 
@@ -545,6 +551,7 @@ void AnaEff::Loop(){
 	DISTRIB_IH->Write();
 	DISTRIB_P_NOPRESEL->Write();
 	DISTRIB_P_PRESEL->Write();
+	DISTRIB_PT_PRESEL->Write();
 	DISTRIB_IH_NOPRESEL->Write();
 	DISTRIB_IH_PRESEL->Write();
 	DISTRIB_IHCHN->Write();
