@@ -33,6 +33,7 @@ TrigEff::TrigEff(){
 TrigEff::~TrigEff(){ 
 	EffvsObsAll.clear();
 	EffvsPom.clear();
+	EffvsPt.clear();
 	NamesPos.clear();
 	TriggerNames.clear();
 	
@@ -63,7 +64,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	NamesPos.resize(triggerNames.size());
 
 	EffvsPom.resize(triggerNames.size());
-	
+	EffvsPt.resize(triggerNames.size());
 	Efficiency.resize(triggerNames.size(), 0.0);
 	
 	NumEfficiency.resize(triggerNames.size(), 0.0);
@@ -73,9 +74,9 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	//Trig.resize(triggerNames.size());
 
 	this->TriggerNames = triggerNames;
-	string pom = "POM";
+	string pom = "POM",pt = ";t";
 	for(int i =0; i < triggerNames.size(); i++){
-		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
+		string namepom = ((triggerNames[i].c_str()) + pom).c_str(), namept = ((triggerNames[i].c_str()) + pt).c_str();
 
 		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",100,0,2000); 
 		EffvsObsAll[i]->SetName(triggerNames[i].c_str());
@@ -83,6 +84,9 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 		EffvsPom[i] = new TEfficiency("Eff","Efficiency;#beta #gamma;#epsilon",100,0,5);
 		EffvsPom[i]->SetName(namepom.c_str());
 
+		EffvsPt[i] = new TEfficiency("Eff","Efficiency;p_T;#epsilon",100,0,4000);
+		EffvsPt[i]->SetName(namept.c_str());
+		
 		NamesPos[i] = make_pair(triggerNames[i],i);
 	}
 	
@@ -111,6 +115,14 @@ void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,co
 			if(NamesPos[i].first == TriggerName){
 				//cout << "Filling with POM as obs = " << Obs << " and trigger val : " << trig << endl;
 				EffvsPom[NamesPos[i].second]->Fill(trig,Obs);
+			}
+		}
+	}
+	if(mode == "PT"){
+		for(int i = 0; i < NamesPos.size(); i++){
+			if(NamesPos[i].first == TriggerName){
+				//cout << "Filling with POM as obs = " << Obs << " and trigger val : " << trig << endl;
+				EffvsPt[NamesPos[i].second]->Fill(trig,Obs);
 			}
 		}
 	}
@@ -251,6 +263,7 @@ void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 	for(int j=0; j < EffvsObsAll.size() ; j++){
 		EffvsObsAll[j]->Write();
 		EffvsPom[j]->Write();
+		EffvsPt[j]->Write();
 	}
 	OutputHisto->Close();
 }

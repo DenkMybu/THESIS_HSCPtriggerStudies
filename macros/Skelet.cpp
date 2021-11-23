@@ -1000,6 +1000,7 @@ void AnaEff::FillTEff(const int &indexcandidate){
 			if(triggerName->at(j) == triggerNames[i]){
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0], 1.0 ,"MET");
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]/TheorMass), 1.0 ,"POM");
+				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_pt[hscp_track_idx[indexcandidate]]), 1.0 ,"PT");
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 				break;
 			}

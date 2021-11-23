@@ -120,7 +120,8 @@ public:
 
    vector <TEfficiency*> EffvsObsAll;
    vector <TEfficiency*> EffvsPom;
-
+   vector <TEfficiency*> EffvsPt;
+   
    vector< pair<string, int > > NamesPos; 
    vector<string> TriggerNames;
 
