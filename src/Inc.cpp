@@ -114,7 +114,7 @@ void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,co
 	if(mode == "POM"){
 		for(int i = 0; i < NamesPos.size(); i++){
 			if(NamesPos[i].first == TriggerName){
-				cout << "Filling with POM = " << Obs << " and trigger val : " << trig << endl;
+				//cout << "Filling with POM = " << Obs << " and trigger val : " << trig << endl;
 				EffvsPom[NamesPos[i].second]->Fill(trig,Obs);
 			}
 		}
@@ -122,7 +122,7 @@ void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,co
 	if(mode == "PT"){
 		for(int i = 0; i < NamesPos.size(); i++){
 			if(NamesPos[i].first == TriggerName){
-				cout << "Filling with PT  = " << Obs << " and trigger val : " << trig << endl;
+				//cout << "Filling with PT  = " << Obs << " and trigger val : " << trig << endl;
 				EffvsPt[NamesPos[i].second]->Fill(trig,Obs);
 			}
 		}
