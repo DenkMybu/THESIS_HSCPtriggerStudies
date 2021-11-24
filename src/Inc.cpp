@@ -76,7 +76,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	this->TriggerNames = triggerNames;
 	string pom = "POM",pt = "PT";
 	for(int i =0; i < triggerNames.size(); i++){
-		string namepom = ((triggerNames[i].c_str()) + pom).c_str;
+		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
 		string namept = ((triggerNames[i].c_str()) + pt).c_str();
 
 		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",100,0,2000); 
