@@ -348,7 +348,7 @@ void AnaEff::Loop(){
 
 	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak",  test = "Test", dump = "dump_deltar", scenario = "Mode";
 	string Data = "Gluino", DataType = Data + to_string(int(TheorMass));
-	string mode = "Both"; // To pick if you want to compute efficiencies for Both scenarios, CHCH (charged-charged) or CHN (charged-neutral)
+	string mode = "CHCH"; // To pick if you want to compute efficiencies for Both scenarios, CHCH (charged-charged) or CHN (charged-neutral)
 	
 	string EffScenario = TransferEff + scenario + mode + DataType + ExtTxt;
 
