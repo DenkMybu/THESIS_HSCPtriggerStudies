@@ -74,9 +74,10 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	//Trig.resize(triggerNames.size());
 
 	this->TriggerNames = triggerNames;
-	string pom = "POM",pt = ";t";
+	string pom = "POM",pt = "PT";
 	for(int i =0; i < triggerNames.size(); i++){
-		string namepom = ((triggerNames[i].c_str()) + pom).c_str(), namept = ((triggerNames[i].c_str()) + pt).c_str();
+		string namepom = ((triggerNames[i].c_str()) + pom).c_str;
+		string namept = ((triggerNames[i].c_str()) + pt).c_str();
 
 		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",100,0,2000); 
 		EffvsObsAll[i]->SetName(triggerNames[i].c_str());
@@ -84,7 +85,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 		EffvsPom[i] = new TEfficiency("Eff","Efficiency;#beta #gamma;#epsilon",100,0,5);
 		EffvsPom[i]->SetName(namepom.c_str());
 
-		EffvsPt[i] = new TEfficiency("Eff","Efficiency;p_T;#epsilon",100,0,4000);
+		EffvsPt[i] = new TEfficiency("Eff","Efficiency;PT;#epsilon",100,0,4000);
 		EffvsPt[i]->SetName(namept.c_str());
 		
 		NamesPos[i] = make_pair(triggerNames[i],i);
@@ -113,7 +114,7 @@ void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,co
 	if(mode == "POM"){
 		for(int i = 0; i < NamesPos.size(); i++){
 			if(NamesPos[i].first == TriggerName){
-				//cout << "Filling with POM as obs = " << Obs << " and trigger val : " << trig << endl;
+				cout << "Filling with POM = " << Obs << " and trigger val : " << trig << endl;
 				EffvsPom[NamesPos[i].second]->Fill(trig,Obs);
 			}
 		}
@@ -121,7 +122,7 @@ void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,co
 	if(mode == "PT"){
 		for(int i = 0; i < NamesPos.size(); i++){
 			if(NamesPos[i].first == TriggerName){
-				//cout << "Filling with POM as obs = " << Obs << " and trigger val : " << trig << endl;
+				cout << "Filling with PT  = " << Obs << " and trigger val : " << trig << endl;
 				EffvsPt[NamesPos[i].second]->Fill(trig,Obs);
 			}
 		}
