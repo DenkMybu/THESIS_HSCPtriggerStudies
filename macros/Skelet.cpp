@@ -373,7 +373,7 @@ void AnaEff::Loop(){
 
 	string trigger1="",trigger2="";
 	trigEff_presel.InitTEff(teffFilename);
-	cout << "Working on " << DataType << " , study will be on scenario " << mode << endl;
+	cout << "Working on " << DataType << " , study will be on " << scenario  << " scenario(s) "<< endl;
 	posa.resize(triggerNames.size(), 0.0);
 	/*for(int l = 0; l < triggerName->size(); l++){
 			for(int i = 0; i<triggerNames.size();i++){
@@ -1002,7 +1002,7 @@ void AnaEff::FillTEff(const int &indexcandidate){
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]/TheorMass), 1.0 ,"POM");
 				for(int k =0 ; k<nmuons;k++){
 				
-					if(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]],track_phi[hscp_track_idx[indexcandidate]],muon_eta[k],muon_phi[k])) < 0.1){
+					if(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]],track_phi[hscp_track_idx[indexcandidate]],muon_eta[k],muon_phi[k])) < 0.05){
 						trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_pt[hscp_track_idx[indexcandidate]]), 1.0 ,"PT");
 					}
 				}
