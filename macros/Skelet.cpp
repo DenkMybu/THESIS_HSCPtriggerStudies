@@ -1004,6 +1004,7 @@ void AnaEff::FillTEff(const int &indexcandidate){
 				
 					if(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]],track_phi[hscp_track_idx[indexcandidate]],muon_eta[k],muon_phi[k])) < 0.05){
 						trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_pt[hscp_track_idx[indexcandidate]]), 1.0 ,"PT");
+						break;
 					}
 				}
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
