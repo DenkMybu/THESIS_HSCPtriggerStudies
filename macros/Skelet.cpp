@@ -1002,9 +1002,8 @@ void AnaEff::FillTEff(const int &indexcandidate){
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]/TheorMass), 1.0 ,"POM");
 				for(int k =0 ; k<nmuons;k++){
 				
-					if(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]],track_phi[hscp_track_idx[indexcandidate]],muon_eta[k],muon_phi[k])) < 0.05){
-						trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_pt[hscp_track_idx[indexcandidate]]), 1.0 ,"PT");
-						break;
+				if(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]],track_phi[hscp_track_idx[indexcandidate]],muon_eta[k],muon_phi[k])) < 0.05){
+						trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], muon_pt[k], 1.0 ,"PT");
 					}
 				}
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
