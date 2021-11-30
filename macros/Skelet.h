@@ -166,6 +166,7 @@ public :
    virtual void     CountZones(const double &impulsion);
    virtual void     FillTEff(const int &indexcandidate);
    virtual void     TrackRhadron();
+   virtual void     PassedTriggerDistrib(const string &trigname,const string &selectionmode);
    
 private :
 

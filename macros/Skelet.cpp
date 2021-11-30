@@ -399,26 +399,17 @@ void AnaEff::Loop(){
 			DISTRIB_P_NOPRESEL->Fill(track_p[hscp_track_idx[ihs]]);
 			DISTRIB_IH_NOPRESEL->Fill(track_ih_ampl[hscp_track_idx[ihs]]);
 		}
-		auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
-		auto index = distance(triggerName->begin(), it);
-		if(it != triggerName->end()){
-			if(passTrigger[index] == 1){
-				DISTRIB_METNOSEL_TRIGGER->Fill(pfmet_pt[0]);
-			}
-		}
+		
+		PassedTriggerDistrib("HLT_PFMET120_PFMHT120_IDTight_v16","NOSEL");
+		
+	
 		if(indexcandidate!=64){
 			DISTRIB_P_PRESEL->Fill(track_p[hscp_track_idx[indexcandidate]]);
 			DISTRIB_PT_PRESEL->Fill(track_pt[hscp_track_idx[indexcandidate]]);
 			DISTRIB_IH_PRESEL->Fill(track_ih_ampl[hscp_track_idx[indexcandidate]]);
 			DISTRIB_METPRESEL->Fill(pfmet_pt[0]);
 
-			auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
-			auto index = distance(triggerName->begin(), it);
-			if(it != triggerName->end()){
-				if(passTrigger[index] == 1){
-					DISTRIB_METPRESEL_TRIGGER->Fill(pfmet_pt[0]);
-				}
-			}
+			PassedTriggerDistrib("HLT_PFMET120_PFMHT120_IDTight_v16","PRESEL");
 
 			passedpresel+=1;
 			indexcandidatesel = Selection(indexcandidate);
@@ -428,13 +419,7 @@ void AnaEff::Loop(){
 					DISTRIB_POVERM_ALL_STRAIGHT->Fill(track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass);
 				}
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
-				auto it = find(triggerName->begin(), triggerName->end(), "HLT_PFMET120_PFMHT120_IDTight_v16");
-				auto index = distance(triggerName->begin(), it);
-				if(it != triggerName->end()){
-					if(passTrigger[index] == 1){
-						DISTRIB_METSEL_TRIGGER->Fill(pfmet_pt[0]);
-					}
-				}
+				PassedTriggerDistrib("HLT_PFMET120_PFMHT120_IDTight_v16","SEL");
 
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
@@ -1001,6 +986,7 @@ void AnaEff::FillTEff(const int &indexcandidate){
 			if(triggerName->at(j) == triggerNames[i]){
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], pfmet_pt[0], 1.0 ,"MET");
 				trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], (track_p[hscp_track_idx[indexcandidate]]/TheorMass), 1.0 ,"POM");
+				
 				for(int k =0 ; k<nmuons;k++){
 				
 				if(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]],track_phi[hscp_track_idx[indexcandidate]],muon_eta[k],muon_phi[k])) < 0.05){
@@ -1117,6 +1103,42 @@ void AnaEff::TrackRhadron(){
 		nbchain+=1;
 	}	
 }
+
+
+void AnaEff::PassedTriggerDistrib(const string &trigname,const string &selectionmode){
+
+	auto it = find(triggerName->begin(), triggerName->end(), trigname.c_str());
+	auto index = distance(triggerName->begin(), it);
+	
+	if(selectionmode == "NOSEL"){
+		if(it != triggerName->end()){
+			if(passTrigger[index] == 1){
+				DISTRIB_METNOSEL_TRIGGER->Fill(pfmet_pt[0]);
+			}
+		}
+	}
+	else if(selectionmode == "PRESEL"){
+		
+		if(it != triggerName->end()){
+			if(passTrigger[index] == 1){
+				DISTRIB_METPRESEL_TRIGGER->Fill(pfmet_pt[0]);
+				}
+			}
+	}
+	
+	else if(selectionmode == "SEL"){
+		
+			if(it != triggerName->end()){
+				if(passTrigger[index] == 1){
+					DISTRIB_METSEL_TRIGGER->Fill(pfmet_pt[0]);
+				}
+			}
+	}
+	
+	
+	
+}
+
 
 void AnaEff::ReadFromTxt(const string &NameListForType){
 	ifstream ifile(NameListForType.c_str()); 
