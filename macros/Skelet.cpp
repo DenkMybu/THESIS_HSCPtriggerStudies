@@ -347,7 +347,8 @@ void AnaEff::Loop(){
 	//******************************************************************************************************************
 
 	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak",  test = "Test", dump = "dump_deltar", scenario = "Mode";
-	string Data = "Gluino", DataType = Data + to_string(int(TheorMass));
+	
+	string Data = "Gluino", DataType = Data + to_string(int(TheorMass)); // Data is the type of particle you study
 	
 	string mode = "CHCH"; // To pick if you want to compute efficiencies for Both scenarios, CHCH (charged-charged) or CHN (charged-neutral)
 	
@@ -376,14 +377,7 @@ void AnaEff::Loop(){
 	trigEff_presel.InitTEff(teffFilename);
 	cout << "Working on " << DataType << " , study will be on " << mode << " scenario(s) "<< endl;
 	posa.resize(triggerNames.size(), 0.0);
-	/*for(int l = 0; l < triggerName->size(); l++){
-			for(int i = 0; i<triggerNames.size();i++){
-				if(triggerName->at(l) == triggerNames[i]){
-					posa[i]=l;
-					break;
-				}
-			}
-	}*/
+	
 	Dump.open (dumpfile);
 	cout << "nb entrees : " << nentries << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++){
@@ -424,24 +418,6 @@ void AnaEff::Loop(){
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				
-				/* TEST TIME OPTIMIZER, uncomment line 319 and remove function FillTEff(indexcandidatesel) : same output (?) with 20% less time consumed
-				for(int i=0; i < posa.size(); i++){
-					for(int j=0; j < triggerNames.size(); j++){
-						if(triggerNames[j] == triggerName->at(posa[i])){
-							trigEff_presel.FillNoMap(triggerNames[j], passTrigger[posa[i]], pfmet_pt[0]);
-							//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
-							trig.push_back(make_pair(triggerNames[j], passTrigger[posa[i]]));
-							break;
-							
-						}
-						else{
-
-							cout << "+1 event where triggernames do not match expected ints" << endl;
-						}
-					}
-
-				}*/
-
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 				TrackRhadron();
 				if(mode == "Both"){
@@ -597,7 +573,34 @@ void AnaEff::Loop(){
 	distrib->Close();
 	cout << "Program terminated without any logic call out of bound" << endl;
 }
+//*********************************TEST TIME OPTIMIZER*********************************
 
+/*for(int l = 0; l < triggerName->size(); l++){
+			for(int i = 0; i<triggerNames.size();i++){
+				if(triggerName->at(l) == triggerNames[i]){
+					posa[i]=l;
+					break;
+				}
+			}
+	}
+	//TEST TIME OPTIMIZER, uncomment line 319 and remove function FillTEff(indexcandidatesel) : same output (?) with 20% less time consumed
+				for(int i=0; i < posa.size(); i++){
+					for(int j=0; j < triggerNames.size(); j++){
+						if(triggerNames[j] == triggerName->at(posa[i])){
+							trigEff_presel.FillNoMap(triggerNames[j], passTrigger[posa[i]], pfmet_pt[0]);
+							//cout << triggerNames[i] << " has trigger value " << passTrigger[j] << endl;
+							trig.push_back(make_pair(triggerNames[j], passTrigger[posa[i]]));
+							break;
+							
+						}
+						else{
+
+							cout << "+1 event where triggernames do not match expected ints" << endl;
+						}
+					}
+
+				}*/
+				
 
 //*********************************NO SELECTION*********************************
 
@@ -718,8 +721,8 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const strin
 		if(gen_moth_pdg[i] == 1000021){
 			nbmothgen+=1;
 		}
-		//***************** CHARGED RHADRONS *****************
-		for(int k = 0; k < indexpdgch.size() ; k++){
+
+		for(int k = 0; k < indexpdgch.size() ; k++){ //Charged r-hadrons
 			if(abs(gen_pdg[i]) == indexpdgch[k]){
 				if(gen_status[i] == 1){
 					nbch+=1;
@@ -727,11 +730,8 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const strin
 				}
 			}
 		}
-		//*****************************************************
 
-
-		//***************** NEUTRAL RHADRONS *****************
-		for(int j=0; j < indexpdgn.size(); j++){
+		for(int j=0; j < indexpdgn.size(); j++){ // Neutral r-hadrons
 			if(abs(gen_pdg[i]) == indexpdgn[j]){
 				if(gen_status[i] == 1){
 				 nbn+=1;
@@ -739,9 +739,8 @@ void AnaEff::AssoGenId(const int &indexcandidate,const int &nbevent, const strin
 				}
 			}
 		}
-		//****************************************************
-
-		for(int j=0; j < indexpdgch2.size(); j++){
+		
+		for(int j=0; j < indexpdgch2.size(); j++){ //Doubly charged r-hadrons
 			if(abs(gen_pdg[i]) == indexpdgch2[j]){
 				if(gen_status[i] == 1){
 					nbdch+=1;
