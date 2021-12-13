@@ -43,7 +43,7 @@ int ListNameTriggers::IsInList(string name){
 void ListNameTriggers::FindAllNames(){
 	
 	ofstream CompleteList;
-	string DataType = "Stop2400";
+	string DataType = "Gluino2000";
 	string NameList = "CompleteList";
 	string ExtTxt = ".txt";
 	string PresList = "PrescaledSubList";
