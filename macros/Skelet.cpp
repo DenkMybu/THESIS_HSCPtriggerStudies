@@ -350,24 +350,24 @@ void AnaEff::Loop(){
 	
 	string Data = "Gluino", DataType = Data + to_string(int(TheorMass)); // Data is the type of particle you study
 	
-	string mode = "CHCH"; // To pick if you want to compute efficiencies for Both scenarios, CHCH (charged-charged) or CHN (charged-neutral)
+	string mode = "CHN"; // To pick if you want to compute efficiencies for Both scenarios, CHCH (charged-charged) or CHN (charged-neutral)
 	
 	string EffScenario = TransferEff + scenario + mode + DataType + ExtTxt;
-
+	
 	string dumpfile = dump + DataType + ExtTxt;
 	string teffFilename = test + DataType + ExtRoot;
-
+	
 	string StudyTxt = TransferTxt + DataType + Date;
 	string NameOfTxt = StudyTxt + SubNum + ExtTxt;
-
+	
 	string StudyDistribZ = TransferDistribZ + DataType + Date;
 	string distribvarZ = StudyDistribZ + SubNum + ExtRoot;
 	
-
+	
 	string NameCompleteList = "ListeInteretTriggers";
 	string NameListForType = NameCompleteList + DataType + ExtTxt;
-
-
+	
+	
 	ReadFromTxt(NameListForType);
 	trigEff_presel.LoadNoMap(triggerNames,1);
 	
