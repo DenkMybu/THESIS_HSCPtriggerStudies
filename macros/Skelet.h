@@ -153,7 +153,7 @@ public :
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     Loop();
+   virtual void     Loop(const string &mode);
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
    virtual int      NoSelection();
