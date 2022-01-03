@@ -27,7 +27,7 @@ const double TheorMass = 2000;
 
 const double EPSILON = 1.0e-15;
  
-void AnaEff::Loop(){
+void AnaEff::Loop(const string &mode){
 	Long64_t nentries = fChain->GetEntriesFast();
 	Long64_t nbytes = 0, nb = 0, nbi = 0;
 	Long64_t initializing = LoadTree(0);
@@ -350,7 +350,7 @@ void AnaEff::Loop(){
 	
 	string Data = "Gluino", DataType = Data + to_string(int(TheorMass)); // Data is the type of particle you study
 	
-	string mode = "CHN"; // To pick if you want to compute efficiencies for Both scenarios, CHCH (charged-charged) or CHN (charged-neutral)
+	//string mode2 = mode; // To pick if you want to compute efficiencies for Both scenarios, CHCH (charged-charged) or CHN (charged-neutral)
 	
 	string EffScenario = TransferEff + scenario + mode + DataType + ExtTxt;
 	
@@ -430,7 +430,6 @@ void AnaEff::Loop(){
 			
 			}
 		}
-
 	}
 
 	
@@ -1152,9 +1151,14 @@ void AnaEff::ReadFromTxt(const string &NameListForType){
 	//bool ReadFromTxt, return 1 if no problem
 }
 
-int main(){
+int main(int argc , char * argv[]){
+
+	if(argc!=2){
+		cout << "Enter 2 arguments > ./Skelet <scenario>" << endl;
+	}
 
 	AnaEff ana;
-	ana.Loop();
+	
+	ana.Loop(argv[1]);
 	
 }
