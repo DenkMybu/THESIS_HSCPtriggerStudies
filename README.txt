@@ -20,9 +20,10 @@ Step 3 : In skelet.cpp  > change line 26 for the mass of your simulated events
 Then you can upload your file where your environment is set, and run the following commands :
 
 ./compilemain.sh
-time ./bin/Skelet 
+time ./bin/Skelet <scenario>
 
-The study starts now, you can always your progress, the % are displayed 
+The study starts now, you can monitor your progress bar in the terminal
 
-
+Once it is terminated, the code will output many different things depending on what were the inputs :
+The scenario 
 
