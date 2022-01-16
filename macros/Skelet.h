@@ -49,7 +49,9 @@ public :
    Int_t	ndedxhits;
 
    Float_t	pfmet_pt[32]; //test
-
+   Float_t	hltpfmet_pt[32]; //add branch etc..
+   Float_t	hltcalomet_pt[32]; //add branch etc..
+   Float_t	hltpfmet_pt[32]; //add branch etc..
    Float_t	prescaleTrigger[1000];
    Bool_t	passTrigger[1000];
    vector<string>* triggerName;
