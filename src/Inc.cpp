@@ -278,7 +278,7 @@ void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 	OutputHisto->cd();
 	for(int j=0; j < EffvsObsAll.size() ; j++){
 		EffvsObsAll[j]->Write();
-		EffvsRecoCalo->Write();
+		EffvsRecoCalo[j]->Write();
 		EffvsPom[j]->Write();
 		EffvsPt[j]->Write();
 	}
