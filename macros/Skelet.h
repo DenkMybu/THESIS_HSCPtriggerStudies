@@ -620,7 +620,7 @@ void AnaEff::Init(TTree *tree)
    fChain->SetBranchAddress("pfmet_pt", pfmet_pt, &b_pfmet_pt);
    fChain->SetBranchAddress("pfmet_hlt_pt", pfmet_hlt_pt, &b_pfmet_hlt_pt);\
    fChain->SetBranchAddress("calomet_hlt_pt", calomet_hlt_pt, &b_calomet_hlt_pt);
-   fChain->SetBranchAddress("calomet_pt", calomet_pt, &b_calomet_pt);
+   fChain->SetBranchAddress("calomet_et", calomet_pt, &b_calomet_pt);
    
    
    fChain->SetBranchAddress("track_eta", track_eta, &b_track_eta);
