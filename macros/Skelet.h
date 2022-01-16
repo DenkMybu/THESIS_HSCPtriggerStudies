@@ -253,6 +253,7 @@ private :
   TH2D* DISTRIB_MET_pt_CHCH;
   TH2D* DISTRIB_MET_pt_CHN;
   TH2D* DISTRIB_MET_ptN_CHN;
+  TH2D* DISTRIB_CALO_RECO_vs_HLT;
   TH2D* DISTRIB_MET_pt;
   TH2D* DISTRIB_DELTAR_CH_VS_N;
   //*************************************************************************************************************************
@@ -326,6 +327,7 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_MET_pt_CHCH=0;
 	DISTRIB_MET_pt_CHN=0;
 	DISTRIB_MET_ptN_CHN=0;
+	DISTRIB_CALO_RECO_vs_HLT=0;
 	DISTRIB_DELTAR_CH_VS_N=0;
 
 	triggerName = 0;
@@ -545,7 +547,9 @@ AnaEff::~AnaEff() //deconstruct
   if(!DISTRIB_MET_ptN_CHN){
    	delete DISTRIB_MET_ptN_CHN;
   }
-
+  if(!DISTRIB_CALO_RECO_vs_HLT){
+   	delete DISTRIB_CALO_RECO_vs_HLT;
+  }
   triggerNames.clear();
   posa.clear();
   trig.clear();

@@ -235,6 +235,11 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_MET_ptN_CHN->GetYaxis()->SetTitle("Pt [GeV]");
 
 
+	DISTRIB_CALO_RECO_vs_HLT = new TH2D("DISTRIB_CALO_RECO_vs_HLT", "Reco::calomet vs hlt::calomet", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_CALO_RECO_vs_HLT->GetXaxis()->SetTitle("Reco::calo MET [GeV]");
+	DISTRIB_CALO_RECO_vs_HLT->GetYaxis()->SetTitle("HLT::calo MeT [GeV]");
+	
+
 	DISTRIB_DEDX_POVERM_CHCH = new TH2D("DISTRIB_IH_POVERM_CHCH", "IH vs #beta #gamma in CH-CH",100, 0,10,100,0,5);
 	DISTRIB_DEDX_POVERM_CHCH->GetYaxis()->SetTitle("IH");
 	DISTRIB_DEDX_POVERM_CHCH->GetXaxis()->SetTitle("#beta #gamma");
@@ -315,6 +320,7 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_MET_pt_CHN->Sumw2();
 	DISTRIB_MET_pt_CHCH->Sumw2();
 	DISTRIB_MET_ptN_CHN->Sumw2();
+	DISTRIB_CALO_RECO_vs_HLT->Sumw2();
 	DISTRIB_P1MP2CHCH->Sumw2();
 	DISTRIB_P1MP2CHN->Sumw2();
 	DISTRIB_PT1MPT2CHCH->Sumw2();
@@ -555,6 +561,7 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_MET_pt_CHCH->Write();
 	DISTRIB_MET_pt_CHN->Write();
 	DISTRIB_MET_ptN_CHN->Write();
+	DISTRIB_CALO_RECO_vs_HLT->Write();
 	DISTRIB_P1MP2CHCH->Write();
 	DISTRIB_P1MP2CHN->Write();
 	DISTRIB_PT1MPT2CHCH->Write();
@@ -990,6 +997,13 @@ void AnaEff::FillTEff(const int &indexcandidate){
 				if(deltaR(deltaR2(track_eta[hscp_track_idx[indexcandidate]],track_phi[hscp_track_idx[indexcandidate]],muon_eta[k],muon_phi[k])) < 0.05){
 						trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], muon_pt[k], 1.0 ,"PT");
 					}
+				}
+				if(calomet_pt[0] > 90){
+					trigEff_presel.FillNoMap(triggerNames[i], 1, calomet_pt[0], 1.0 ,"CALOMET");
+				}
+				else{
+				
+					trigEff_presel.FillNoMap(triggerNames[i], 0, calomet_pt[0], 1.0 ,"CALOMET");
 				}
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 				break;

@@ -32,6 +32,7 @@ TrigEff::TrigEff(){
 
 TrigEff::~TrigEff(){ 
 	EffvsObsAll.clear();
+	EffvsRecoCalo.clear();
 	EffvsPom.clear();
 	EffvsPt.clear();
 	NamesPos.clear();
@@ -62,7 +63,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	
 	EffvsObsAll.resize(triggerNames.size());
 	NamesPos.resize(triggerNames.size());
-
+	EffvsRecoCalo.resize(triggerNames.size());
 	EffvsPom.resize(triggerNames.size());
 	EffvsPt.resize(triggerNames.size());
 	Efficiency.resize(triggerNames.size(), 0.0);
@@ -74,14 +75,19 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	//Trig.resize(triggerNames.size());
 
 	this->TriggerNames = triggerNames;
-	string pom = "POM",pt = "PT";
+	string pom = "POM",pt = "PT",recocalo = "reco::calo";
 	for(int i =0; i < triggerNames.size(); i++){
 		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
 		string namept = ((triggerNames[i].c_str()) + pt).c_str();
-
+		string namerecocalo = ((triggerNames[i].c_str()) + recocalo).c_str();
 		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",100,0,2000); 
 		EffvsObsAll[i]->SetName(triggerNames[i].c_str());
 
+
+		EffvsRecoCalo[i] = new TEfficiency("Eff","Efficiency;Reco calo_MET [GeV];#epsilon",100,0,2000); 
+		EffvsRecoCalo[i]->SetName(namerecocalo.c_str());
+		
+		
 		EffvsPom[i] = new TEfficiency("Eff","Efficiency;#beta #gamma;#epsilon",100,0,5);
 		EffvsPom[i]->SetName(namepom.c_str());
 
@@ -127,6 +133,15 @@ void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,co
 			}
 		}
 	}
+	if(mode == "CALOMET"){
+		for(int i = 0; i < NamesPos.size(); i++){
+			if(NamesPos[i].first == TriggerName){
+				//cout << "Filling with PT  = " << Obs << " and trigger val : " << trig << endl;
+				EffvsRecoCalo[NamesPos[i].second]->Fill(trig,Obs);
+			}
+		}
+	}
+	
 }
 
 
@@ -263,6 +278,7 @@ void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 	OutputHisto->cd();
 	for(int j=0; j < EffvsObsAll.size() ; j++){
 		EffvsObsAll[j]->Write();
+		EffvsRecoCalo->Write();
 		EffvsPom[j]->Write();
 		EffvsPt[j]->Write();
 	}

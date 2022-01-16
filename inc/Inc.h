@@ -119,6 +119,7 @@ public:
    ofstream EffScenario;
 
    vector <TEfficiency*> EffvsObsAll;
+   vector <TEfficiency*> EffvsRecoCalo;
    vector <TEfficiency*> EffvsPom;
    vector <TEfficiency*> EffvsPt;
    
