@@ -116,7 +116,13 @@ public :
    
    TBranch        *b_gen_status;
    TBranch        *b_track_nhits;
+   
    TBranch        *b_pfmet_pt; // !
+   TBranch        *b_pfmet_hlt_pt;
+   TBranch        *b_calomet_hlt_pt;
+   TBranch        *b_calomet_pt;
+   
+  
    TBranch        *b_track_eta; //!
    TBranch        *b_track_npixhits; //!
    TBranch        *b_track_nvalidhits;
@@ -337,14 +343,14 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 	if (tree == 0) {
-		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_gluino2000.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
+		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_27/src/stage/ntuple/test/prod/nt_mc_aod_gluino2000_initial.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
 
 		if (!f || !f->IsOpen()) {
-			f = new TFile("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_gluino2000.root");
+			f = new TFile("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_27/src/stage/ntuple/test/prod/nt_mc_aod_gluino2000_initial.root");
 		}
 		
 	
-		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_gluino2000.root:/stage"); 
+		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_27/src/stage/ntuple/test/prod/nt_mc_aod_gluino2000_initial.root:/stage"); 
 		dir->GetObject("ttree",tree);
 		
 // /opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2400.root
@@ -612,6 +618,11 @@ void AnaEff::Init(TTree *tree)
 
    fChain->SetBranchAddress("gen_moth_pdg", gen_moth_pdg, &b_gen_moth_pdg);
    fChain->SetBranchAddress("pfmet_pt", pfmet_pt, &b_pfmet_pt);
+   fChain->SetBranchAddress("pfmet_hlt_pt", pfmet_hlt_pt, &b_pfmet_hlt_pt);\
+   fChain->SetBranchAddress("calomet_hlt_pt", calomet_hlt_pt, &b_calomet_hlt_pt);
+   fChain->SetBranchAddress("calomet_pt", calomet_pt, &b_calomet_pt);
+   
+   
    fChain->SetBranchAddress("track_eta", track_eta, &b_track_eta);
    fChain->SetBranchAddress("track_npixhits", track_npixhits, &b_track_npixhits);
    fChain->SetBranchAddress("track_nvalidhits", track_nvalidhits, &b_track_nvalidhits);
@@ -636,7 +647,7 @@ void AnaEff::Init(TTree *tree)
    fChain->SetBranchAddress("muon_isoR03_sumChargedHadronPt", muon_isoR03_sumChargedHadronPt, &b_muon_isoR03_sumChargedHadronPt);
    fChain->SetBranchAddress("track_phi", track_phi, &b_track_phi);
    fChain->SetBranchAddress("ntracks", &ntracks, &b_ntracks);
-   fChain->SetBranchAddress("hscp_muon_idx", hscp_muon_idx, &b_hscp_muon_idx); 
+   fChain->SetBranchAddress("hscp_muon_idx", hscp_muon_idx, &b_hscp_muon_idx);
    fChain->SetBranchAddress("muon_isMediumMuon", muon_isMediumMuon, &b_muon_isMediumMuon);
    fChain->SetBranchAddress("muon_p", muon_p, &b_muon_p);
    fChain->SetBranchAddress("gen_pdg", gen_pdg, &b_gen_pdg);
