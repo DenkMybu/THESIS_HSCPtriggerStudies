@@ -81,6 +81,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	
 	EffVsRecoCal = new TEfficiency("Eff","Efficiency hlt_pfmet>90;Reco calo_MET [GeV];#epsilon",100,0,2000);
 	EffvsRecoCal->SetName("TEff_recocalo");
+	
 	for(int i =0; i < triggerNames.size(); i++){
 		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
 		string namept = ((triggerNames[i].c_str()) + pt).c_str();
