@@ -45,9 +45,7 @@ TrigEff::~TrigEff(){
 	DenomEfficiency.clear();
 	
 	EffErr.clear();
-	if(!EffVsRecoCal){
-		delete EffVsRecoCal;
-	}
+
 	if(!OutputHisto){
 		delete OutputHisto;
 	}
@@ -78,9 +76,6 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 
 	this->TriggerNames = triggerNames;
 	string pom = "POM",pt = "PT",recocalo = "reco::calo";
-	
-	EffVsRecoCal = new TEfficiency("Eff","Efficiency hlt_pfmet>90;Reco calo_MET [GeV];#epsilon",100,0,2000);
-	EffvsRecoCal->SetName("TEff_recocalo");
 	for(int i =0; i < triggerNames.size(); i++){
 		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
 		string namept = ((triggerNames[i].c_str()) + pt).c_str();
@@ -145,7 +140,6 @@ void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,co
 				EffvsRecoCalo[NamesPos[i].second]->Fill(trig,Obs);
 			}
 		}
-		EffvsRecoCal->Fill(trig,Obs);
 	}
 	
 }
@@ -282,7 +276,6 @@ void TrigEff::ComputeError(){
 void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 	
 	OutputHisto->cd();
-	EffvsRecoCal->Write();
 	for(int j=0; j < EffvsObsAll.size() ; j++){
 		EffvsObsAll[j]->Write();
 		EffvsRecoCalo[j]->Write();
