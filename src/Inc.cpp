@@ -27,13 +27,14 @@ using namespace std;
 
 TrigEff::TrigEff(){
 	OutputHisto=0;
-	EffVsRecoCal = 0;
+	//EffVsRecoCal = 0;
 }
 
 
 
 TrigEff::~TrigEff(){ 
 	EffvsObsAll.clear();
+	TestCalo.clear()
 	EffvsRecoCalo.clear();
 	EffvsPom.clear();
 	EffvsPt.clear();
@@ -51,9 +52,9 @@ TrigEff::~TrigEff(){
 	if(!OutputHisto){
 		delete OutputHisto;
 	}
-	if(!EffVsRecoCal){
+	/*if(!EffVsRecoCal){
 		delete EffVsRecoCal;
-	}
+	}*/
 }
 
 
@@ -72,7 +73,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	EffvsPom.resize(triggerNames.size());
 	EffvsPt.resize(triggerNames.size());
 	Efficiency.resize(triggerNames.size(), 0.0);
-	
+	TestCalo.resize(1);
 	NumEfficiency.resize(triggerNames.size(), 0.0);
 	DenomEfficiency.resize(triggerNames.size(), 0.0);
 	
@@ -82,8 +83,8 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	this->TriggerNames = triggerNames;
 	string pom = "POM",pt = "PT",recocalo = "reco::calo";
 	
-	EffVsRecoCal = new TEfficiency("Eff","Efficiency hlt_pfmet>90;Reco calo_MET [GeV];#epsilon",100,0,2000);
-	EffvsRecoCal.SetName(recocalo.c_str());
+	/*EffVsRecoCal = new TEfficiency("Eff","Efficiency hlt_pfmet > 90;Reco calo_MET [GeV];#epsilon",100,0,2000);
+	EffvsRecoCal->SetName(recocalo.c_str());*/
 
 	for(int i =0; i < triggerNames.size(); i++){
 		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
@@ -95,6 +96,9 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 
 		EffvsRecoCalo[i] = new TEfficiency("Eff","Efficiency;Reco calo_MET [GeV];#epsilon",100,0,2000);
 		EffvsRecoCalo[i]->SetName("TEff_recocalo");
+		
+		TestCalo[i] = new TEfficiency("Eff","Efficiency;Reco calo_MET [GeV];#epsilon",100,0,2000);
+		TestCalo[i]->SetName("TEff_recocalo");
 		
 		
 		EffvsPom[i] = new TEfficiency("Eff","Efficiency;#beta #gamma;#epsilon",100,0,5);
@@ -149,7 +153,9 @@ void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,co
 				EffvsRecoCalo[NamesPos[i].second]->Fill(trig,Obs);
 			}
 		}
-		EffvsRecoCal->Fill(trig,Obs);
+		//EffvsRecoCal->Fill(trig,Obs);
+		TestCalo[0]->Fill(trig,Obs);
+		
 	}
 	
 }
@@ -286,12 +292,14 @@ void TrigEff::ComputeError(){
 void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 	
 	OutputHisto->cd();
-	EffvsRecoCal->Write();
+	//EffvsRecoCal->Write();
+	TestCalo[0]->Write();
 	for(int j=0; j < EffvsObsAll.size() ; j++){
 		EffvsObsAll[j]->Write();
 		EffvsRecoCalo[j]->Write();
 		EffvsPom[j]->Write();
 		EffvsPt[j]->Write();
+		
 	}
 	OutputHisto->Close();
 }
