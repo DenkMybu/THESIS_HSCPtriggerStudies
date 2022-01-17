@@ -235,7 +235,7 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_MET_ptN_CHN->GetYaxis()->SetTitle("Pt [GeV]");
 
 
-	DISTRIB_CALO_RECO_vs_HLT = new TH2D("DISTRIB_CALO_RECO_vs_HLT", "Reco::calomet vs hlt::calomet", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_CALO_RECO_vs_HLT = new TH2D("DISTRIB_CALO_RECO_vs_HLT", "Reco::calomet vs hlt::calomet, after selection", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_CALO_RECO_vs_HLT->GetXaxis()->SetTitle("Reco::calo MET [GeV]");
 	DISTRIB_CALO_RECO_vs_HLT->GetYaxis()->SetTitle("HLT::calo MeT [GeV]");
 	
@@ -423,7 +423,7 @@ void AnaEff::Loop(const string &mode){
 
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
-				
+				DISTRIB_CALO_RECO_vs_HLT->Fill(calomet_et[0],calomet_hlt_pt[0]);
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 				TrackRhadron();
 				if(mode == "Both"){
