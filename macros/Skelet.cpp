@@ -998,7 +998,6 @@ void AnaEff::FillTEff(const int &indexcandidate){
 						trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], muon_pt[k], 1.0 ,"PT");
 					}
 				}
-
 				if(calomet_hlt_pt[0] > 90){
 					trigEff_presel.FillNoMap(triggerNames[i], 1, calomet_et[0], 1.0 ,"CALOMET");
 				}
