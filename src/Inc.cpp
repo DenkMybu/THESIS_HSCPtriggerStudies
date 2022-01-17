@@ -19,6 +19,7 @@
 #include <TFile.h>
 #include <TEntryList.h>
 #include <TFrame.h>
+#include <TEfficiency.h>
 
 using namespace std;
 
