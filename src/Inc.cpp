@@ -97,7 +97,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 		EffvsRecoCalo[i] = new TEfficiency("Eff","Efficiency;Reco calo_MET [GeV];#epsilon",100,0,2000);
 		EffvsRecoCalo[i]->SetName(namerecocalo.c_str());
 		
-		TestCalo[i] = new TEfficiency("Eff","Efficiency of hlt_pfmet > 90 ;Reco calo_MET [GeV];#epsilon",100,0,2000);
+		TestCalo[i] = new TEfficiency("Eff","Efficiency of hlt_pfmet > 90 ;Reco calo_MET [GeV];#epsilon",100,0,800);
 		TestCalo[i]->SetName("TEff_recocalo");
 		
 		
