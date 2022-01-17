@@ -191,6 +191,11 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_PT1MPT2CHCH->GetXaxis()->SetTitle("2*(pt1 - pt2) / (pt1 + pt2)");
 	DISTRIB_PT1MPT2CHCH->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_HLTMRECO_CALO = new TH1D ("DISTRIB_HLTMRECO_CALO", "(HLT - RECO) calo::met", 100, -5, 5);
+	DISTRIB_HLTMRECO_CALO->GetXaxis()->SetTitle("HLT::calo MET - RECO::calo MET");
+	DISTRIB_HLTMRECO_CALO->GetYaxis()->SetTitle("# Events");
+	
+	
 	DISTRIB_PT1MPT2CHN = new TH1D ("DISTRIB_PT1MPT2CHN", "PT1MPT2CHN", 100, -5, 5);
 	DISTRIB_PT1MPT2CHN->GetXaxis()->SetTitle("2*(pt1 - pt2) / (pt1 + pt2)");
 	DISTRIB_PT1MPT2CHN->GetYaxis()->SetTitle("# HSCP");
@@ -344,6 +349,7 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_P1MP2CHCH->Sumw2();
 	DISTRIB_P1MP2CHN->Sumw2();
 	DISTRIB_PT1MPT2CHCH->Sumw2();
+	DISTRIB_HLTMRECO_CALO->Sumw2();
 	DISTRIB_PT1MPT2CHN->Sumw2();
 	DISTRIB_ANGLE_RAD->Sumw2();
 	DISTRIB_POVERMN_CHN->Sumw2();
@@ -447,6 +453,8 @@ void AnaEff::Loop(const string &mode){
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				DISTRIB_CALO_RECO_vs_HLT->Fill(calomet_et[0],calomet_hlt_pt[0]);
+				DISTRIB_HLTMRECO_CALO->Fill(calomet_hlt_pt[0]-calomet_et[0]);
+			
 				if(calomet_et[0]>100){
 					DISTRIB_PF_RECO_vs_HLT->Fill(pfmet_pt[0],pfmet_hlt_pt[0]);
 				}
@@ -591,10 +599,12 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_MET_pt_CHN->Write();
 	DISTRIB_MET_ptN_CHN->Write();
 	DISTRIB_CALO_RECO_vs_HLT->Write();
+	DISTRIB_HLTMRECO_CALO->Write();
 	DISTRIB_PF_RECO_vs_HLT->Write();
 	DISTRIB_P1MP2CHCH->Write();
 	DISTRIB_P1MP2CHN->Write();
 	DISTRIB_PT1MPT2CHCH->Write();
+	DISTRIB_HLTMRECO_CALO->Write();
 	DISTRIB_PT1MPT2CHN->Write();
 	DISTRIB_ANGLE_RAD->Write();
 	DISTRIB_PT1_PT2->Write();
