@@ -998,12 +998,12 @@ void AnaEff::FillTEff(const int &indexcandidate){
 						trigEff_presel.FillNoMap(triggerNames[i], passTrigger[j], muon_pt[k], 1.0 ,"PT");
 					}
 				}
-				if(calomet_hlt_pt[0] > 90){
-					trigEff_presel.FillNoMap(triggerNames[i], 1, calomet_et[0], 1.0 ,"CALOMET");
+				if(calomet_pt[0] > 90){
+					trigEff_presel.FillNoMap(triggerNames[i], 1, calomet_pt[0], 1.0 ,"CALOMET");
 				}
 				else{
 				
-					trigEff_presel.FillNoMap(triggerNames[i], 0, calomet_et[0], 1.0 ,"CALOMET");
+					trigEff_presel.FillNoMap(triggerNames[i], 0, calomet_pt[0], 1.0 ,"CALOMET");
 				}
 				trig.push_back(make_pair(triggerNames[i], passTrigger[j]));
 				break;
