@@ -687,9 +687,9 @@ int AnaEff::Preselection(){
 	bool yon=true;
 	for(int ihs=0; ihs<nhscp;ihs++){
 		yon=true;
-		/*if(calomet_et[0] < 100){
+		if(calomet_et[0] < 100){
 			yon=false;
-		}*/
+		}
 		if( track_eta[hscp_track_idx[ihs]] >= 2.1 || track_eta[hscp_track_idx[ihs]] <= -2.1 ){
 			yon=false;
 		}
