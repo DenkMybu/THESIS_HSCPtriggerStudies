@@ -34,7 +34,7 @@ TrigEff::TrigEff(){
 
 TrigEff::~TrigEff(){ 
 	EffvsObsAll.clear();
-	TestCalo.clear()
+	TestCalo.clear();
 	EffvsRecoCalo.clear();
 	EffvsPom.clear();
 	EffvsPt.clear();
