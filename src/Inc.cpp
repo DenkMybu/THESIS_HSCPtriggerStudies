@@ -26,7 +26,7 @@ using namespace std;
 
 TrigEff::TrigEff(){
 	OutputHisto=0;
-	EffVsRecoCal=0;
+	TEfficiency* EffVsRecoCal=0;
 }
 
 
