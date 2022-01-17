@@ -26,7 +26,6 @@ using namespace std;
 
 TrigEff::TrigEff(){
 	OutputHisto=0;
-	EffVsRecoCal=0;
 }
 
 
@@ -46,7 +45,6 @@ TrigEff::~TrigEff(){
 	DenomEfficiency.clear();
 	
 	EffErr.clear();
-	
 	if(!EffVsRecoCal){
 		delete EffVsRecoCal;
 	}
@@ -81,16 +79,13 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	this->TriggerNames = triggerNames;
 	string pom = "POM",pt = "PT",recocalo = "reco::calo";
 	
-	
 	EffVsRecoCal = new TEfficiency("Eff","Efficiency hlt_pfmet>90;Reco calo_MET [GeV];#epsilon",100,0,2000);
-	
 	EffvsRecoCal->SetName("TEff_recocalo");
 	
 	for(int i =0; i < triggerNames.size(); i++){
 		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
 		string namept = ((triggerNames[i].c_str()) + pt).c_str();
 		string namerecocalo = ((triggerNames[i].c_str()) + recocalo).c_str();
-		
 		EffvsObsAll[i] = new TEfficiency("Eff","Efficiency;Reco pf_MET [GeV];#epsilon",100,0,2000); 
 		EffvsObsAll[i]->SetName(triggerNames[i].c_str());
 
