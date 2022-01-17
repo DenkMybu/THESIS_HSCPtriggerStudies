@@ -191,7 +191,7 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_PT1MPT2CHCH->GetXaxis()->SetTitle("2*(pt1 - pt2) / (pt1 + pt2)");
 	DISTRIB_PT1MPT2CHCH->GetYaxis()->SetTitle("# HSCP");
 
-	DISTRIB_HLTMRECO_CALO = new TH1D ("DISTRIB_HLTMRECO_CALO", "(HLT - RECO) calo::met", 100, -5, 5);
+	DISTRIB_HLTMRECO_CALO = new TH1D ("DISTRIB_HLTMRECO_CALO", "(HLT - RECO) calo::met", 100, -2000, 2000);
 	DISTRIB_HLTMRECO_CALO->GetXaxis()->SetTitle("HLT::calo MET - RECO::calo MET");
 	DISTRIB_HLTMRECO_CALO->GetYaxis()->SetTitle("# Events");
 	
@@ -257,9 +257,14 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_CALO_RECO_vs_HLT->GetXaxis()->SetTitle("Reco::calo MET [GeV]");
 	DISTRIB_CALO_RECO_vs_HLT->GetYaxis()->SetTitle("HLT::calo MeT [GeV]");
 	
-	DISTRIB_PF_RECO_vs_HLT = new TH2D("DISTRIB_PF_RECO_vs_HLT", "reco::pfmet vs hlt::pfmet,Selection + reco:calomet > 100", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_PF_RECO_vs_HLT = new TH2D("DISTRIB_PF_RECO_vs_HLT", "reco::pfmet vs hlt::pfmet,Selection", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_PF_RECO_vs_HLT->GetXaxis()->SetTitle("Reco::pf MET [GeV]");
 	DISTRIB_PF_RECO_vs_HLT->GetYaxis()->SetTitle("HLT::pf MeT [GeV]");
+
+	DISTRIB_PF_RECO_vs_HLT_CUT = new TH2D("DISTRIB_PF_RECO_vs_HLT_CUT", "reco::pfmet vs hlt::pfmet,Selection + reco:calomet > 100", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_PF_RECO_vs_HLT_CUT->GetXaxis()->SetTitle("Reco::pf MET [GeV]");
+	DISTRIB_PF_RECO_vs_HLT_CUT->GetYaxis()->SetTitle("HLT::pf MeT [GeV]");
+
 
 	DISTRIB_DEDX_POVERM_CHCH = new TH2D("DISTRIB_IH_POVERM_CHCH", "IH vs #beta #gamma in CH-CH",100, 0,10,100,0,5);
 	DISTRIB_DEDX_POVERM_CHCH->GetYaxis()->SetTitle("IH");
@@ -346,6 +351,7 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_MET_ptN_CHN->Sumw2();
 	DISTRIB_CALO_RECO_vs_HLT->Sumw2();
 	DISTRIB_PF_RECO_vs_HLT->Sumw2();
+	DISTRIB_PF_RECO_vs_HLT_CUT->Sumw2();
 	DISTRIB_P1MP2CHCH->Sumw2();
 	DISTRIB_P1MP2CHN->Sumw2();
 	DISTRIB_PT1MPT2CHCH->Sumw2();
@@ -454,9 +460,11 @@ void AnaEff::Loop(const string &mode){
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				DISTRIB_CALO_RECO_vs_HLT->Fill(calomet_et[0],calomet_hlt_pt[0]);
 				DISTRIB_HLTMRECO_CALO->Fill(calomet_hlt_pt[0]-calomet_et[0]);
-			
+				
+				DISTRIB_PF_RECO_vs_HLT->Fill(pfmet_pt[0],pfmet_hlt_pt[0]);
+				
 				if(calomet_et[0]>100){
-					DISTRIB_PF_RECO_vs_HLT->Fill(pfmet_pt[0],pfmet_hlt_pt[0]);
+					DISTRIB_PF_RECO_vs_HLT_CUT->Fill(pfmet_pt[0],pfmet_hlt_pt[0]);
 				}
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 				TrackRhadron();
@@ -599,8 +607,8 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_MET_pt_CHN->Write();
 	DISTRIB_MET_ptN_CHN->Write();
 	DISTRIB_CALO_RECO_vs_HLT->Write();
-	DISTRIB_HLTMRECO_CALO->Write();
 	DISTRIB_PF_RECO_vs_HLT->Write();
+	DISTRIB_PF_RECO_vs_HLT_CUT->Write();
 	DISTRIB_P1MP2CHCH->Write();
 	DISTRIB_P1MP2CHN->Write();
 	DISTRIB_PT1MPT2CHCH->Write();
@@ -679,9 +687,9 @@ int AnaEff::Preselection(){
 	bool yon=true;
 	for(int ihs=0; ihs<nhscp;ihs++){
 		yon=true;
-		if(calomet_et[0] < 100){
+		/*if(calomet_et[0] < 100){
 			yon=false;
-		}
+		}*/
 		if( track_eta[hscp_track_idx[ihs]] >= 2.1 || track_eta[hscp_track_idx[ihs]] <= -2.1 ){
 			yon=false;
 		}
