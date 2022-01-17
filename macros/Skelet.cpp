@@ -118,6 +118,19 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_METSEL_TRIGGER->GetXaxis()->SetTitle("MET [GeV]");
 	DISTRIB_METSEL_TRIGGER->GetYaxis()->SetTitle("# HSCP");
 
+	DISTRIB_METSEL_HLT_CALO = new TH1D("DISTRIB_METSEL_HLT_CALO", "( MET )", 100,0,4000);
+	DISTRIB_METSEL_HLT_CALO->GetXaxis()->SetTitle("hlt::calo MET [GeV]");
+	DISTRIB_METSEL_HLT_CALO->GetYaxis()->SetTitle("# HSCP");
+	
+	DISTRIB_METSEL_RECO_CALO = new TH1D("DISTRIB_METSEL_RECO_CALO", "( MET )", 100,0,4000);
+	DISTRIB_METSEL_RECO_CALO->GetXaxis()->SetTitle("reco::calo MET [GeV]");
+	DISTRIB_METSEL_RECO_CALO->GetYaxis()->SetTitle("# HSCP");
+	
+	DISTRIB_METSEL_HLT_PF = new TH1D("DISTRIB_METSEL_HLT_PF", "( MET )", 100,0,4000);
+	DISTRIB_METSEL_HLT_PF->GetXaxis()->SetTitle("hlt::pf MET [GeV]");
+	DISTRIB_METSEL_HLT_PF->GetYaxis()->SetTitle("# HSCP");
+
+
 	DISTRIB_METNOSEL_CHN = new TH1D("DISTRIB_METNOSEL_CHN", "( MET )", 100,0,4000);
 	DISTRIB_METNOSEL_CHN->GetXaxis()->SetTitle("MET [GeV]");
 	DISTRIB_METNOSEL_CHN->GetYaxis()->SetTitle("# HSCP");
@@ -235,11 +248,11 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_MET_ptN_CHN->GetYaxis()->SetTitle("Pt [GeV]");
 
 
-	DISTRIB_CALO_RECO_vs_HLT = new TH2D("DISTRIB_CALO_RECO_vs_HLT", "Reco::calomet vs hlt::calomet, after selection", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_CALO_RECO_vs_HLT = new TH2D("DISTRIB_CALO_RECO_vs_HLT", "Reco::calomet vs hlt::calomet,Selection", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_CALO_RECO_vs_HLT->GetXaxis()->SetTitle("Reco::calo MET [GeV]");
 	DISTRIB_CALO_RECO_vs_HLT->GetYaxis()->SetTitle("HLT::calo MeT [GeV]");
 	
-	DISTRIB_PF_RECO_vs_HLT = new TH2D("DISTRIB_PF_RECO_vs_HLT", "reco::pfmet vs hlt::pfmet, after selection", 600, 0, 4000, 600, 0, 4000);
+	DISTRIB_PF_RECO_vs_HLT = new TH2D("DISTRIB_PF_RECO_vs_HLT", "reco::pfmet vs hlt::pfmet,Selection + reco:calomet > 100", 600, 0, 4000, 600, 0, 4000);
 	DISTRIB_PF_RECO_vs_HLT->GetXaxis()->SetTitle("Reco::pf MET [GeV]");
 	DISTRIB_PF_RECO_vs_HLT->GetYaxis()->SetTitle("HLT::pf MeT [GeV]");
 
@@ -302,6 +315,9 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_METNOSEL->Sumw2();
 	DISTRIB_METNOSEL_TRIGGER->Sumw2();
 	DISTRIB_METSEL_TRIGGER->Sumw2();
+	DISTRIB_METSEL_HLT_CALO->Sumw2();
+	DISTRIB_METSEL_RECO_CALO->Sumw2();
+	DISTRIB_METSEL_HLT_PF->Sumw2();
 	DISTRIB_METPRESEL_TRIGGER->Sumw2();
 	DISTRIB_METPRESEL->Sumw2();
 	DISTRIB_METSEL->Sumw2();
@@ -423,12 +439,17 @@ void AnaEff::Loop(const string &mode){
 					DISTRIB_POVERM_ALL_STRAIGHT->Fill(track_p[hscp_track_idx[indexcandidatesel]]*1.0/TheorMass);
 				}
 				DISTRIB_METSEL->Fill(pfmet_pt[0]);
+				DISTRIB_METSEL_HLT_CALO->Fill(calomet_hlt_pt[0]);
+				DISTRIB_METSEL_RECO_CALO->Fill(calomet_et[0]);
+				DISTRIB_METSEL_HLT_PF->Fill(pfmet_hlt_pt[0]);
 				PassedTriggerDistrib("HLT_PFMET120_PFMHT120_IDTight_v16","SEL");
 
 				passedevent+=1;
 				DISTRIB_IAS->Fill(track_ias_ampl[hscp_track_idx[indexcandidatesel]]);
 				DISTRIB_CALO_RECO_vs_HLT->Fill(calomet_et[0],calomet_hlt_pt[0]);
-				DISTRIB_PF_RECO_vs_HLT->Fill(pfmet_pt[0],pfmet_hlt_pt[0]);
+				if(calomet_et[0]>100){
+					DISTRIB_PF_RECO_vs_HLT->Fill(pfmet_pt[0],pfmet_hlt_pt[0]);
+				}
 				CountZones(track_p[hscp_track_idx[indexcandidatesel]]);
 				TrackRhadron();
 				if(mode == "Both"){
@@ -532,6 +553,9 @@ void AnaEff::Loop(const string &mode){
 	DISTRIB_METNOSEL->Write();
 	DISTRIB_METNOSEL_TRIGGER->Write();
 	DISTRIB_METSEL_TRIGGER->Write();
+	DISTRIB_METSEL_HLT_CALO->Write();
+	DISTRIB_METSEL_RECO_CALO->Write();
+	DISTRIB_METSEL_HLT_PF->Write();
 	DISTRIB_METPRESEL_TRIGGER->Write();
 	DISTRIB_METPRESEL->Write();
 	DISTRIB_METSEL->Write();
@@ -645,6 +669,9 @@ int AnaEff::Preselection(){
 	bool yon=true;
 	for(int ihs=0; ihs<nhscp;ihs++){
 		yon=true;
+		/*if(calomet_et[0] < 100){
+			yon=false;
+		}*/
 		if( track_eta[hscp_track_idx[ihs]] >= 2.1 || track_eta[hscp_track_idx[ihs]] <= -2.1 ){
 			yon=false;
 		}
