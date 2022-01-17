@@ -51,7 +51,7 @@ public :
    Float_t	pfmet_pt[32]; //test
    Float_t	pfmet_hlt_pt[32]; //add branch etc..
    Float_t	calomet_hlt_pt[32]; //add branch etc..
-   Float_t	calomet_et[32]; //add branch etc..
+   Float_t	calomet_pt[32]; //add branch etc..
    
    Float_t	prescaleTrigger[1000];
    Bool_t	passTrigger[1000];
@@ -120,7 +120,7 @@ public :
    TBranch        *b_pfmet_pt; // !
    TBranch        *b_pfmet_hlt_pt;
    TBranch        *b_calomet_hlt_pt;
-   TBranch        *b_calomet_et;
+   TBranch        *b_calomet_pt;
    
   
    TBranch        *b_track_eta; //!
@@ -620,7 +620,7 @@ void AnaEff::Init(TTree *tree)
    fChain->SetBranchAddress("pfmet_pt", pfmet_pt, &b_pfmet_pt);
    fChain->SetBranchAddress("pfmet_hlt_pt", pfmet_hlt_pt, &b_pfmet_hlt_pt);\
    fChain->SetBranchAddress("calomet_hlt_pt", calomet_hlt_pt, &b_calomet_hlt_pt);
-   fChain->SetBranchAddress("calomet_et", calomet_et, &b_calomet_et);
+   fChain->SetBranchAddress("calomet_et", calomet_pt, &b_calomet_pt);
    
    
    fChain->SetBranchAddress("track_eta", track_eta, &b_track_eta);
