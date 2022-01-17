@@ -49,9 +49,10 @@ public :
    Int_t	ndedxhits;
 
    Float_t	pfmet_pt[32]; //test
-   Float_t	hltpfmet_pt[32]; //add branch etc..
-   Float_t	hltcalomet_pt[32]; //add branch etc..
-   Float_t	hltpfmet_pt[32]; //add branch etc..
+   Float_t	pfmet_hlt_pt[32]; //add branch etc..
+   Float_t	calomet_hlt_pt[32]; //add branch etc..
+   Float_t	calomet_et[32]; //add branch etc..
+
    Float_t	prescaleTrigger[1000];
    Bool_t	passTrigger[1000];
    vector<string>* triggerName;
@@ -115,7 +116,12 @@ public :
    
    TBranch        *b_gen_status;
    TBranch        *b_track_nhits;
+
    TBranch        *b_pfmet_pt; // !
+   TBranch        *b_pfmet_hlt_pt;
+   TBranch        *b_calomet_hlt_pt;
+   TBranch        *b_calomet_et;
+
    TBranch        *b_track_eta; //!
    TBranch        *b_track_npixhits; //!
    TBranch        *b_track_nvalidhits;
@@ -336,14 +342,14 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 	if (tree == 0) {
-		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_gluino2000.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
+		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_27/src/stage/ntuple/test/prod/nt_mc_aod_gluino2000_initial.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
 
 		if (!f || !f->IsOpen()) {
-			f = new TFile("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_gluino2000.root");
+			f = new TFile("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_27/src/stage/ntuple/test/prod/nt_mc_aod_gluino2000_initial.root");
 		}
 		
 	
-		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_gluino2000.root:/stage"); 
+		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_27/src/stage/ntuple/test/prod/nt_mc_aod_gluino2000_initial.root:/stage"); 
 		dir->GetObject("ttree",tree);
 		
 // /opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2400.root
@@ -592,6 +598,7 @@ void AnaEff::Init(TTree *tree)
    //******************************* LIST OF ALL BRANCHES *******************************
 
 
+
    fChain->SetBranchAddress("ntrigger", &ntrigger, &b_ntrigger);
    fChain->SetBranchAddress("prescaleTrigger", prescaleTrigger, &b_prescaleTrigger);
 
@@ -611,6 +618,11 @@ void AnaEff::Init(TTree *tree)
 
    fChain->SetBranchAddress("gen_moth_pdg", gen_moth_pdg, &b_gen_moth_pdg);
    fChain->SetBranchAddress("pfmet_pt", pfmet_pt, &b_pfmet_pt);
+   fChain->SetBranchAddress("pfmet_hlt_pt", pfmet_hlt_pt, &b_pfmet_hlt_pt);\
+   fChain->SetBranchAddress("calomet_hlt_pt", calomet_hlt_pt, &b_calomet_hlt_pt);
+   fChain->SetBranchAddress("calomet_et", calomet_et, &b_calomet_et);
+ 
+
    fChain->SetBranchAddress("track_eta", track_eta, &b_track_eta);
    fChain->SetBranchAddress("track_npixhits", track_npixhits, &b_track_npixhits);
    fChain->SetBranchAddress("track_nvalidhits", track_nvalidhits, &b_track_nvalidhits);
