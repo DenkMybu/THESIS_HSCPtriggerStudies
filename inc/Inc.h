@@ -121,7 +121,7 @@ public:
    vector <TEfficiency*> EffvsObsAll;
    vector <TEfficiency*> EffvsRecoCalo;
 
-   //TEfficiency* EffVsRecoCal;
+   TEfficiency* EffVsRecoCal;
 
    vector <TEfficiency*> EffvsPom;
    vector <TEfficiency*> EffvsPt;
