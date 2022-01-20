@@ -384,7 +384,7 @@ void AnaEff::Loop(const string &mode){
 	//******************************************************************************************************************
 	//******************************************************************************************************************
 
-	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak",  test = "Test", dump = "dump_deltar", scenario = "Mode";
+	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak",  test = "Test", dump = "dump_deltar", scenario = "Mode", Mets = "Hlt_vs_reco";
 	
 	string Data = "Gluino", DataType = Data + to_string(int(TheorMass)); // Data is the type of particle you study
 	
@@ -392,8 +392,8 @@ void AnaEff::Loop(const string &mode){
 	
 	string EffScenario = TransferEff + scenario + mode + DataType + ExtTxt;
 	
-	string dumpfile = dump + DataType + ExtTxt;
-	string teffFilename = test + DataType + ExtRoot;
+	string DumpFile = dump + DataType + ExtTxt;
+	string TeffFilename = test + DataType + ExtRoot;
 	
 	string StudyTxt = TransferTxt + DataType + Date;
 	string NameOfTxt = StudyTxt + SubNum + ExtTxt;
@@ -405,18 +405,21 @@ void AnaEff::Loop(const string &mode){
 	string NameCompleteList = "ListeInteretTriggers";
 	string NameListForType = NameCompleteList + DataType + ExtTxt;
 	
+	string MetStudies = Mets + DataType + ExtTxt;
 	
 	ReadFromTxt(NameListForType);
 	trigEff_presel.LoadNoMap(triggerNames,1);
 	
 	int counter=0,counterasso=0,countertotasso=0,passedevent=0,passednosel=0,passedpresel=0,passedsel=0,nbofpairs=0,nbmuons=0,nbwrong=0,indexcandidate, indexcandidatenosel, indexcandidatesel;
 
+
+	int nb_pass_calomet_cut[3] = { 0 }; //cut0 = 100, cut1 = 105, cut2 = 110
+	
 	string trigger1="",trigger2="";
-	trigEff_presel.InitTEff(teffFilename);
+	trigEff_presel.InitTEff(TeffFilename);
 	cout << "Working on " << DataType << " , study will be on " << mode << " scenario(s) "<< endl;
 	posa.resize(triggerNames.size(), 0.0);
 	
-	Dump.open (dumpfile);
 	cout << "nb entrees : " << nentries << endl;
 	for (Long64_t jentry=0; jentry<nentries;jentry++){
 		Long64_t ientry = LoadTree(jentry);
@@ -454,6 +457,17 @@ void AnaEff::Loop(const string &mode){
 				DISTRIB_METSEL_HLT_CALO->Fill(calomet_hlt_pt[0]);
 				DISTRIB_METSEL_RECO_CALO->Fill(calomet_et[0]);
 				DISTRIB_METSEL_HLT_PF->Fill(pfmet_hlt_pt[0]);
+				
+				if(calomet_et[0] > 100){
+					nb_pass_calomet_cut[0]+=1;
+				}
+				if(calomet_et[0] > 105){
+					nb_pass_calomet_cut[1]+=1;
+				}
+				if(calomet_et[0] > 110){
+					nb_pass_calomet_cut[2]+=1;
+				}
+				
 				PassedTriggerDistrib("HLT_PFMET120_PFMHT120_IDTight_v16","SEL");
 
 				passedevent+=1;
@@ -536,11 +550,21 @@ void AnaEff::Loop(const string &mode){
 	InfosData.close();
 	//******************************************************************************
 	//******************************************************************************
-
+	Dump.open (DumpFile);
 	Dump << "There was " << nmissmuons << " CH-N events without any muons = " << (nmissmuons*1.0/nbchn)*100 << " % " << endl;
 	Dump << "------------------------------------------Chain of r-hadrons ----------------------------------------------- \n\n" << endl;
 	Dump << "In total, there was " << nbchain << " events where a r-hadron chain was followed, and " << nbchainmiss << " where there was no obvious chain. We identified " << (nbchain*1.0/(nbchainmiss+nbchain))*100 << " % " << endl;
 	Dump.close();
+	MetStudy.open (MetStudies);
+	MetStudy << "After selection, we had" << passedevent << " events" << endl;
+	cout << "With cut on calo_met > 100, only " << nb_pass_calomet_cut[0] << " remain \n" << " Number of events lost due to the cut : " << passedevent - nb_pass_calomet_cut[0] << " , loss = " << ((passedevent - nb_pass_calomet_cut[0])/passedevent)*100 << endl;
+	
+	cout << "\n" << endl;
+	cout << "With cut on calo_met > 105, only " << nb_pass_calomet_cut[1] << " remain \n" << " Number of events lost due to the cut : " << passedevent - nb_pass_calomet_cut[1] << " , loss = " << ((passedevent - nb_pass_calomet_cut[1])/passedevent)*100 << endl;
+	cout << "\n" << endl;
+	cout << "With cut on calo_met > 110, only " << nb_pass_calomet_cut[2] << " remain \n" << " Number of events lost due to the cut : " << passedevent - nb_pass_calomet_cut[2] << " , loss = " << ((passedevent - nb_pass_calomet_cut[2])/passedevent)*100 << endl;
+	
+	MetStudy.close();
 	//******************************************************************************
 
 
