@@ -27,7 +27,7 @@ using namespace std;
 
 TrigEff::TrigEff(){
 	OutputHisto=0;
-	//EffVsRecoCal = 0;
+	
 }
 
 
@@ -52,9 +52,7 @@ TrigEff::~TrigEff(){
 	if(!OutputHisto){
 		delete OutputHisto;
 	}
-	/*if(!EffVsRecoCal){
-		delete EffVsRecoCal;
-	}*/
+	
 }
 
 
@@ -83,9 +81,8 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 	this->TriggerNames = triggerNames;
 	string pom = "POM",pt = "PT",recocalo = "reco::calo";
 	
-	/*EffVsRecoCal = new TEfficiency("Eff","Efficiency hlt_pfmet > 90;Reco calo_MET [GeV];#epsilon",100,0,2000);
-	EffvsRecoCal->SetName(recocalo.c_str());*/
-
+	TestCalo[0] = new TEfficiency("Eff","Efficiency of hlt_calomet > 90 ;Reco calo_MET [GeV];#epsilon",100,0,800);
+	TestCalo[0]->SetName("TEff_recocalo");
 	for(int i =0; i < triggerNames.size(); i++){
 		string namepom = ((triggerNames[i].c_str()) + pom).c_str();
 		string namept = ((triggerNames[i].c_str()) + pt).c_str();
@@ -97,8 +94,7 @@ void TrigEff::LoadNoMap(const vector<string> &triggerNames,int ErrorType, string
 		EffvsRecoCalo[i] = new TEfficiency("Eff","Efficiency;Reco calo_MET [GeV];#epsilon",100,0,2000);
 		EffvsRecoCalo[i]->SetName(namerecocalo.c_str());
 		
-		TestCalo[i] = new TEfficiency("Eff","Efficiency of hlt_calomet > 90 ;Reco calo_MET [GeV];#epsilon",100,0,800);
-		TestCalo[i]->SetName("TEff_recocalo");
+		
 		
 		
 		EffvsPom[i] = new TEfficiency("Eff","Efficiency;#beta #gamma;#epsilon",100,0,5);
@@ -153,7 +149,7 @@ void TrigEff::FillNoMap(const string &TriggerName, bool trig,const float &Obs,co
 				EffvsRecoCalo[NamesPos[i].second]->Fill(trig,Obs);
 			}
 		}
-		//EffvsRecoCal->Fill(trig,Obs);
+		
 		TestCalo[0]->Fill(trig,Obs);
 		
 	}
@@ -292,7 +288,6 @@ void TrigEff::ComputeError(){
 void TrigEff::WritePlots(string NameVar,string NameOfFile){ //TFile* OutputHisto
 	
 	OutputHisto->cd();
-	//EffvsRecoCal->Write();
 	TestCalo[0]->Write();
 	for(int j=0; j < EffvsObsAll.size() ; j++){
 		EffvsObsAll[j]->Write();
