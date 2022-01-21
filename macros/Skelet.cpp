@@ -557,12 +557,12 @@ void AnaEff::Loop(const string &mode){
 	Dump.close();
 	MetStudy.open (MetStudies);
 	MetStudy << "After selection, we had" << passedevent << " events" << endl;
-	cout << "With cut on calo_met > 100, only " << nb_pass_calomet_cut[0] << " remain \n" << " Number of events lost due to the cut : " << passedevent - nb_pass_calomet_cut[0] << " , loss = " << ((passedevent - nb_pass_calomet_cut[0])/passedevent)*100 << endl;
+	MetStudy << "With cut on calo_met > 100, only " << nb_pass_calomet_cut[0] << " remain \n" << " Number of events lost due to the cut : " << passedevent - nb_pass_calomet_cut[0] << " , loss = " << ((passedevent - nb_pass_calomet_cut[0])*1.0/passedevent)*100 << endl;
 	
-	cout << "\n" << endl;
-	cout << "With cut on calo_met > 105, only " << nb_pass_calomet_cut[1] << " remain \n" << " Number of events lost due to the cut : " << passedevent - nb_pass_calomet_cut[1] << " , loss = " << ((passedevent - nb_pass_calomet_cut[1])/passedevent)*100 << endl;
-	cout << "\n" << endl;
-	cout << "With cut on calo_met > 110, only " << nb_pass_calomet_cut[2] << " remain \n" << " Number of events lost due to the cut : " << passedevent - nb_pass_calomet_cut[2] << " , loss = " << ((passedevent - nb_pass_calomet_cut[2])/passedevent)*100 << endl;
+	MetStudy << "\n" << endl;
+	MetStudy << "With cut on calo_met > 105, only " << nb_pass_calomet_cut[1] << " remain \n" << " Number of events lost due to the cut : " << passedevent - nb_pass_calomet_cut[1] << " , loss = " << ((passedevent - nb_pass_calomet_cut[1])*1.0/passedevent)*100 << endl;
+	MetStudy << "\n" << endl;
+	MetStudy << "With cut on calo_met > 110, only " << nb_pass_calomet_cut[2] << " remain \n" << " Number of events lost due to the cut : " << passedevent - nb_pass_calomet_cut[2] << " , loss = " << ((passedevent - nb_pass_calomet_cut[2])*1.0/passedevent)*100 << endl;
 	
 	MetStudy.close();
 	//******************************************************************************
