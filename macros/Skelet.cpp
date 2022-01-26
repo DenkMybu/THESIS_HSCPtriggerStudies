@@ -23,7 +23,7 @@ const double uncertaintyMu = 0.0000000024;
 const double massW = 80.379;
 const double uncertaintyW = 0.012;
 
-const double TheorMass = 2000;
+const double TheorMass = 0.1056583745; //put HSPC mass here
 
 const double EPSILON = 1.0e-15;
  
@@ -386,7 +386,7 @@ void AnaEff::Loop(const string &mode){
 
 	string NameList = "CompleteList", PrescaledList = "PrescaledList", ListAll = "ListOfAllTriggersEff", SubNum = "all", ExtRoot = ".root", ExtTxt = ".txt", Date="05_10_2021", Or = "LogicalOr", TransferTxt="AllInfos", TransferEff = "Eff", TransferZ = "EntriesFromZ", TransferW = "EntriesFromW", ErrorEffTransfer = "Error", TransferDistribZ = "DistribZpeak", TransferDistribW = "DistribWpeak",  test = "Test", dump = "dump_deltar", scenario = "Mode", Mets = "Hlt_vs_reco";
 	
-	string Data = "Gluino", DataType = Data + to_string(int(TheorMass)); // Data is the type of particle you study
+	string Data = "SingleMu2017", DataType = Data + to_string(int(TheorMass)); // Data is the type of particle you study
 	
 	//string mode2 = mode; // To pick if you want to compute efficiencies for Both scenarios, CHCH (charged-charged) or CHN (charged-neutral)
 	
