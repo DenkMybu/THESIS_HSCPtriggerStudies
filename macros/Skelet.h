@@ -352,17 +352,24 @@ AnaEff::AnaEff(TTree *tree) : fChain(0) //construct
 	DISTRIB_DELTAR_CH_VS_N=0;
 
 	triggerName = 0;
+	//TCHAIN FOR ALL FILES ON DPM
+	
+	//TChain ch("stage");
+	//ch.Add("/dpm/in2p3.fr/home/cms/phedex/store/user/rhaberle/HSCP/prodMay2021_CMSSW_10_6_2/HSCPgluino_M_2000_TuneCP5_13TeV_pythia8/MC_MK_Gluino2000/220120_155850/0000/nt_mc_aod_gluino2000_*.root");
+	
+	
+	//
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 	if (tree == 0) {
-		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_2/src/prodMay2021_CMSSW_10_6_2/HSCPgluino_M-2000_TuneCP5_13TeV-pythia8/result/glu2000_all.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
+		TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/SingleMuon/2017B/nt_data_aod-2.root"); //opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/HSCPgluino_M-1600_TuneCP5_13TeV-pythia8/MC17_Gluino1600_runv3/210324_135858/0000
 
 		if (!f || !f->IsOpen()) {
-			f = new TFile("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_2/src/prodMay2021_CMSSW_10_6_2/HSCPgluino_M-2000_TuneCP5_13TeV-pythia8/result/glu2000_all.root");
+			f = new TFile("/opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/SingleMuon/2017B/nt_data_aod-2.root");
 		}
 		
 	
-		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/ui2_data1/rhaeberl/CMSSW_10_6_2/src/prodMay2021_CMSSW_10_6_2/HSCPgluino_M-2000_TuneCP5_13TeV-pythia8/result/glu2000_all.root:/stage"); 
+		TDirectory * dir = (TDirectory*)f->Get("/opt/sbg/cms/ui3_data1/dapparu/HSCP/Production/prodMarch2021_CMSSW_10_6_2/SingleMuon/2017B/nt_data_aod-2.root:/stage"); 
 		dir->GetObject("ttree",tree);
 		
 // /opt/sbg/cms/safe1/cms/rhaeberl/CMSSW_10_6_2/src/HSCPtriggerStudies/all_stop2400.root
